@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whimsy POV</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Manrope', sans-serif; }
+    html { scroll-behavior: smooth; }
+    .active-link { background-color: #6E533A; color: #F0EDE1; }
+    .bg-primary-dark { background-color: #1A1A1A; }
+    .text-accent-gold { color: #EADDC2; }
+    .bg-accent-gold-light { background-color: #F0EDE1; }
+    .text-primary-light { color: #F0EDE1; }
+    .bg-secondary-dark { background-color: #6E533A; }
+    .text-secondary-light { color: #A9A9A9; }
+    .bg-brand-ochre { background-color: #876F55; }
+    .text-brand-ochre { color: #876F55; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <header class="md:hidden bg-primary-dark text-primary-light p-4 shadow-lg fixed w-full z-50">
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-accent-gold">Whimsy POV</h1>
+      <button id="mobile-menu-button" class="text-primary-light focus:outline-none">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </div>
+    <nav id="mobile-nav" class="hidden mt-4 space-y-2">
+      <a href="#inicio" class="nav-link block py-2 px-4 rounded hover:bg-secondary-dark transition-colors duration-200">Inicio</a>
+      <a href="#audiovisual" class="nav-link block py-2 px-4 rounded hover:bg-secondary-dark transition-colors duration-200">Audiovisual</a>
+      <a href="#minuta" class="nav-link block py-2 px-4 rounded hover:bg-secondary-dark transition-colors duration-200">La minuta W</a>
+      <a href="#sobre" class="nav-link block py-2 px-4 rounded hover:bg-secondary-dark transition-colors duration-200">Sobre Whimsy</a>
+      <a href="#enlaces" class="nav-link block py-2 px-4 rounded hover:bg-secondary-dark transition-colors duration-200">Enlaces</a>
+    </nav>
+  </header>
+
+  <nav class="hidden md:flex bg-primary-dark text-primary-light p-6 shadow-lg justify-center sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-accent-gold">Whimsy POV</h1>
+      <div class="space-x-8">
+        <a href="#inicio" class="nav-link text-lg hover:text-accent-gold transition-colors duration-200">Inicio</a>
+        <a href="#audiovisual" class="nav-link text-lg hover:text-accent-gold transition-colors duration-200">Audiovisual</a>
+        <a href="#minuta" class="nav-link text-lg hover:text-accent-gold transition-colors duration-200">La minuta W</a>
+        <a href="#sobre" class="nav-link text-lg hover:text-accent-gold transition-colors duration-200">Sobre Whimsy</a>
+        <a href="#enlaces" class="nav-link text-lg hover:text-accent-gold transition-colors duration-200">Enlaces</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-20 md:pt-0">
+
+    <section id="inicio" class="min-h-screen flex items-center justify-center text-center bg-accent-gold-light py-16 px-4">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-5xl md:text-6xl font-extrabold text-primary-dark mb-6 leading-tight">
+          <span class="block text-brand-ochre">Whimsy POV</span>
+          <span class="block text-secondary-dark text-3xl md:text-4xl font-semibold mt-3">un paréntesis para la curiosidad y el pensar</span>
+        </h2>
+
+        <p class="text-xl md:text-2xl text-secondary-dark mb-8 leading-relaxed max-w-3xl mx-auto">
+          A partir de un punto mínimo, abre conexiones, desvíos y preguntas nuevas, para mentes curiosas, observadoras y hartas.
+        </p>
+
+        <div class="space-y-4 sm:space-y-0 sm:space-x-6 flex flex-col sm:flex-row justify-center mb-12">
+          <a href="#audiovisual" class="bg-secondary-dark text-primary-light px-8 py-4 rounded-full text-lg font-semibold hover:bg-brand-ochre transition duration-300 shadow-lg">
+            Ver selección audiovisual
+          </a>
+          <a href="#minuta" class="bg-white text-secondary-dark border border-secondary-dark px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg">
+            Leer La minuta W
+          </a>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4 text-sm md:text-base">
+          <a href="https://www.youtube.com/@whimsyPOV" target="_blank" rel="noopener noreferrer" class="underline text-secondary-dark hover:text-brand-ochre">YouTube</a>
+          <a href="https://www.instagram.com/whimsypov/" target="_blank" rel="noopener noreferrer" class="underline text-secondary-dark hover:text-brand-ochre">Instagram</a>
+          <a href="https://www.tiktok.com/@whimsypov" target="_blank" rel="noopener noreferrer" class="underline text-secondary-dark hover:text-brand-ochre">TikTok</a>
+          <a href="https://arianawajntraub.substack.com/" target="_blank" rel="noopener noreferrer" class="underline text-secondary-dark hover:text-brand-ochre">Substack</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="audiovisual" class="py-16 px-4 bg-gray-100">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center text-primary-dark mb-6">Selección audiovisual</h2>
+        <p class="text-lg text-secondary-dark text-center mb-12 max-w-3xl mx-auto">
+          Algunas piezas para entrar en Whimsy POV desde distintos bordes: arte, lectura, desvío y observación.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <article class="bg-white p-6 rounded-lg shadow-xl flex flex-col">
+            <h3 class="text-xl font-bold text-brand-ochre mb-3">Hoja 3. Acerca de un happening que nunca tuvo lugar.</h3>
+            <p class="text-secondary-dark mb-6 flex-grow">
+              Una entrada a El antihappening y a la idea de un acontecimiento que existe también por lo que no ocurrió.
+            </p>
+            <a href="https://youtube.com/shorts/o98fuM6VA7Q?si=SxT_OvwkxF9Ug1nA" target="_blank" rel="noopener noreferrer" class="inline-block bg-secondary-dark text-primary-light px-5 py-3 rounded-full text-sm font-semibold hover:bg-brand-ochre transition duration-300 text-center">
+              Ver en YouTube
+            </a>
+          </article>
+
+          <article class="bg-white p-6 rounded-lg shadow-xl flex flex-col">
+            <h3 class="text-xl font-bold text-brand-ochre mb-3">Una calavera viva. Mondongo | ARTISTAS Whimsy POV</h3>
+            <p class="text-secondary-dark mb-6 flex-grow">
+              Una lectura de Mondongo como superficie viva: mapa, memoria material y juego visual.
+            </p>
+            <a href="https://youtube.com/shorts/D2IqpzXKwXM?si=H8prpbS4t7QLr1UD" target="_blank" rel="noopener noreferrer" class="inline-block bg-secondary-dark text-primary-light px-5 py-3 rounded-full text-sm font-semibold hover:bg-brand-ochre transition duration-300 text-center">
+              Ver en YouTube
+            </a>
+          </article>
+
+          <article class="bg-white p-6 rounded-lg shadow-xl flex flex-col">
+            <h3 class="text-xl font-bold text-brand-ochre mb-3">Madre Cava. Gonzalo Fonseca | ARTISTAS Whimsy POV</h3>
+            <p class="text-secondary-dark mb-6 flex-grow">
+              Una aproximación a una obra que puede leerse como mapa, altar, autorretrato o espejo.
+            </p>
+            <a href="https://youtube.com/shorts/3GxZSkohp_Y?si=KGwqNxHe5SXEVPxH" target="_blank" rel="noopener noreferrer" class="inline-block bg-secondary-dark text-primary-light px-5 py-3 rounded-full text-sm font-semibold hover:bg-brand-ochre transition duration-300 text-center">
+              Ver en YouTube
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="minuta" class="py-16 px-4 bg-accent-gold-light">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center text-primary-dark mb-6">La minuta W</h2>
+        <p class="text-lg text-secondary-dark text-center mb-12 max-w-3xl mx-auto">
+          Textos breves para seguir pensando desde otro ángulo.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <article class="bg-white rounded-lg shadow-xl p-6 flex flex-col">
+            <p class="text-sm text-secondary-light mb-2">3 de noviembre de 2025</p>
+            <h3 class="text-xl font-bold text-brand-ochre mb-3">El costo del tiempo (y otros lujos invisibles)</h3>
+            <p class="text-secondary-dark mb-6 flex-grow">
+              Una pregunta por el lujo, el tiempo y el espesor de ciertas formas de vida.
+            </p>
+            <a href="https://arianawajntraub.substack.com/p/el-costo-del-tiempo-y-otros-lujos?utm_source=profile&utm_medium=reader2" target="_blank" rel="noopener noreferrer" class="text-brand-ochre hover:underline text-sm font-semibold">
+              Leer en Substack →
+            </a>
+          </article>
+
+          <article class="bg-white rounded-lg shadow-xl p-6 flex flex-col">
+            <p class="text-sm text-secondary-light mb-2">22 de septiembre de 2025</p>
+            <h3 class="text-xl font-bold text-brand-ochre mb-3">La estrategia del adhesivo débil</h3>
+            <p class="text-secondary-dark mb-6 flex-grow">
+              Una forma menos rígida de pensar propósito, dirección y movimiento.
+            </p>
+            <a href="https://arianawajntraub.substack.com/p/la-estrategia-del-adhesivo-debil?utm_source=profile&utm_medium=reader2" target="_blank" rel="noopener noreferrer" class="text-brand-ochre hover:underline text-sm font-semibold">
+              Leer en Substack →
+            </a>
+          </article>
+
+          <article class="bg-white rounded-lg shadow-xl p-6 flex flex-col">
+            <p class="text-sm text-secondary-light mb-2">7 de septiembre de 2025</p>
+            <h3 class="text-xl font-bold text-brand-ochre mb-3">Escribir para ver mejor</h3>
+            <p class="text-secondary-dark mb-6 flex-grow">
+              Escribir como práctica para afinar la mirada y ordenar la atención.
+            </p>
+            <a href="https://open.substack.com/pub/arianawajntraub/p/escribir-para-ver-mejor?r=8hz1jc&utm_campaign=post-expanded-share&utm_medium=web" target="_blank" rel="noopener noreferrer" class="text-brand-ochre hover:underline text-sm font-semibold">
+              Leer en Substack →
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="sobre" class="py-16 px-4 bg-gray-50">
+      <div class="container mx-auto max-w-4xl text-center">
+        <h2 class="text-4xl font-bold text-primary-dark mb-8">Sobre Whimsy</h2>
+        <div class="bg-white p-8 rounded-lg shadow-xl text-left leading-relaxed text-lg text-secondary-dark">
+          <p class="mb-4">
+            Whimsy POV es un paréntesis para la curiosidad y el pensar. A partir de un punto mínimo, abre conexiones, desvíos y preguntas nuevas, para mentes curiosas, observadoras y hartas.
+          </p>
+          <p class="mb-4">
+            Toma una idea simple como excusa para explorar conexiones desde distintos puntos de vista y perseguir nuevas conversaciones.
+          </p>
+          <p>
+            Entre videos, textos y otros desvíos, Whimsy busca abrir una pausa: una manera de mirar de nuevo, sin explicar de más ni cerrar rápido lo que todavía merece pensarse.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="enlaces" class="py-16 px-4 bg-secondary-dark text-primary-light">
+      <div class="container mx-auto max-w-3xl text-center">
+        <h2 class="text-4xl font-bold text-accent-gold mb-8">Enlaces</h2>
+        <p class="text-lg text-primary-light mb-8">
+          Para seguir el proyecto o entrar en contacto.
+        </p>
+
+        <div class="space-y-4 text-lg">
+          <p>
+            <a href="mailto:whimsypov@gmail.com" class="underline hover:text-accent-gold">whimsypov@gmail.com</a>
+          </p>
+          <p>
+            <a href="https://www.youtube.com/@whimsyPOV" target="_blank" rel="noopener noreferrer" class="underline hover:text-accent-gold">YouTube</a>
+          </p>
+          <p>
+            <a href="https://www.instagram.com/whimsypov/" target="_blank" rel="noopener noreferrer" class="underline hover:text-accent-gold">Instagram</a>
+          </p>
+          <p>
+            <a href="https://www.tiktok.com/@whimsypov" target="_blank" rel="noopener noreferrer" class="underline hover:text-accent-gold">TikTok</a>
+          </p>
+          <p>
+            <a href="https://arianawajntraub.substack.com/" target="_blank" rel="noopener noreferrer" class="underline hover:text-accent-gold">La minuta W / Substack</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-primary-dark text-primary-light py-10 px-4 text-center">
+    <div class="container mx-auto">
+      <h3 class="text-2xl font-bold text-accent-gold mb-4">Whimsy POV</h3>
+      <p class="text-secondary-light mb-6">Un paréntesis para la curiosidad y el pensar.</p>
+      <p class="text-gray-500 text-sm">&copy; 2026 Whimsy POV</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileNav = document.getElementById('mobile-nav');
+
+      mobileMenuButton.addEventListener('click', function() {
+        mobileNav.classList.toggle('hidden');
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const targetSection = document.getElementById(targetId);
+
+          if (targetSection) {
+            if (!mobileNav.classList.contains('hidden')) {
+              mobileNav.classList.add('hidden');
+            }
+
+            navLinks.forEach(item => item.classList.remove('active-link'));
+            document.querySelectorAll(`.nav-link[href="#${targetId}"]`).forEach(item => item.classList.add('active-link'));
+
+            window.scrollTo({
+              top: targetSection.offsetTop - (window.innerWidth < 768 ? 80 : 0),
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      const sections = document.querySelectorAll('section[id]');
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - (window.innerWidth < 768 ? 80 : 100);
+          const sectionHeight = section.clientHeight;
+          if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active-link');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active-link');
+          }
+        });
+      });
+
+      const homeLinks = document.querySelectorAll('.nav-link[href="#inicio"]');
+      homeLinks.forEach(link => link.classList.add('active-link'));
+    });
+  </script>
+</body>
+</html>
