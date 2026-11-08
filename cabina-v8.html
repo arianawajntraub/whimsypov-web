@@ -3625,6 +3625,27 @@ function saveShowRegistryLog(entryText) {
   } catch (e) {}
 }
 
+
+/* === AUTO-MARCADOR DE CAPÍTULOS DE YOUTUBE EN TIEMPO REAL AL PASAR DE BLOQUE === */
+let liveChapterListV9 = [{ time: "00:00", label: "01 · Apertura en vivo" }];
+const _v8SelectCue = window.selectCue;
+window.selectCue = function(idx, withBumper = false) {
+  _v8SelectCue(idx, withBumper);
+  try {
+    const sc = SCRIPTS[currentScriptIdx];
+    const c = sc?.cues?.[currentCue];
+    if (c) {
+      const mm = String(Math.floor(onAirSeconds / 60)).padStart(2, '0');
+      const ss = String(Math.floor(onAirSeconds % 60)).padStart(2, '0');
+      const tStr = currentCue === 0 ? "00:00" : `${mm}:${ss}`;
+      if (!liveChapterListV9.some(x => x.label === c.ref)) {
+        liveChapterListV9.push({ time: tStr, label: c.ref });
+        localStorage.setItem('whimsy_live_chapters_v9', JSON.stringify(liveChapterListV9));
+      }
+    }
+  } catch (e) {}
+};
+
 </script>
 </body>
 </html>
