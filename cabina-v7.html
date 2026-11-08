@@ -1312,6 +1312,52 @@ async function setLiveCameraPlacement(pos) {
   broadcastStudioState();
 }
 
+let externalScreenStream = null;
+async function startExternalWindowCapture(targetZone) {
+  try {
+    if (!externalScreenStream || !externalScreenStream.active) {
+      externalScreenStream = await navigator.mediaDevices.getDisplayMedia({
+        video: { displaySurface: 'window', cursor: 'always' },
+        audio: false,
+        selfBrowserSurface: 'exclude',
+        preferCurrentTab: false
+      });
+      externalScreenStream.getVideoTracks()[0].onended = () => {
+        externalScreenStream = null;
+      };
+    }
+    const stage = document.getElementById('broadcastStage');
+    if (targetZone === 'center') {
+      const cCam = document.getElementById('corridorLiveCam');
+      if (cCam) {
+        cCam.srcObject = externalScreenStream;
+        cCam.style.display = 'block';
+        cCam.style.opacity = '1';
+        cCam.style.zIndex = '14';
+        cCam.play().catch(()=>{});
+      }
+      if (stage) stage.classList.add('cam-pos-center');
+    } else {
+      const rCam = document.getElementById('rightWingLiveCam');
+      if (rCam) {
+        rCam.srcObject = externalScreenStream;
+        rCam.style.display = 'block';
+        rCam.style.opacity = '1';
+        rCam.style.zIndex = '14';
+        rCam.style.objectFit = 'contain';
+        rCam.style.background = '#0a0a0e';
+        rCam.play().catch(()=>{});
+      }
+      if (stage) stage.classList.add('cam-pos-right');
+    }
+    const cuc = document.getElementById('cucarachaMainMsg');
+    if (cuc) cuc.textContent = '🖥️ PROYECTANDO VENTANA WEB EN VIVO EN: ' + (targetZone === 'center' ? 'CENTRO 9:16' : 'PANEL DERECHO') + ' (La cabina está excluida y protegida)';
+    broadcastStudioState();
+  } catch (e) {
+    console.warn('Captura de ventana cancelada:', e);
+  }
+}
+
 function togglePoncharDerecha() {
   const sz = document.getElementById('safeZone9x16');
   const btn = document.getElementById('btnPoncharDer');
