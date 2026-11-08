@@ -1,92 +1,82 @@
 [
   {
-    "id": "216c1c5c-3c01-4487-842e-34c9539d0095",
-    "title": "out mid1",
-    "mood": "pretty",
-    "bpm": "114",
-    "duration": "03:31",
-    "file": "audio/moby_01_out-mid1.mp3",
-    "size_kb": 8260.4
+    "id": "f905c629-2b67-42fe-9efd-8420c12b16d5",
+    "title": "hollywood (Moby)",
+    "mood": "Groove Sexy Driving",
+    "bpm": "120",
+    "duration": "04:28",
+    "file": "audio/groove_01_hollywood-moby.mp3"
   },
   {
-    "id": "ed977b51-a7ee-481c-9e06-1132ef508b1e",
-    "title": "fever dreams",
-    "mood": "dark",
-    "bpm": "113",
-    "duration": "04:20",
-    "file": "audio/moby_02_fever-dreams.mp3",
-    "size_kb": 10156.7
+    "id": "5d3eded3-5a07-4346-b453-af7aa2a15e1c",
+    "title": "get it (Moby)",
+    "mood": "Funky Driving Beat",
+    "bpm": "100",
+    "duration": "04:46",
+    "file": "audio/groove_02_get-it-moby.mp3"
   },
   {
-    "id": "fe867c57-0e48-4ccb-bd49-d23a7b155ecf",
-    "title": "it was so clear",
-    "mood": "dark driving",
-    "bpm": "85",
-    "duration": "02:53",
-    "file": "audio/moby_03_it-was-so-clear.mp3",
-    "size_kb": 6780.0
+    "id": "43cb10c5-f543-4e5e-bc9c-d01f9d1de8f0",
+    "title": "fail safe audio (Moby)",
+    "mood": "Electro Hypnotic Groove",
+    "bpm": "108",
+    "duration": "05:54",
+    "file": "audio/groove_03_fail-safe-audio-moby.mp3"
   },
   {
-    "id": "f6294a41-3c29-4d56-97a8-e95097a5a2ef",
-    "title": "clip show",
-    "mood": "energetic uplifting",
-    "bpm": "150",
-    "duration": "05:16",
-    "file": "audio/moby_04_clip-show.mp3",
-    "size_kb": 12367.0
+    "id": "80695875-dc3a-4dda-9ac0-6bff0063692c",
+    "title": "great weight lifted (Moby)",
+    "mood": "Rock / Aggressive Driving",
+    "bpm": "132",
+    "duration": "03:55",
+    "file": "audio/groove_04_great-weight-lifted-moby.mp3"
   },
   {
-    "id": "9036940e-c1d3-4718-8ce7-369d2d1f0a9b",
-    "title": "eight and eight",
-    "mood": "bittersweet dark",
-    "bpm": "96",
-    "duration": "03:31",
-    "file": "audio/moby_05_eight-and-eight.mp3",
-    "size_kb": 8247.1
+    "id": "2ffa1724-2c53-481b-8e12-5c3e0b88019c",
+    "title": "falling out of love (Moby)",
+    "mood": "Dark Post-Punk Driving",
+    "bpm": "124",
+    "duration": "02:58",
+    "file": "audio/groove_05_falling-out-of-love-moby.mp3"
   },
   {
-    "id": "85dfa76e-3abd-498f-a83b-721a5a05ff2a",
-    "title": "inspire modulate",
-    "mood": "uplifting pretty",
-    "bpm": "135",
-    "duration": "02:45",
-    "file": "audio/moby_06_inspire-modulate.mp3",
-    "size_kb": 6455.8
+    "id": "0296be8d-794c-4067-af2b-cd1053129933",
+    "title": "friday heretic (Moby)",
+    "mood": "Indie Electro Arriba",
+    "bpm": "126",
+    "duration": "05:38",
+    "file": "audio/groove_06_friday-heretic-moby.mp3"
   },
   {
-    "id": "47c0bc23-a969-5d0e-b270-56c6b22eb482",
-    "title": "Open",
-    "mood": "somber calm",
-    "bpm": "",
-    "duration": "02:25",
-    "file": "audio/moby_07_open.mp3",
-    "size_kb": 2839.0
+    "id": "2d2404ab-bfe2-4b46-a38e-5e8dd28d1ae8",
+    "title": "1983 (Moby)",
+    "mood": "Upbeat Synth 80s",
+    "bpm": "145",
+    "duration": "04:28",
+    "file": "audio/groove_07_1983-moby.mp3"
   },
   {
-    "id": "1006aec1-4dc1-4881-8471-7be70ac190ae",
-    "title": "June 13",
-    "mood": "melancholy calm",
-    "bpm": "118",
-    "duration": "07:45",
-    "file": "audio/moby_08_june-13.mp3",
-    "size_kb": 18180.4
+    "id": "b31d7b49-fe85-4114-83de-56a0f8460bd2",
+    "title": "out stands (Moby)",
+    "mood": "Pulso Hipnótico",
+    "bpm": "102",
+    "duration": "04:04",
+    "file": "audio/groove_08_out-stands-moby.mp3"
   },
   {
-    "id": "a2d07d12-b8a1-4af0-8472-dfbdf49cc584",
-    "title": "classical dec 14",
-    "mood": "uplifting bittersweet",
-    "bpm": "95",
-    "duration": "03:51",
-    "file": "audio/moby_09_classical-dec-14.mp3",
-    "size_kb": 9049.5
+    "id": "groove_09_kaelin-ellis-vibe-centric.m4a",
+    "title": "Vibe Centric (Kaelin Ellis · ARIS2)",
+    "mood": "Neo-Soul / Beat con Onda",
+    "bpm": "98",
+    "duration": "00:40 Loop",
+    "file": "audio/groove_09_kaelin-ellis-vibe-centric.m4a"
   },
   {
-    "id": "ceff66f6-d2e6-43dd-9d64-d86bc144daa2",
-    "title": "idiots",
-    "mood": "dark driving",
-    "bpm": "87.5",
-    "duration": "05:16",
-    "file": "audio/moby_10_idiots.mp3",
-    "size_kb": 12367.0
+    "id": "groove_10_kaelin-ellis-80s-synth.m4a",
+    "title": "80s Synth Groove (Kaelin Ellis · ARIS2)",
+    "mood": "Synth Funk / Radio Beat",
+    "bpm": "110",
+    "duration": "00:35 Loop",
+    "file": "audio/groove_10_kaelin-ellis-80s-synth.m4a"
   }
 ]
