@@ -1119,19 +1119,42 @@
     border-radius: 7px;
   }
   .obs-canvas-16x9.cam-pos-center #corridorLiveCam {
-    display: block;
+    display: block !important;
     position: absolute;
     inset: 0;
-    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 3 !important;
+  }
+  .obs-canvas-16x9.cam-pos-center #corridorBgVideo {
+    opacity: 0.12 !important;
   }
   .obs-canvas-16x9.cam-pos-right #rightWingLiveCam {
-    display: block;
+    display: block !important;
     position: absolute;
     inset: 0;
-    z-index: 3;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 6 !important;
   }
   .obs-canvas-16x9.cam-pos-left #leftWingLiveCamWrap {
     display: block !important;
+    height: 135px !important;
+    z-index: 6 !important;
+  }
+  /* PONCHADO / PANEO DINÁMICO ENTRE CENTRO Y PANEL DERECHO PARA CLIPS Y VIVO */
+  .safe-zone-9x16.ponchar-derecha .corridor-evidence-layer {
+    opacity: 1 !important;
+    top: 0 !important;
+    height: 100% !important;
+    z-index: 3 !important;
+    animation: panRightEvidence 10s ease-in-out infinite alternate;
+  }
+  @keyframes panRightEvidence {
+    0% { transform: scale(1.04) translateX(-3%); }
+    100% { transform: scale(1.12) translateX(3%); }
   }
   .mv51-meter-bar {
     width: 90px;
@@ -1257,23 +1280,50 @@ async function setLiveCameraPlacement(pos) {
   stage.classList.remove('cam-pos-center', 'cam-pos-left', 'cam-pos-right');
 
   if (pos === 'off') {
+    if (liveCamStream) {
+      liveCamStream.getTracks().forEach(t => t.stop());
+      liveCamStream = null;
+    }
     broadcastStudioState();
     return;
   }
 
-  if (!liveCamStream) {
+  if (!liveCamStream || !liveCamStream.active) {
     try {
-      const allDevs = await navigator.mediaDevices.enumerateDevices();
-      videoDevicesList = allDevs.filter(d => d.kind === 'videoinput');
-      liveCamStream = await navigator.mediaDevices.getUserMedia({
-        video: { width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: false
-      });
+      const cuc = document.getElementById('cucarachaMainMsg');
+      if (cuc) cuc.textContent = '🎥 Solicitando cámara de tu MacBook... (Si el navegador pregunta arriba a la izquierda, tocá Permitir)';
+      try {
+        liveCamStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+      } catch (innerErr) {
+        liveCamStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      }
       attachCameraStreamToStage(liveCamStream);
-    } catch (e) {}
+      const camLabel = liveCamStream.getVideoTracks()[0]?.label || 'Cámara MacBook Activa';
+      if (cuc) cuc.textContent = '🟢 CÁMARA EN VIVO CONECTADA: ' + camLabel + ' (Ubicada en: ' + pos.toUpperCase() + ')';
+    } catch (e) {
+      const cuc = document.getElementById('cucarachaMainMsg');
+      if (cuc) cuc.textContent = '⚠️ Permiso de cámara bloqueado en el navegador: tocá el ícono de cámara en la barra de direcciones arriba y poné "Permitir".';
+      return;
+    }
   }
 
+  attachCameraStreamToStage(liveCamStream);
   stage.classList.add('cam-pos-' + pos);
+  broadcastStudioState();
+}
+
+function togglePoncharDerecha() {
+  const sz = document.getElementById('safeZone9x16');
+  const btn = document.getElementById('btnPoncharDer');
+  const rightImg = document.getElementById('wingRightImg');
+  const szImg = document.getElementById('szImage');
+  if (rightImg && szImg) szImg.src = rightImg.src;
+  const isNow = sz.classList.toggle('ponchar-derecha');
+  if (btn) {
+    btn.classList.toggle('active', isNow);
+    btn.textContent = isNow ? '🎬 Ponchando Derecha en 9:16: ON' : '🎬 Ponchar Panel Derecho en 9:16 (Clips)';
+  }
+  saveShowRegistryLog(isNow ? 'PONCHADO POST: Pasar a imagen del panel derecho' : 'PONCHADO POST: Volver al centro 9:16');
   broadcastStudioState();
 }
 
@@ -1732,6 +1782,7 @@ function saveShowRegistryLog(entryText) {
             <button class="btn" id="mode-btn-full" onclick="setScreenMode('full')">🖼️ 9:16 Placa Full</button>
             <button class="btn" id="btnCc0Parallax" onclick="toggleCc0CabinetMode('parallax')" title="Mueve suavemente el grabado antiguo como bajo una lupa de gabinete">✨ CC0 Lámina Viva 2.5D</button>
             <button class="btn" id="btnCc0Dark" onclick="toggleCc0CabinetMode('darkplate')" title="Invierte grabados blancos a fondo carbón #1A1A1A con trazos hueso">🌑 CC0 Placa Oscura</button>
+            <button class="btn btn-gold" id="btnPoncharDer" onclick="togglePoncharDerecha()" title="Trae lo que está en el panel derecho al centro 9:16 con paneo suave para que quede unido al audio en los Shorts/Reels">🎬 Ponchar Panel Derecho en 9:16 (Clips)</button>
             <label class="btn" style="cursor:pointer;">
               📁 Subir Foto/Placa
               <input type="file" accept="image/*" style="display:none;" onchange="uploadCustomEvidence(event)">
