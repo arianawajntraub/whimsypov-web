@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whimsy POV — Cámara Celular en Vivo (Playa / Ventana) + Control Remoto</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+  body {
+    background: #07070b;
+    color: #F5F2EB;
+    font-family: -apple-system, BlinkMacSystemFont, 'DM Sans', sans-serif;
+    padding: 16px;
+    text-align: center;
+  }
+  video {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 12px;
+    border: 2px solid #E8B4B8;
+    background: #000;
+    margin: 10px auto;
+    display: block;
+  }
+  .btn {
+    background: #E8B4B8;
+    color: #08080c;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 9px;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  .btn-sec {
+    background: #1a1a26;
+    color: #F5F2EB;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+</style>
+</head>
+<body>
+  <h2 style="margin-bottom:4px;">📱 Whimsy POV · Cámara en Vivo & Control Remoto</h2>
+  <p style="font-size:12px;color:#A39E93;margin-bottom:10px;">Usá tu celular en la playa o en la ventana para mandar video en vivo a la Cabina y a OBS, o para pasar bloques a distancia.</p>
+  <video id="preview" autoplay muted playsinline></video>
+  <div id="status" style="font-size:12px;color:#38C172;margin-bottom:10px;">Listo para transmitir cámara a tu Cabina</div>
+  <div>
+    <button class="btn" onclick="startMobileCam('environment')">🌊 Transmitir Cámara Trasera (Mar / Playa)</button>
+    <button class="btn btn-sec" onclick="startMobileCam('user')">🤳 Transmitir Cámara Frontal</button>
+  </div>
+  <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15);">
+    <div style="font-size:12px;color:#D4AF37;margin-bottom:8px;">🎛️ CONTROL REMOTO RÁPIDO DE AIRE</div>
+    <button class="btn btn-sec" onclick="sendRemote('prevCue')">⬅ Bloque Ant.</button>
+    <button class="btn" onclick="sendRemote('nextCue')">Siguiente Bloque ➡</button>
+    <button class="btn btn-sec" onclick="sendRemote('duck')">🎙️ Pisar / Subir Música (M)</button>
+  </div>
+<script>
+let peer = new Peer();
+let conn = null;
+peer.on('open', () => {
+  conn = peer.connect('whimsy-pov-cabina-ariana-v8');
+});
+
+async function startMobileCam(facing) {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    document.getElementById('preview').srcObject = stream;
+    peer.call('whimsy-pov-cabina-ariana-v8', stream);
+    document.getElementById('status').textContent = '🟢 TRANSMITIENDO EN VIVO A TU CABINA Y OBS';
+  } catch (e) {
+    document.getElementById('status').textContent = '⚠️ Permití el acceso a la cámara en tu navegador.';
+  }
+}
+
+function sendRemote(action) {
+  if (conn && conn.open) conn.send({ type: 'REMOTE_ACTION', action });
+}
+</script>
+</body>
+</html>
