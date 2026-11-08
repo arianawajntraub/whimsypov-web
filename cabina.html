@@ -451,7 +451,8 @@
     opacity: 0 !important;
     pointer-events: none !important;
   }
-  .obs-canvas-16x9.cinema-mode-16x9 .safe-zone-9x16 {
+  .obs-canvas-16x9.cinema-mode-16x9 .safe-zone-9x16,
+  .obs-canvas-16x9.cinema-mode-9x16 .safe-zone-9x16 {
     background: transparent !important;
     border-color: rgba(232, 180, 184, 0.14);
     pointer-events: none;
@@ -459,7 +460,10 @@
   }
   .obs-canvas-16x9.cinema-mode-16x9 .corridor-bg-video,
   .obs-canvas-16x9.cinema-mode-16x9 .corridor-evidence-layer,
-  .obs-canvas-16x9.cinema-mode-16x9 .corridor-overlay {
+  .obs-canvas-16x9.cinema-mode-16x9 .corridor-overlay,
+  .obs-canvas-16x9.cinema-mode-9x16 .corridor-bg-video,
+  .obs-canvas-16x9.cinema-mode-9x16 .corridor-evidence-layer,
+  .obs-canvas-16x9.cinema-mode-9x16 .corridor-overlay {
     opacity: 0 !important;
   }
   /* MODO B: CINE SMART 9:16 (VIDEO U OBRA 16:9 ENCUADRADO RESPONSIVO EN EL CORREDOR CENTRAL PARA SHORTS / REELS / POST) */
@@ -516,7 +520,7 @@
     display: none;
     position: absolute;
     inset: 0;
-    z-index: 8;
+    z-index: 25;
     pointer-events: none;
     font-family: 'JetBrains Mono', monospace;
   }
@@ -1294,483 +1298,7 @@
   }
 
 </style>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js">
-/* === MOTOR v8: SHURE MV51 USB-C + CÁMARAS EN VIVO + SYNC EN TIEMPO REAL CON OBS-SALIDA Y MESA-PREPRO === */
-const studioBus = new BroadcastChannel('whimsy_studio_v8');
-let mv51Stream = null;
-let mv51AudioCtx = null;
-let mv51Highpass = null;
-let mv51BeachMode = true;
-let liveCamStream = null;
-let currentCamPlacement = 'off';
-let videoDevicesList = [];
-let currentVideoDeviceIdx = 0;
-let peerHost = null;
-
-async function initShureMv51() {
-  try {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const audioInputs = devices.filter(d => d.kind === 'audioinput');
-    const shureDev = audioInputs.find(d => /shure|mv51|motiv|usb/i.test(d.label));
-    const constraints = {
-      audio: {
-        deviceId: shureDev ? { exact: shureDev.deviceId } : undefined,
-        echoCancellation: false,
-        noiseSuppression: false,
-        autoGainControl: false
-      }
-    };
-    mv51Stream = await navigator.mediaDevices.getUserMedia(constraints);
-    const trackLabel = mv51Stream.getAudioTracks()[0]?.label || 'Shure MV51 USB-C';
-    document.getElementById('mv51DeviceLabel').textContent = '🟢 ' + trackLabel;
-    document.getElementById('btnInitMv51').textContent = '🎙️ MV51 Activo';
-
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    mv51AudioCtx = new AudioCtx();
-    const src = mv51AudioCtx.createMediaStreamSource(mv51Stream);
-    mv51Highpass = mv51AudioCtx.createBiquadFilter();
-    mv51Highpass.type = 'highpass';
-    mv51Highpass.frequency.value = mv51BeachMode ? 90 : 45;
-
-    const analyser = mv51AudioCtx.createAnalyser();
-    analyser.fftSize = 256;
-    src.connect(mv51Highpass);
-    mv51Highpass.connect(analyser);
-
-    const dataArr = new Uint8Array(analyser.frequencyBinCount);
-    setInterval(() => {
-      analyser.getByteFrequencyData(dataArr);
-      let sum = 0;
-      for (let i = 0; i < dataArr.length; i++) sum += dataArr[i];
-      const avg = Math.min(100, Math.round((sum / dataArr.length) * 1.8));
-      const fill = document.getElementById('mv51MeterFill');
-      if (fill) fill.style.width = avg + '%';
-    }, 80);
-
-    saveShowRegistryLog('Micrófono conectado: ' + trackLabel);
-  } catch (err) {
-    document.getElementById('mv51DeviceLabel').textContent = '⚠️ Dar permiso de Mic en navegador';
-  }
-}
-
-function toggleMv51BeachFilter() {
-  mv51BeachMode = !mv51BeachMode;
-  if (mv51Highpass) mv51Highpass.frequency.value = mv51BeachMode ? 90 : 45;
-  const btn = document.getElementById('btnMv51BeachEq');
-  if (btn) {
-    btn.classList.toggle('active', mv51BeachMode);
-    btn.textContent = mv51BeachMode ? '🌊 Filtro Playa Anti-Viento: ON' : '🏠 Modo Gabinete Interior';
-  }
-}
-
-async function setLiveCameraPlacement(pos) {
-  currentCamPlacement = pos;
-  ['Off', 'Center', 'Left', 'Right'].forEach(k => {
-    const b = document.getElementById('camBtn' + k);
-    if (b) b.classList.toggle('active', k.toLowerCase() === pos);
-  });
-
-  const stage = document.getElementById('obsStage');
-  stage.classList.remove('cam-pos-center', 'cam-pos-left', 'cam-pos-right');
-
-  if (pos === 'off') {
-    if (liveCamStream) {
-      liveCamStream.getTracks().forEach(t => t.stop());
-      liveCamStream = null;
-    }
-    broadcastStudioState();
-    return;
-  }
-
-  if (!liveCamStream || !liveCamStream.active) {
-    try {
-      const cuc = document.getElementById('cucarachaMainMsg');
-      if (cuc) cuc.textContent = '🎥 Solicitando cámara de tu MacBook... (Si el navegador pregunta arriba a la izquierda, tocá Permitir)';
-      try {
-        liveCamStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
-      } catch (innerErr) {
-        liveCamStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-      }
-      attachCameraStreamToStage(liveCamStream);
-      const camLabel = liveCamStream.getVideoTracks()[0]?.label || 'Cámara MacBook Activa';
-      if (cuc) cuc.textContent = '🟢 CÁMARA EN VIVO CONECTADA: ' + camLabel + ' (Ubicada en: ' + pos.toUpperCase() + ')';
-    } catch (e) {
-      const cuc = document.getElementById('cucarachaMainMsg');
-      if (cuc) cuc.textContent = '⚠️ Permiso de cámara bloqueado en el navegador: tocá el ícono de cámara en la barra de direcciones arriba y poné "Permitir".';
-      return;
-    }
-  }
-
-  attachCameraStreamToStage(liveCamStream);
-  stage.classList.add('cam-pos-' + pos);
-  broadcastStudioState();
-}
-
-let externalScreenStream = null;
-async function startExternalWindowCapture(targetZone) {
-  try {
-    if (!externalScreenStream || !externalScreenStream.active) {
-      externalScreenStream = await navigator.mediaDevices.getDisplayMedia({
-        video: { displaySurface: 'window', cursor: 'always' },
-        audio: false,
-        selfBrowserSurface: 'exclude',
-        preferCurrentTab: false
-      });
-      externalScreenStream.getVideoTracks()[0].onended = () => {
-        externalScreenStream = null;
-      };
-    }
-    const stage = document.getElementById('broadcastStage');
-    if (targetZone === 'center') {
-      const cCam = document.getElementById('corridorLiveCam');
-      if (cCam) {
-        cCam.srcObject = externalScreenStream;
-        cCam.style.display = 'block';
-        cCam.style.opacity = '1';
-        cCam.style.zIndex = '14';
-        cCam.play().catch(()=>{});
-      }
-      if (stage) stage.classList.add('cam-pos-center');
-    } else {
-      const rCam = document.getElementById('rightWingLiveCam');
-      if (rCam) {
-        rCam.srcObject = externalScreenStream;
-        rCam.style.display = 'block';
-        rCam.style.opacity = '1';
-        rCam.style.zIndex = '14';
-        rCam.style.objectFit = 'contain';
-        rCam.style.background = '#0a0a0e';
-        rCam.play().catch(()=>{});
-      }
-      if (stage) stage.classList.add('cam-pos-right');
-    }
-    const cuc = document.getElementById('cucarachaMainMsg');
-    if (cuc) cuc.textContent = '🖥️ PROYECTANDO VENTANA WEB EN VIVO EN: ' + (targetZone === 'center' ? 'CENTRO 9:16' : 'PANEL DERECHO') + ' (La cabina está excluida y protegida)';
-    broadcastStudioState();
-  } catch (e) {
-    console.warn('Captura de ventana cancelada:', e);
-  }
-}
-
-function togglePoncharDerecha() {
-  const sz = document.getElementById('safeZone9x16');
-  const btn = document.getElementById('btnPoncharDer');
-  const rightImg = document.getElementById('wingRightImg');
-  const szImg = document.getElementById('szImage');
-  if (rightImg && szImg) szImg.src = rightImg.src;
-  const isNow = sz.classList.toggle('ponchar-derecha');
-  if (btn) {
-    btn.classList.toggle('active', isNow);
-    btn.textContent = isNow ? '🎬 Ponchando Derecha en 9:16: ON' : '🎬 Ponchar Panel Derecho en 9:16 (Clips)';
-  }
-  saveShowRegistryLog(isNow ? 'PONCHADO POST: Pasar a imagen del panel derecho' : 'PONCHADO POST: Volver al centro 9:16');
-  broadcastStudioState();
-}
-
-function attachCameraStreamToStage(stream) {
-  ['corridorLiveCam', 'leftWingLiveCam', 'rightWingLiveCam'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.srcObject = stream;
-      el.play().catch(() => {});
-    }
-  });
-}
-
-async function switchCameraSource() {
-  try {
-    const allDevs = await navigator.mediaDevices.enumerateDevices();
-    videoDevicesList = allDevs.filter(d => d.kind === 'videoinput');
-    if (videoDevicesList.length > 1) {
-      currentVideoDeviceIdx = (currentVideoDeviceIdx + 1) % videoDevicesList.length;
-      const devId = videoDevicesList[currentVideoDeviceIdx].deviceId;
-      if (liveCamStream) liveCamStream.getTracks().forEach(t => t.stop());
-      liveCamStream = await navigator.mediaDevices.getUserMedia({
-        video: { deviceId: { exact: devId }, width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: false
-      });
-      attachCameraStreamToStage(liveCamStream);
-      if (currentCamPlacement === 'off') setLiveCameraPlacement('left');
-    } else if (currentCamPlacement === 'off') {
-      setLiveCameraPlacement('left');
-    }
-  } catch (e) {}
-}
-
-/* SINCRONIZACIÓN EN TIEMPO REAL ENTRE CABINA (IPAD/MAC), SALIDA LIMPIA OBS Y BACKEND PREPRO */
-let currentCinemaMode = 'off'; // 'off' | '16x9' | '9x16'
-let currentCinemaMediaType = 'iframe'; // 'iframe' | 'img'
-let currentCinemaMediaSrc = '';
-
-window.setCinemaBroadcastMode = function(mode, mediaType, mediaSrc, kickerText, graphText) {
-  const stage = document.getElementById('obsStage');
-  const layer = document.getElementById('cinemaStageLayer');
-  const ifr = document.getElementById('cinemaIframe');
-  const img = document.getElementById('cinemaImg');
-  const kEl = document.getElementById('moscaMiniGraphKicker');
-  const tEl = document.getElementById('moscaMiniGraphText');
-  const b16 = document.getElementById('btnCinema16x9');
-  const b9 = document.getElementById('btnCinema9x16');
-
-  currentCinemaMode = mode || 'off';
-  if (!stage || !layer) return;
-
-  stage.classList.remove('cinema-mode-16x9', 'cinema-mode-9x16');
-  if (b16) b16.classList.toggle('active', currentCinemaMode === '16x9');
-  if (b9) b9.classList.toggle('active', currentCinemaMode === '9x16');
-
-  if (currentCinemaMode === 'off') {
-    if (ifr) ifr.src = 'about:blank';
-    if (img) img.style.display = 'none';
-    const cuc = document.getElementById('cucarachaMainMsg');
-    if (cuc) cuc.textContent = '🟢 PANTALLA NORMAL DE 3 COLUMNAS RESTAURADA EN VIVO';
-    broadcastStudioState();
-    return;
-  }
-
-  if (mediaType) currentCinemaMediaType = mediaType;
-  if (mediaSrc) currentCinemaMediaSrc = mediaSrc;
-  if (kickerText && kEl) kEl.textContent = kickerText;
-  if (graphText && tEl) tEl.textContent = graphText;
-
-  if (currentCinemaMode === '16x9') {
-    stage.classList.add('cinema-mode-16x9');
-  } else if (currentCinemaMode === '9x16') {
-    stage.classList.add('cinema-mode-9x16');
-  }
-
-  if (currentCinemaMediaType === 'img') {
-    if (ifr) { ifr.src = 'about:blank'; ifr.style.display = 'none'; }
-    if (img) { img.src = currentCinemaMediaSrc; img.style.display = 'block'; }
-  } else {
-    if (img) img.style.display = 'none';
-    if (ifr) {
-      ifr.style.display = 'block';
-      if (ifr.src !== currentCinemaMediaSrc) ifr.src = currentCinemaMediaSrc;
-    }
-  }
-
-  const cuc = document.getElementById('cucarachaMainMsg');
-  if (cuc) {
-    cuc.textContent = currentCinemaMode === '16x9'
-      ? '🍿 MODO CINE 16:9 SALA LIMPIA AL AIRE: Mosca quieta + Mini-Graph a la izquierda de la Mosca + Tu Shure MV51 abierto para comentar encima.'
-      : '📱 MODO CINE SMART 9:16 AL AIRE: Obra encuadrada dentro del corredor central 9:16 + Mini-Graph junto a la Mosca (listo para cortar Shorts/Reels sin perder los bordes).';
-  }
-  saveShowRegistryLog('Categoría Cine / Monitor al Aire (' + currentCinemaMode + '): ' + (tEl ? tEl.textContent : ''));
-  broadcastStudioState();
-};
-
-window.speakCustomCorrespondentText = function(titleLabel, textBody) {
-  if (!textBody) return;
-  const currentDeck = getActiveDeck();
-  const hudTitle = document.getElementById('hudCorrTitle');
-  const hudTimer = document.getElementById('hudCorrTimer');
-  const pill = document.getElementById('audioStatusPill');
-  const cuc = document.getElementById('cucarachaMainMsg');
-
-  if (!currentDeck.paused && !isDucked) {
-    toggleDucking();
-  }
-  try {
-    const corrAudio = document.getElementById('corrAudio');
-    if (corrAudio && !corrAudio.paused) corrAudio.pause();
-  } catch (e) {}
-
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(textBody);
-    u.lang = 'es-ES';
-    const voices = window.speechSynthesis.getVoices();
-    if (currentCorrGender === 'male') {
-      const mVoice = voices.find(v => /jorge|diego|carlos|juan|alvaro|male/i.test(v.name) && /es/i.test(v.lang)) || voices.find(v => /es/i.test(v.lang));
-      if (mVoice) u.voice = mVoice;
-      u.pitch = 0.94;
-      u.rate = 0.97;
-    } else {
-      const fVoice = voices.find(v => /paulina|monica|helena|paloma|lucia|sofia|female/i.test(v.name) && /es/i.test(v.lang)) || voices.find(v => /es/i.test(v.lang));
-      if (fVoice) u.voice = fVoice;
-      u.pitch = 1.02;
-      u.rate = 0.98;
-    }
-    const vLabel = currentCorrGender === 'male' ? 'Varón Estudio' : 'Mujer Jaffa';
-    if (hudTitle) hudTitle.textContent = (titleLabel || 'Crónica Espontánea') + ' (' + vLabel + ')';
-    const estSec = Math.max(8, Math.round(textBody.split(/\s+/).length / 2.5));
-    if (hudTimer) hudTimer.textContent = `EST: ${fmtMMSS(estSec)} · EN AIRE`;
-    if (pill) {
-      pill.className = 'audio-status-pill is-on';
-      pill.textContent = '🎙️ CRÓNICA ESPONTÁNEA (' + vLabel + '): ' + (titleLabel || 'En aire');
-    }
-    if (cuc) cuc.textContent = '🎙️ CORRESPONSAL EN AIRE CONTANDO EL TRASFONDO Y REPORTAJE DE LA OBRA → Podés intervenir con tu Shure MV51 cuando quieras.';
-    u.onend = () => {
-      if (isDucked && !currentDeck.paused) toggleDucking();
-      if (hudTitle) hudTitle.textContent = '✅ Finalizada: ' + (titleLabel || 'Crónica');
-      if (cuc) cuc.textContent = '🟢 TERMINÓ LA CRÓNICA DEL REPORTAJE → AIRE TUYO ARIANA';
-    };
-    window.speechSynthesis.speak(u);
-  }
-};
-
-function getStudioSnapshot() {
-  return {
-    ts: Date.now(),
-    bgVideoSrc: document.getElementById('corridorBgVideo')?.getAttribute('src') || 'loops/micro_fibra_lente.mp4',
-    screenMode: currentScreenMode,
-    camPlacement: currentCamPlacement,
-    cinemaMode: currentCinemaMode,
-    cinemaMediaType: currentCinemaMediaType,
-    cinemaMediaSrc: currentCinemaMediaSrc,
-    moscaMiniGraphKicker: document.getElementById('moscaMiniGraphKicker')?.textContent || '',
-    moscaMiniGraphText: document.getElementById('moscaMiniGraphText')?.textContent || '',
-    szStepBadge: document.getElementById('szStepBadge')?.textContent || '',
-    szKicker: document.getElementById('szKicker')?.textContent || '',
-    szHeadline: document.getElementById('szHeadline')?.textContent || '',
-    szFact: document.getElementById('szFact')?.textContent || '',
-    szRefLabel: document.getElementById('szRefLabel')?.textContent || '',
-    wingRightTopTag: document.getElementById('wingRightTopTag')?.textContent || '',
-    wingHeroNumValue: document.getElementById('wingHeroNumValue')?.textContent || '1976',
-    wingTitle: document.getElementById('wingTitle')?.textContent || '',
-    wingBpmNum: document.getElementById('wingBpmNum')?.textContent || '124 BPM',
-    wingStepNum: document.getElementById('wingStepNum')?.textContent || '01 / 05',
-    wingMusicCountdown: document.getElementById('wingMusicCountdown')?.textContent || '--:--',
-    wingCorrCountdown: document.getElementById('wingCorrCountdown')?.textContent || 'LISTA',
-    wingTrackTitle: document.getElementById('wingTrackTitle')?.textContent || 'falling out of love (Moby)',
-    wingTrackMood: document.getElementById('wingTrackMood')?.textContent || '124 BPM',
-    comingUpHtml: document.getElementById('wingComingUpList')?.innerHTML || '',
-    szImageSrc: document.getElementById('szImage')?.src || '',
-    wingRightImgSrc: document.getElementById('wingRightImg')?.src || '',
-    bumperActive: document.getElementById('sectionBumper')?.classList.contains('active') || false,
-    bumperKicker: document.getElementById('bumperKicker')?.textContent || '',
-    bumperTitle: document.getElementById('bumperTitle')?.textContent || ''
-  };
-}
-
-function broadcastStudioState() {
-  const snap = getStudioSnapshot();
-  try {
-    studioBus.postMessage({ type: 'STUDIO_STATE', payload: snap });
-    localStorage.setItem('whimsy_live_state_v8', JSON.stringify(snap));
-    if (window.activePeerConnections) {
-      window.activePeerConnections.forEach(conn => {
-        if (conn && conn.open) conn.send({ type: 'STUDIO_STATE', payload: snap });
-      });
-    }
-  } catch (e) {}
-}
-
-setInterval(broadcastStudioState, 400);
-
-/* Escuchar cambios enviados desde el Backend de Pre-Producción (mesa-prepro.html) o desde el iPad remoto */
-function applyIncomingCommand(msg) {
-  if (!msg || !msg.type) return;
-  if (msg.type === 'PREPRO_PUSH') {
-    const d = msg.payload || {};
-    if (d.heroNumber) document.getElementById('wingHeroNumValue').textContent = d.heroNumber;
-    if (d.headline) {
-      document.getElementById('szHeadline').textContent = d.headline;
-      document.getElementById('wingTitle').textContent = d.headline;
-    }
-    if (d.kicker) document.getElementById('szKicker').textContent = d.kicker;
-    if (d.fact) document.getElementById('szFact').textContent = d.fact;
-    if (d.pntMsg) {
-      const cuc = document.getElementById('cucarachaMainMsg');
-      if (cuc) cuc.textContent = '💎 ENVIADO DESDE MESA DE PREPRO: ' + d.pntMsg;
-    }
-    if (d.comingUpItems && Array.isArray(d.comingUpItems)) {
-      const box = document.getElementById('wingComingUpList');
-      if (box) {
-        box.innerHTML = d.comingUpItems.map((t, i) =>
-          `<div class="cu-item ${i===0?'now':(i===1?'next':'')}">${i===0?'● AHORA: ':(i===1?'→ VIENE: ':'→ LUEGO: ')}${t}</div>`
-        ).join('');
-      }
-    }
-    if (d.customScriptCues && Array.isArray(d.customScriptCues) && d.customScriptCues.length) {
-      SCRIPTS[0].title = d.scriptTitle || SCRIPTS[0].title;
-      SCRIPTS[0].cues = d.customScriptCues;
-      switchScript(0);
-    }
-    if (d.newRightImage) {
-      rightPlaylistItems.unshift({
-        tag: d.newRightTag || '[MESA DE ARTE]',
-        label: d.newRightLabel || 'LÁMINA EN VIVO',
-        img: d.newRightImage
-      });
-      rightPlaylistIdx = -1;
-      nextRightPlaylistItem();
-    }
-    if (d.newCenterImage) {
-      const szImg = document.getElementById('szImage');
-      if (szImg) szImg.src = d.newCenterImage;
-      if (typeof setScreenMode === 'function') setScreenMode('split');
-    }
-    if (d.cinemaMode) {
-      setCinemaBroadcastMode(
-        d.cinemaMode,
-        d.cinemaMediaType || 'iframe',
-        d.cinemaMediaSrc || '',
-        d.moscaMiniGraphKicker || '🎬 CINE / OBRA AL AIRE · WHIMSY POV',
-        d.moscaMiniGraphText || d.headline || ''
-      );
-    }
-    if (d.speakCorrespondentStory && d.speakCorrespondentStory.text) {
-      speakCustomCorrespondentText(d.speakCorrespondentStory.title || 'Crónica Espontánea', d.speakCorrespondentStory.text);
-    }
-    saveShowRegistryLog('Actualización recibida desde Mesa de Prepro: ' + (d.headline || 'Escaleta actualizada'));
-    broadcastStudioState();
-  } else if (msg.type === 'REMOTE_ACTION') {
-    const act = msg.action;
-    if (act === 'nextCue') nextCue();
-    else if (act === 'prevCue') prevCue();
-    else if (act === 'duck') toggleDucking();
-    else if (act === 'playMoby') playMoby(msg.idx || 0);
-    else if (act === 'speakCorr') speakCorrespondent(msg.idx || 0);
-  }
-}
-
-studioBus.onmessage = (ev) => applyIncomingCommand(ev.data);
-window.addEventListener('storage', (ev) => {
-  if (ev.key === 'whimsy_prepro_push_v8' && ev.newValue) {
-    try { applyIncomingCommand(JSON.parse(ev.newValue)); } catch (e) {}
-  }
-});
-
-/* Inicializar PeerJS Cloud Broker para recibir cámara desde el celular en la playa o comandos desde el iPad */
-window.activePeerConnections = [];
-try {
-  if (window.Peer) {
-    peerHost = new Peer('whimsy-pov-cabina-ariana-v8');
-    peerHost.on('connection', (conn) => {
-      window.activePeerConnections.push(conn);
-      conn.on('data', (data) => applyIncomingCommand(data));
-      conn.on('open', () => conn.send({ type: 'STUDIO_STATE', payload: getStudioSnapshot() }));
-    });
-    peerHost.on('call', (call) => {
-      call.answer();
-      call.on('stream', (remoteMobileStream) => {
-        liveCamStream = remoteMobileStream;
-        attachCameraStreamToStage(remoteMobileStream);
-        if (currentCamPlacement === 'off') setLiveCameraPlacement('center');
-        const cuc = document.getElementById('cucarachaMainMsg');
-        if (cuc) cuc.textContent = '📱 CÁMARA DE CELULAR RECIBIDA EN VIVO (Desde playa / ventana)';
-      });
-    });
-  }
-} catch (e) {}
-
-/* REGISTRO HISTÓRICO DE EMISIONES (SIN OCUPAR LA MAC) */
-function saveShowRegistryLog(entryText) {
-  try {
-    const logs = JSON.parse(localStorage.getItem('whimsy_show_registry_v8') || '[]');
-    logs.unshift({
-      time: new Date().toLocaleString('es-AR'),
-      event: entryText,
-      track: MOBY_TRACKS[currentPlayingTrack]?.title || 'Sin música',
-      cue: SCRIPTS[currentScriptIdx]?.cues[currentCue]?.ref || 'Apertura'
-    });
-    localStorage.setItem('whimsy_show_registry_v8', JSON.stringify(logs.slice(0, 100)));
-  } catch (e) {}
-}
-
-</script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
 <body>
 
@@ -1788,19 +1316,19 @@ function saveShowRegistryLog(entryText) {
       <span>🇺🇾🇦🇷 PDE / BUE</span> <strong id="clk-uy">--:--:--</strong>
     </button>
     <button class="clock-btn" id="top-corr-0" onclick="triggerCorrespondent(0)">
-      <span>🇬🇧 LONDRES · V&A Reverso</span> <strong id="clk-lon">--:--</strong>
+      <span>🇬🇧 LONDRES · V&A (00:38)</span> <strong id="clk-lon">--:--</strong>
     </button>
     <button class="clock-btn" id="top-corr-1" onclick="triggerCorrespondent(1)">
-      <span>🇫🇷 PARÍS · Telar Perforado</span> <strong id="clk-par">--:--</strong>
+      <span>🇫🇷 PARÍS · Telar (00:35)</span> <strong id="clk-par">--:--</strong>
     </button>
     <button class="clock-btn" id="top-corr-2" onclick="triggerCorrespondent(2)">
-      <span>🇯🇵 TOKIO · Musgo en Arcade</span> <strong id="clk-tok">--:--</strong>
+      <span>🇯🇵 TOKIO · Arcade (00:32)</span> <strong id="clk-tok">--:--</strong>
     </button>
     <button class="clock-btn" id="top-corr-3" onclick="triggerCorrespondent(3)">
-      <span>🇮🇱 JAFFA · Cerámica con Sal</span> <strong id="clk-tlv">--:--</strong>
+      <span>🇮🇱 JAFFA · Sal (00:28)</span> <strong id="clk-tlv">--:--</strong>
     </button>
     <button class="clock-btn" id="top-corr-4" onclick="triggerCorrespondent(4)">
-      <span>🇺🇾 GARZÓN · Pinos Acústicos</span> <strong id="clk-nyc">--:--</strong>
+      <span>🇺🇾 GARZÓN · Pinos (00:28)</span> <strong id="clk-nyc">--:--</strong>
     </button>
   </div>
 </header>
@@ -1808,6 +1336,7 @@ function saveShowRegistryLog(entryText) {
   <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
     <span style="color:var(--gold);font-weight:700;">🌐 ECOSISTEMA INDEPENDIENTE (VIVE FUERA DEL CHAT):</span>
     <a href="obs-salida.html" target="_blank" class="btn btn-primary" style="text-decoration:none;font-size:10px;">📺 1. Abrir Salida Limpia OBS (1920x1080)</a>
+    <button class="btn" onclick="openFloatingCleanAirWindow()" style="font-size:10px;border-color:#4ADE80;color:#4ADE80;" title="Abre la Salida Limpia 16:9 en una ventanita flotante al costado para ensayar el Aire Real sin abrir OBS">🪟 1b. Monitor Flotante de Aire Limpio (Ensayar sin OBS)</button>
     <a href="mesa-prepro.html" target="_blank" class="btn btn-gold" style="text-decoration:none;font-size:10px;">🗂️ 2. Abrir Backend Prepro / Arte / Guion / Registro</a>
     <a href="camara-celu.html" target="_blank" class="btn" style="text-decoration:none;font-size:10px;">📱 3. Link Cámara Celular (Playa / Ventana)</a>
     <a href="watch.html" target="_blank" class="btn" style="text-decoration:none;font-size:10px;border-color:var(--gold);color:#ffe484;">⌚ 4. Apple Watch</a>
@@ -1997,11 +1526,22 @@ function saveShowRegistryLog(entryText) {
           <div class="btn-row">
             <button class="btn active" id="btnMusicLoop" onclick="toggleMusicLoopFade()">🔁 Loop c/Fade 5s: ON</button>
             <button class="btn btn-primary" id="btnDuckSticky" onclick="toggleDucking()">🎙️ Pisar 18% (M)</button>
-            <button class="btn" onclick="stopMoby()">⏹ Apagar c/Fade 5s</button>
+            <button class="btn btn-gold" id="btnFadeAndStopDefinitely" onclick="fadeAndStopMobyDefinitely()" style="border-color:#F87171;color:#FCA5A5;background:rgba(248,113,113,0.14);" title="Baja la música suavemente en 3 segundos, apaga el Loop y frena la música SÍ O SÍ (ideal antes de tirar un video)">📉 Fade 3s y Parar SÍ O SÍ</button>
           </div>
-          <div class="quick-strip" style="width:100%;justify-content:space-between;padding-top:3px;border-top:1px solid rgba(255,255,255,0.06);">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--muted);">CAMBIO RÁPIDO (SIN SCROLLEAR):</span>
-            <div class="quick-strip" id="stickyQuickMoby"></div>
+          <div class="quick-strip" style="width:100%;justify-content:space-between;padding-top:3px;border-top:1px solid rgba(255,255,255,0.06);gap:6px;">
+            <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--muted);">CAMBIO RÁPIDO (SIN SCROLLEAR):</span>
+              <div class="quick-strip" id="stickyQuickMoby"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--pink);font-weight:700;">🎚️ VOL MÚSICA:</span>
+              <input type="range" id="stickyVolSlider" min="0" max="100" value="68" oninput="setLiveMusicVolume(this.value)" style="accent-color:var(--pink);width:74px;cursor:pointer;" title="Regulá el volumen de la música en tiempo real mientras suena una crónica o un video">
+              <strong id="stickyVolLabel" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink);min-width:26px;">68%</strong>
+              <button class="q-btn" onclick="setLiveMusicVolume(0)" title="Mute música inmediato">0%</button>
+              <button class="q-btn" onclick="setLiveMusicVolume(12)" title="Colchón bajito para hablar o escuchar corresponsal">12% Colchón</button>
+              <button class="q-btn" onclick="setLiveMusicVolume(18)" title="Nivel Pisar estándar">18% Pisar</button>
+              <button class="q-btn" onclick="setLiveMusicVolume(68)" title="Nivel Música arriba">68% Aire</button>
+            </div>
           </div>
         </div>
 
@@ -2019,11 +1559,11 @@ function saveShowRegistryLog(entryText) {
           </div>
           <div class="quick-strip" style="width:100%;justify-content:space-between;padding-top:3px;border-top:1px solid rgba(255,255,255,0.06);">
             <div class="quick-strip">
-              <button class="q-btn" onclick="speakCorrespondent(0)">🇬🇧 C1 Londres</button>
-              <button class="q-btn" onclick="speakCorrespondent(1)">🇫🇷 C2 París</button>
-              <button class="q-btn" onclick="speakCorrespondent(2)">🇯🇵 C3 Tokio</button>
-              <button class="q-btn" onclick="speakCorrespondent(3)">🇮🇱 C4 Jaffa</button>
-              <button class="q-btn" onclick="speakCorrespondent(4)">🇺🇾 C5 Garzón</button>
+              <button class="q-btn" onclick="speakCorrespondent(0)" title="Duración: 38s (Mujer) / 35s (Varón)">🇬🇧 C1 Londres (00:38)</button>
+              <button class="q-btn" onclick="speakCorrespondent(1)" title="Duración: 35s (Mujer) / 33s (Varón)">🇫🇷 C2 París (00:35)</button>
+              <button class="q-btn" onclick="speakCorrespondent(2)" title="Duración: 32s (Mujer) / 29s (Varón)">🇯🇵 C3 Tokio (00:32)</button>
+              <button class="q-btn" onclick="speakCorrespondent(3)" title="Duración: 28s (Mujer) / 25s (Varón)">🇮🇱 C4 Jaffa (00:28)</button>
+              <button class="q-btn" onclick="speakCorrespondent(4)" title="Duración: 28s (Mujer) / 29s (Varón)">🇺🇾 C5 Garzón (00:28)</button>
             </div>
             <div class="quick-strip">
               <button class="q-btn" id="btnRightModeFixed" onclick="setRightWingMode('fixed')" style="border-color:var(--gold);">📌 Derecha: Fijo</button>
@@ -2077,13 +1617,15 @@ function saveShowRegistryLog(entryText) {
         <!-- CATEGORÍA CINE / OBRA Y MONITOR DE PREVIA AL AIRE (CON MINI-GRAPH A LA IZQUIERDA DE LA MOSCA) -->
         <div class="btn-row" style="padding:6px 8px;margin-bottom:4px;border-radius:8px;background:rgba(212,175,55,0.09);border:1px solid rgba(212,175,55,0.38);align-items:center;justify-content:space-between;">
           <div style="font-size:10px;color:#F5F0EB;">
-            <strong style="color:var(--gold);font-family:'JetBrains Mono',monospace;">🍿 CATEGORÍA CINE / OBRA Y MONITOR AL AIRE:</strong>
-            <span style="color:#D8D3C8;">Mosca quieta + Mini-Graph a la izquierda de la Mosca + Subtítulos libres abajo + Tu mic Shure MV51 abierto</span>
+            <strong style="color:var(--gold);font-family:'JetBrains Mono',monospace;">🍿 CATEGORÍA CINE / OBRA Y MONITOR AL AIRE (AUTO-PLAY + FADE MÚSICA 3s):</strong>
+            <span style="color:#D8D3C8;">Mosca + Mini-Graph (100% adentro del margen verde 9:16) + Sincronía en vivo con Salida Limpia OBS</span>
           </div>
           <div class="btn-row">
             <button class="btn btn-gold" id="btnCinema16x9" onclick="setCinemaBroadcastMode('16x9', 'iframe', 'https://player.vimeo.com/video/1241981102?h=0&title=0&byline=0&portrait=0', '🎬 CINE / OBRA AL AIRE · WHIMSY POV', '«I Made a Film in Excel» · Maria Tomazou & Rich Farris (Colossal)')">🍿 Cine 16:9 Sala Limpia (Solo Mosca + Graph Izq)</button>
             <button class="btn btn-primary" id="btnCinema9x16" onclick="setCinemaBroadcastMode('9x16', 'iframe', 'https://player.vimeo.com/video/1241981102?h=0&title=0&byline=0&portrait=0', '📱 MODO SMART 9:16 · APTO SHORTS/REELS', '«I Made a Film in Excel» · Maria Tomazou & Rich Farris')">📱 Cine Smart 9:16 (Encuadre p/Shorts)</button>
-            <button class="btn" id="btnCorrExcelStory" onclick="speakCustomCorrespondentText('Crónica de lanzamiento y reportaje · Londres (Colossal)', 'En Londres, la artista e ilustradora chipriota Maria Tomazou acaba de demostrar que hasta el programa más burocrático de una oficina puede convertirse en una sala de cine artesanal. Su cortometraje, titulado I Made a Film in Excel, nació al revés que las películas tradicionales: primero su colaborador Rich Farris compuso la banda sonora con letra, y recién después Tomazou dibujó la historia celda por celda dentro de una planilla de cálculo real de Microsoft Excel. Si miramos los bordes del archivo entre las filas mil doscientos sesenta y nueve y mil doscientos setenta y uno, descubrimos su secreto técnico: en las columnas C y F colocó signos de asterisco que imitan las perforaciones de una cinta de treinta y cinco milímetros, y animó cada escena haciendo correr hacia abajo las filas de la hoja de cálculo. En su reportaje del cinco de noviembre con la periodista Grace Ebert para Colossal, Tomazou dejó la frase que resume toda la obra: que algo no tenga una utilidad práctica de oficina no significa que no valga la pena hacerlo.')">🎙️ Crónica Espontánea del Film (Voz Jaffa / Varón)</button>
+            <button class="btn" onclick="controlCinemaVideo('playPause')" title="Pausa o reanuda el video al mismo tiempo en Cabina y en Salida Limpia OBS">⏯️ Play/Pausa Video</button>
+            <button class="btn" onclick="controlCinemaVideo('restart')" title="Vuelve el video a 00:00 al mismo tiempo en Cabina y en Salida Limpia OBS">🔄 00:00 Sync</button>
+            <button class="btn" id="btnCorrExcelStory" onclick="speakCustomCorrespondentText('Crónica de lanzamiento y reportaje · Londres (Colossal)', 'En Londres, la artista e ilustradora chipriota Maria Tomazou acaba de demostrar que hasta el programa más burocrático de una oficina puede convertirse en una sala de cine artesanal. Su cortometraje, titulado I Made a Film in Excel, nació al revés que las películas tradicionales: primero su colaborador Rich Farris compuso la banda sonora con letra, y recién después Tomazou dibujó la historia celda por celda dentro de una planilla de cálculo real de Microsoft Excel. Si miramos los bordes del archivo entre las filas mil doscientos sesenta y nueve y mil doscientos setenta y uno, descubrimos su secreto técnico: en las columnas C y F colocó signos de asterisco que imitan las perforaciones de una cinta de treinta y cinco milímetros, y animó cada escena haciendo correr hacia abajo las filas de la hoja de cálculo. En su reportaje del cinco de noviembre con la periodista Grace Ebert para Colossal, Tomazou dejó la frase que resume toda la obra: que algo no tenga una utilidad práctica de oficina no significa que no valga la pena hacerlo.')">🎙️ Crónica del Film (01:02 · Voz Jaffa/Varón)</button>
             <button class="btn" id="btnCinemaOff" onclick="setCinemaBroadcastMode('off')">🛑 Volver a 3 Columnas</button>
           </div>
         </div>
@@ -2439,11 +1981,11 @@ const CORR_AUDIO_FILES = [
 ];
 
 const CORR_VOICE_LABELS = [
-  "🎙️ Voz Sobria en 3ª Persona · Noticia Real Londres (V&A Museum)",
-  "🎙️ Voz Sobria en 3ª Persona · Noticia Real París (Belleville)",
-  "🎙️ Voz Sobria en 3ª Persona · Noticia Real Tokio (Akihabara)",
-  "🎙️ Voz Sobria en 3ª Persona · Noticia Real Jaffa (Puerto Antiguo)",
-  "🎙️ Voz Sobria en 3ª Persona · Noticia Real Maldonado / Garzón"
+  "🎙️ Voz en 3ª Persona · Londres V&A · ⏱️ DUR: 00:38 (Mujer) / 00:35 (Varón)",
+  "🎙️ Voz en 3ª Persona · París Belleville · ⏱️ DUR: 00:35 (Mujer) / 00:33 (Varón)",
+  "🎙️ Voz en 3ª Persona · Tokio Akihabara · ⏱️ DUR: 00:32 (Mujer) / 00:29 (Varón)",
+  "🎙️ Voz en 3ª Persona · Jaffa Puerto · ⏱️ DUR: 00:28 (Mujer) / 00:25 (Varón)",
+  "🎙️ Voz en 3ª Persona · Garzón Costa · ⏱️ DUR: 00:28 (Mujer) / 00:29 (Varón)"
 ];
 
 const CORRESPONDENTS = [
@@ -3698,7 +3240,7 @@ setInterval(() => {
     }
   }
 
-  // 2. Correspondent / Chronicle Telemetry & Countdown
+  // 2. Correspondent / Chronicle / Cinema Video Telemetry & Countdown (in HUD + Left Wing Screen of Clocks)
   const corrAudio = document.getElementById('corrAudio');
   const hudCorrTimer = document.getElementById('hudCorrTimer');
   const wingCorrCd = document.getElementById('wingCorrCountdown');
@@ -3710,19 +3252,148 @@ setInterval(() => {
       hudCorrTimer.textContent = `DUR: ${fmtMMSS(cDur)} · FALTAN: -${fmtMMSS(cRem)}`;
       hudCorrTimer.className = 'hud-timer-pill' + (cRem <= 6 ? ' urgent' : (cRem <= 12 ? ' warn' : ''));
     }
-    if (wingCorrCd) wingCorrCd.textContent = `-${fmtMMSS(cRem)}`;
+    if (wingCorrCd) wingCorrCd.textContent = `${fmtMMSS(cDur)} · -${fmtMMSS(cRem)}`;
     if (cRem <= 6 && cRem > 0.3) {
       const cuc = document.getElementById('cucarachaMainMsg');
       if (cuc) cuc.textContent = `🟢 ATENTA ARIANA: Al corresponsal le quedan ${Math.ceil(cRem)}s → Prepará el aire para retomar vos.`;
     }
-  } else {
+  } else if (window.customCorrActive && window.customCorrTotalSec > 0) {
+    const cDur = window.customCorrTotalSec;
+    const cRem = Math.max(0, window.customCorrRemainingSec || 0);
     if (hudCorrTimer) {
-      hudCorrTimer.textContent = 'DUR: 00:00 · FALTAN: -00:00';
+      hudCorrTimer.textContent = `DUR: ${fmtMMSS(cDur)} · FALTAN: -${fmtMMSS(cRem)}`;
+      hudCorrTimer.className = 'hud-timer-pill' + (cRem <= 6 ? ' urgent' : (cRem <= 12 ? ' warn' : ''));
+    }
+    if (wingCorrCd) wingCorrCd.textContent = `${fmtMMSS(cDur)} · -${fmtMMSS(cRem)}`;
+  } else if (typeof currentCinemaMode !== 'undefined' && currentCinemaMode !== 'off' && window.cinemaTotalSec > 0) {
+    const vDur = window.cinemaTotalSec;
+    const vRem = Math.max(0, vDur - (window.cinemaElapsedSec || 0));
+    if (hudCorrTimer) {
+      hudCorrTimer.textContent = `🎬 FILM: ${fmtMMSS(vDur)} · FALTAN: -${fmtMMSS(vRem)}`;
       hudCorrTimer.className = 'hud-timer-pill';
     }
-    if (wingCorrCd) wingCorrCd.textContent = 'LISTA';
+    if (wingCorrCd) wingCorrCd.textContent = `FILM -${fmtMMSS(vRem)}`;
+  } else {
+    const defDur = (typeof currentCorrGender !== 'undefined' && currentCorrGender === 'male')
+      ? [35, 33, 29, 25, 29][(typeof currentCorrIdx !== 'undefined' ? currentCorrIdx : 0) % 5]
+      : [38, 35, 32, 28, 28][(typeof currentCorrIdx !== 'undefined' ? currentCorrIdx : 0) % 5];
+    if (hudCorrTimer) {
+      hudCorrTimer.textContent = `LISTA (${fmtMMSS(defDur)}) · FALTAN: -${fmtMMSS(defDur)}`;
+      hudCorrTimer.className = 'hud-timer-pill';
+    }
+    if (wingCorrCd) wingCorrCd.textContent = `LISTA (${fmtMMSS(defDur)})`;
   }
 }, 250);
+
+/* === CONTROL DE VOLUMEN EN TIEMPO REAL + FADE 3s Y PARAR SÍ O SÍ === */
+window.setLiveMusicVolume = function(val) {
+  const numVal = Math.max(0, Math.min(100, Number(val) || 0));
+  const v = numVal / 100;
+  if (numVal <= 28) {
+    duckVolume = v;
+    isDucked = true;
+  } else {
+    normalVolume = v;
+    isDucked = false;
+  }
+  const currentDeck = getActiveDeck();
+  if (currentDeck) currentDeck.volume = v;
+  const s1 = document.getElementById('volSlider');
+  const l1 = document.getElementById('volLabel');
+  const s2 = document.getElementById('stickyVolSlider');
+  const l2 = document.getElementById('stickyVolLabel');
+  if (s1) s1.value = numVal;
+  if (l1) l1.textContent = numVal + '%';
+  if (s2) s2.value = numVal;
+  if (l2) l2.textContent = numVal + '%';
+};
+
+window.fadeAndStopMobyDefinitely = function() {
+  musicLoopWithFade = false;
+  const btnLoop = document.getElementById('btnMusicLoop');
+  if (btnLoop) {
+    btnLoop.classList.remove('active');
+    btnLoop.textContent = '🔁 Loop c/Fade 5s: OFF';
+  }
+  const pill = document.getElementById('audioStatusPill');
+  const hudTitle = document.getElementById('hudMusicTitle');
+  const dA = document.getElementById('deckA');
+  const dB = document.getElementById('deckB');
+  if (crossfadeTimer) {
+    clearInterval(crossfadeTimer);
+    crossfadeTimer = null;
+  }
+  const startA = dA ? dA.volume : 0;
+  const startB = dB ? dB.volume : 0;
+  if ((dA && dA.paused) && (dB && dB.paused)) {
+    currentPlayingTrack = -1;
+    if (hudTitle) hudTitle.textContent = '⏹ Música detenida SÍ O SÍ (Loop apagado)';
+    return;
+  }
+  let step = 0;
+  const totalSteps = 30; // 3.0 segundos exactos (30 * 100ms)
+  if (pill) {
+    pill.className = 'audio-status-pill is-fading';
+    pill.textContent = '📉 BAJANDO MÚSICA EN 3s Y APAGANDO SÍ O SÍ...';
+  }
+  crossfadeTimer = setInterval(() => {
+    step++;
+    const factor = Math.max(0, 1 - (step / totalSteps));
+    if (dA) dA.volume = startA * factor;
+    if (dB) dB.volume = startB * factor;
+    const pct = Math.round((Math.max(startA, startB) * factor) * 100);
+    const s2 = document.getElementById('stickyVolSlider');
+    const l2 = document.getElementById('stickyVolLabel');
+    if (s2) s2.value = pct;
+    if (l2) l2.textContent = pct + '%';
+    if (step >= totalSteps) {
+      clearInterval(crossfadeTimer);
+      crossfadeTimer = null;
+      if (dA) { dA.pause(); dA.currentTime = 0; }
+      if (dB) { dB.pause(); dB.currentTime = 0; }
+      currentPlayingTrack = -1;
+      document.querySelectorAll('.moby-btn').forEach((b, i) => {
+        b.classList.remove('playing');
+        const lbl = document.getElementById('moby-label-' + i);
+        if (lbl && MOBY_TRACKS[i]) lbl.textContent = '▶️ ' + (i + 1) + '. ' + MOBY_TRACKS[i].title;
+      });
+      if (hudTitle) hudTitle.textContent = '⏹ Música apagada con Fade 3s (No vuelve a arrancar sola)';
+      if (pill) {
+        pill.className = 'audio-status-pill';
+        pill.textContent = '⏹ MÚSICA FRENADA CON FADE 3s SÍ O SÍ (Loop OFF)';
+      }
+      const cuc = document.getElementById('cucarachaMainMsg');
+      if (cuc) cuc.textContent = '🔇 MÚSICA BAJADA CON FADE 3s Y DETENIDA SÍ O SÍ → Aire limpio para el video o tu voz.';
+    }
+  }, 100);
+};
+
+const _origStopCorr = window.stopCorrespondentAudio;
+window.stopCorrespondentAudio = function() {
+  if (_origStopCorr) _origStopCorr();
+  try {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  } catch (e) {}
+  window.customCorrActive = false;
+  if (window.customCorrInterval) {
+    clearInterval(window.customCorrInterval);
+    window.customCorrInterval = null;
+  }
+  const hudTitle = document.getElementById('hudCorrTitle');
+  if (hudTitle) hudTitle.textContent = '⏹ Crónica detenida';
+};
+
+window.openFloatingCleanAirWindow = function() {
+  window.open(
+    'obs-salida.html?monitor=1',
+    'WhimsyCleanAirMonitor',
+    'width=860,height=484,menubar=no,toolbar=no,location=no,status=no,resizable=yes'
+  );
+  const cuc = document.getElementById('cucarachaMainMsg');
+  if (cuc) {
+    cuc.textContent = '🪟 MONITOR FLOTANTE DE AIRE LIMPIO ABIERTO: Ponelo a un costado para ver qué sale en vivo sin necesidad de abrir OBS (suena desde acá en Cabina para no hacer eco).';
+  }
+};
 
 
 /* === MOTOR v8: SHURE MV51 USB-C + CÁMARAS EN VIVO + SYNC EN TIEMPO REAL CON OBS-SALIDA Y MESA-PREPRO === */
@@ -3858,6 +3529,10 @@ async function switchCameraSource() {
 let currentCinemaMode = 'off'; // 'off' | '16x9' | '9x16'
 let currentCinemaMediaType = 'iframe'; // 'iframe' | 'img'
 let currentCinemaMediaSrc = '';
+window.cinemaTotalSec = 0;
+window.cinemaElapsedSec = 0;
+window.cinemaTimerInterval = null;
+window.cinemaIsPlaying = false;
 
 window.setCinemaBroadcastMode = function(mode, mediaType, mediaSrc, kickerText, graphText) {
   const stage = document.getElementById('obsStage');
@@ -3876,17 +3551,32 @@ window.setCinemaBroadcastMode = function(mode, mediaType, mediaSrc, kickerText, 
   if (b16) b16.classList.toggle('active', currentCinemaMode === '16x9');
   if (b9) b9.classList.toggle('active', currentCinemaMode === '9x16');
 
+  if (window.cinemaTimerInterval) {
+    clearInterval(window.cinemaTimerInterval);
+    window.cinemaTimerInterval = null;
+  }
+
   if (currentCinemaMode === 'off') {
     if (ifr) ifr.src = 'about:blank';
     if (img) img.style.display = 'none';
+    window.cinemaTotalSec = 0;
+    window.cinemaElapsedSec = 0;
+    window.cinemaIsPlaying = false;
     const cuc = document.getElementById('cucarachaMainMsg');
     if (cuc) cuc.textContent = '🟢 PANTALLA NORMAL DE 3 COLUMNAS RESTAURADA EN VIVO';
     broadcastStudioState();
     return;
   }
 
-  if (mediaType) currentCinemaMediaType = mediaType;
-  if (mediaSrc) currentCinemaMediaSrc = mediaSrc;
+  if (mediaType) currentCinemaMediaType = (mediaType === 'image' ? 'img' : (mediaType === 'vimeo' ? 'iframe' : mediaType));
+  if (mediaSrc) {
+    let finalSrc = mediaSrc;
+    if (currentCinemaMediaType === 'iframe' && /vimeo\.com/i.test(finalSrc)) {
+      if (!/autoplay=/i.test(finalSrc)) finalSrc += (finalSrc.includes('?') ? '&' : '?') + 'autoplay=1';
+      if (!/api=/i.test(finalSrc)) finalSrc += '&api=1';
+    }
+    currentCinemaMediaSrc = finalSrc;
+  }
   if (kickerText && kEl) kEl.textContent = kickerText;
   if (graphText && tEl) tEl.textContent = graphText;
 
@@ -3896,25 +3586,58 @@ window.setCinemaBroadcastMode = function(mode, mediaType, mediaSrc, kickerText, 
     stage.classList.add('cinema-mode-9x16');
   }
 
-  if (currentCinemaMediaType === 'img') {
+  if (currentCinemaMediaType === 'img' || currentCinemaMediaType === 'image') {
     if (ifr) { ifr.src = 'about:blank'; ifr.style.display = 'none'; }
     if (img) { img.src = currentCinemaMediaSrc; img.style.display = 'block'; }
+    window.cinemaTotalSec = 0;
   } else {
     if (img) img.style.display = 'none';
     if (ifr) {
       ifr.style.display = 'block';
       if (ifr.src !== currentCinemaMediaSrc) ifr.src = currentCinemaMediaSrc;
     }
+    // Al lanzar un video al Aire, bajamos la música de Moby con Fade de 3 segundos y la frenamos SÍ O SÍ para que escuches el video limpio!
+    if (typeof window.fadeAndStopMobyDefinitely === 'function') {
+      window.fadeAndStopMobyDefinitely();
+    }
+    window.cinemaTotalSec = 205; // 03:25 duración del corto en Excel
+    window.cinemaElapsedSec = 0;
+    window.cinemaIsPlaying = true;
+    window.cinemaTimerInterval = setInterval(() => {
+      if (window.cinemaIsPlaying && window.cinemaElapsedSec < window.cinemaTotalSec) {
+        window.cinemaElapsedSec += 1;
+      }
+    }, 1000);
   }
 
   const cuc = document.getElementById('cucarachaMainMsg');
   if (cuc) {
     cuc.textContent = currentCinemaMode === '16x9'
-      ? '🍿 MODO CINE 16:9 SALA LIMPIA AL AIRE: Mosca quieta + Mini-Graph a la izquierda de la Mosca + Tu Shure MV51 abierto para comentar encima.'
-      : '📱 MODO CINE SMART 9:16 AL AIRE: Obra encuadrada dentro del corredor central 9:16 + Mini-Graph junto a la Mosca (listo para cortar Shorts/Reels sin perder los bordes).';
+      ? '🍿 MODO CINE 16:9 SALA LIMPIA AL AIRE: Música Moby bajada con Fade 3s + Video en Auto-Play + Mosca y Mini-Graph dentro del margen verde.'
+      : '📱 MODO CINE SMART 9:16 AL AIRE: Música Moby bajada con Fade 3s + Obra encuadrada dentro del margen verde 9:16 para Shorts/Reels.';
   }
   saveShowRegistryLog('Categoría Cine / Monitor al Aire (' + currentCinemaMode + '): ' + (tEl ? tEl.textContent : ''));
   broadcastStudioState();
+};
+
+window.controlCinemaVideo = function(cmd) {
+  const ifr = document.getElementById('cinemaIframe');
+  if (ifr && ifr.contentWindow) {
+    if (cmd === 'playPause') {
+      window.cinemaIsPlaying = !window.cinemaIsPlaying;
+      ifr.contentWindow.postMessage(JSON.stringify({ method: window.cinemaIsPlaying ? 'play' : 'pause' }), '*');
+    } else if (cmd === 'restart') {
+      window.cinemaElapsedSec = 0;
+      window.cinemaIsPlaying = true;
+      ifr.contentWindow.postMessage(JSON.stringify({ method: 'setCurrentTime', value: 0 }), '*');
+      ifr.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+    }
+  }
+  try {
+    const syncMsg = { type: 'CINEMA_VIDEO_CMD', cmd: cmd, playing: window.cinemaIsPlaying, ts: Date.now() };
+    studioBus.postMessage(syncMsg);
+    localStorage.setItem('whimsy_cinema_cmd_v8', JSON.stringify(syncMsg));
+  } catch (e) {}
 };
 
 window.speakCustomCorrespondentText = function(titleLabel, textBody) {
@@ -3932,6 +3655,11 @@ window.speakCustomCorrespondentText = function(titleLabel, textBody) {
     const corrAudio = document.getElementById('corrAudio');
     if (corrAudio && !corrAudio.paused) corrAudio.pause();
   } catch (e) {}
+
+  if (window.customCorrInterval) {
+    clearInterval(window.customCorrInterval);
+    window.customCorrInterval = null;
+  }
 
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -3951,14 +3679,27 @@ window.speakCustomCorrespondentText = function(titleLabel, textBody) {
     }
     const vLabel = currentCorrGender === 'male' ? 'Varón Estudio' : 'Mujer Jaffa';
     if (hudTitle) hudTitle.textContent = (titleLabel || 'Crónica Espontánea') + ' (' + vLabel + ')';
-    const estSec = Math.max(8, Math.round(textBody.split(/\s+/).length / 2.5));
-    if (hudTimer) hudTimer.textContent = `EST: ${fmtMMSS(estSec)} · EN AIRE`;
+    const estSec = Math.max(8, Math.round(textBody.split(/\s+/).length / 2.4));
+    window.customCorrTotalSec = estSec;
+    window.customCorrRemainingSec = estSec;
+    window.customCorrActive = true;
+    window.customCorrInterval = setInterval(() => {
+      if (window.customCorrRemainingSec > 0) {
+        window.customCorrRemainingSec -= 1;
+      }
+    }, 1000);
+    if (hudTimer) hudTimer.textContent = `DUR: ${fmtMMSS(estSec)} · FALTAN: -${fmtMMSS(estSec)}`;
     if (pill) {
       pill.className = 'audio-status-pill is-on';
       pill.textContent = '🎙️ CRÓNICA ESPONTÁNEA (' + vLabel + '): ' + (titleLabel || 'En aire');
     }
-    if (cuc) cuc.textContent = '🎙️ CORRESPONSAL EN AIRE CONTANDO EL TRASFONDO Y REPORTAJE DE LA OBRA → Podés intervenir con tu Shure MV51 cuando quieras.';
+    if (cuc) cuc.textContent = '🎙️ CORRESPONSAL EN AIRE CONTANDO EL TRASFONDO Y REPORTAJE DE LA OBRA → Podés regular el volumen de música arriba en el deslizador o intervenir con tu Shure MV51.';
     u.onend = () => {
+      window.customCorrActive = false;
+      if (window.customCorrInterval) {
+        clearInterval(window.customCorrInterval);
+        window.customCorrInterval = null;
+      }
       if (isDucked && !currentDeck.paused) toggleDucking();
       if (hudTitle) hudTitle.textContent = '✅ Finalizada: ' + (titleLabel || 'Crónica');
       if (cuc) cuc.textContent = '🟢 TERMINÓ LA CRÓNICA DEL REPORTAJE → AIRE TUYO ARIANA';
@@ -4070,6 +3811,8 @@ function applyIncomingCommand(msg) {
     }
     if (d.speakCorrespondentStory && d.speakCorrespondentStory.text) {
       speakCustomCorrespondentText(d.speakCorrespondentStory.title || 'Crónica Espontánea', d.speakCorrespondentStory.text);
+    } else if (d.speakCorrespondentNow && d.customCorrespondentText) {
+      speakCustomCorrespondentText(d.customCorrespondentLabel || 'Crónica Espontánea', d.customCorrespondentText);
     }
     saveShowRegistryLog('Actualización recibida desde Mesa de Prepro: ' + (d.headline || 'Escaleta actualizada'));
     broadcastStudioState();
@@ -4156,6 +3899,64 @@ function toggleCc0CabinetMode(mode) {
   const btn = document.getElementById(mode === 'parallax' ? 'btnCc0Parallax' : 'btnCc0Dark');
   if (btn) btn.classList.toggle('active', isNow);
 }
+
+let externalWebStream = null;
+let poncharDerActive = false;
+
+window.startExternalWindowCapture = async function(targetZone) {
+  try {
+    if (externalWebStream) {
+      externalWebStream.getTracks().forEach(t => t.stop());
+      externalWebStream = null;
+    }
+    externalWebStream = await navigator.mediaDevices.getDisplayMedia({
+      video: { cursor: 'always' },
+      audio: false,
+      preferCurrentTab: false,
+      selfBrowserSurface: 'exclude'
+    });
+    const vidId = targetZone === 'center' ? 'corridorLiveCam' : 'rightWingLiveCam';
+    const wrapId = targetZone === 'center' ? null : 'rightWingLiveCamWrap';
+    if (wrapId) {
+      const w = document.getElementById(wrapId);
+      if (w) { w.style.display = 'block'; w.style.height = '185px'; }
+    }
+    const vEl = document.getElementById(vidId);
+    if (vEl) {
+      vEl.srcObject = externalWebStream;
+      vEl.style.display = 'block';
+      vEl.style.transform = 'none';
+      vEl.style.objectFit = 'contain';
+      vEl.style.background = '#09090D';
+      vEl.play().catch(() => {});
+    }
+    const stage = document.getElementById('obsStage');
+    if (targetZone === 'center') stage.classList.add('cam-pos-center');
+    else stage.classList.add('cam-pos-right');
+    const cuc = document.getElementById('cucarachaMainMsg');
+    if (cuc) cuc.textContent = '🟢 PROYECTANDO VENTANA WEB EN VIVO (' + (targetZone === 'center' ? 'CENTRO 9:16' : 'PANEL DERECHO') + ') — Navegá esa página y saldrá proyectada al aire.';
+  } catch (err) {}
+};
+
+window.togglePoncharDerecha = function() {
+  poncharDerActive = !poncharDerActive;
+  const btn = document.getElementById('btnPoncharDer');
+  if (btn) {
+    btn.classList.toggle('active', poncharDerActive);
+    btn.textContent = poncharDerActive ? '🟢 PONCHADO EN 9:16 ACTIVO (Tocá para volver)' : '🎬 Ponchar Panel Derecho en 9:16 (Clips)';
+  }
+  const rImg = document.getElementById('wingRightImg');
+  const szImg = document.getElementById('szImage');
+  if (poncharDerActive) {
+    if (rImg && szImg && rImg.src) szImg.src = rImg.src;
+    if (typeof setScreenMode === 'function') setScreenMode('split');
+    const cuc = document.getElementById('cucarachaMainMsg');
+    if (cuc) cuc.textContent = '🎬 PANEL DERECHO PONCHADO EN EL CENTRO 9:16: Lo que comentás ahora sale adentro del recorte vertical para Shorts/Reels.';
+  } else {
+    if (typeof setScreenMode === 'function') setScreenMode('clean');
+  }
+  if (typeof broadcastStudioState === 'function') broadcastStudioState();
+};
 
 </script>
 </body>

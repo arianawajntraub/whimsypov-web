@@ -755,6 +755,7 @@
       <button class="btn gold" onclick="toggleAddFeedDrawer()">➕ Sumar nuevo RSS / sitio / hallazgo</button>
       <button class="btn green" onclick="pullLiveCommonsAndWiki()">🔄 Traer hallazgos y fotos CC0 ahora</button>
       <a href="cabina-v8.html" target="_blank" class="btn primary">🎛️ Abrir Cabina en Vivo (v8)</a>
+      <button class="btn" onclick="window.open('obs-salida.html?monitor=1', 'WhimsyCleanAirMonitor', 'width=860,height=484,menubar=no,toolbar=no,location=no,status=no')" style="border-color:rgba(74,222,128,0.55); color:#4ade80;">🪟 Monitor Flotante de Aire Limpio (Ensayar al costado)</button>
       <a href="obs-salida.html" target="_blank" class="btn">📺 Salida Limpia OBS</a>
       <a href="watch.html" target="_blank" class="btn">⌚ Apple Watch</a>
     </div>
@@ -1936,9 +1937,20 @@
     return `Crónica espontánea de producción sobre ${card.sourceName}. Detrás de este hallazgo verificado en el archivo de hoy: ${card.summary} ${firstParagraph}`;
   }
 
+  function pauseAllLocalPreviewVideos() {
+    try {
+      document.querySelectorAll('iframe').forEach(f => {
+        if (f && f.contentWindow) {
+          f.contentWindow.postMessage('{"method":"pause"}', '*');
+        }
+      });
+    } catch (e) {}
+  }
+
   function triggerCinemaFromCard(cardId, mode) {
     const card = allCards.find(c => c.id === cardId) || allCards[0];
     if (!card) return;
+    pauseAllLocalPreviewVideos();
     lbActiveCinemaMode = mode;
     const hasVimeo = !!card.embedVimeo;
     const firstPhoto = (card.album && card.album[0]) ? card.album[0] : { url: 'evidencias/prepro/excel_film_1.gif', caption: card.title };
@@ -1984,6 +1996,7 @@
   function projectMonitorCinemaFromLightbox(mode) {
     const card = allCards.find(c => c.id === lbCurrentCardId) || allCards[0];
     if (!card) return;
+    pauseAllLocalPreviewVideos();
     lbActiveCinemaMode = mode;
     const photo = (card.album && card.album[lbCurrentPhotoIdx]) ? card.album[lbCurrentPhotoIdx] : (card.album && card.album[0]);
     const useVimeo = lbShowingVideo && !!card.embedVimeo;

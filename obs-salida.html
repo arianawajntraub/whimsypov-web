@@ -535,14 +535,20 @@ function applyState(s) {
   if (s.moscaMiniGraphKicker && mKick) mKick.textContent = s.moscaMiniGraphKicker;
   if (s.moscaMiniGraphText && mTxt) mTxt.textContent = s.moscaMiniGraphText;
   if (s.cinemaMode === '16x9' || s.cinemaMode === '9x16') {
-    if (s.cinemaMediaType === 'img') {
+    if (s.cinemaMediaType === 'img' || s.cinemaMediaType === 'image') {
       if (ifr) { ifr.src = 'about:blank'; ifr.style.display = 'none'; }
       if (cImg) { cImg.src = s.cinemaMediaSrc || ''; cImg.style.display = 'block'; }
     } else {
       if (cImg) cImg.style.display = 'none';
       if (ifr) {
         ifr.style.display = 'block';
-        if (s.cinemaMediaSrc && ifr.src !== s.cinemaMediaSrc) ifr.src = s.cinemaMediaSrc;
+        let finalSrc = s.cinemaMediaSrc || '';
+        if (/vimeo\.com/i.test(finalSrc)) {
+          if (!/autoplay=/i.test(finalSrc)) finalSrc += (finalSrc.includes('?') ? '&' : '?') + 'autoplay=1';
+          if (!/muted=/i.test(finalSrc)) finalSrc += '&muted=1';
+          if (!/api=/i.test(finalSrc)) finalSrc += '&api=1';
+        }
+        if (finalSrc && ifr.src !== finalSrc) ifr.src = finalSrc;
       }
     }
   } else {
@@ -551,11 +557,28 @@ function applyState(s) {
   }
 }
 
+function handleCinemaCmd(msg) {
+  if (!msg || msg.type !== 'CINEMA_VIDEO_CMD') return;
+  const ifr = document.getElementById('cinemaIframe');
+  if (!ifr || !ifr.contentWindow) return;
+  if (msg.cmd === 'playPause') {
+    ifr.contentWindow.postMessage(JSON.stringify({ method: msg.playing ? 'play' : 'pause' }), '*');
+  } else if (msg.cmd === 'restart') {
+    ifr.contentWindow.postMessage(JSON.stringify({ method: 'setCurrentTime', value: 0 }), '*');
+    ifr.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+  }
+}
+
 const bus = new BroadcastChannel('whimsy_studio_v8');
-bus.onmessage = (ev) => { if (ev.data?.type === 'STUDIO_STATE') applyState(ev.data.payload); };
+bus.onmessage = (ev) => {
+  if (ev.data?.type === 'STUDIO_STATE') applyState(ev.data.payload);
+  else if (ev.data?.type === 'CINEMA_VIDEO_CMD') handleCinemaCmd(ev.data);
+};
 window.addEventListener('storage', (ev) => {
   if (ev.key === 'whimsy_live_state_v8' && ev.newValue) {
     try { applyState(JSON.parse(ev.newValue)); } catch(e) {}
+  } else if (ev.key === 'whimsy_cinema_cmd_v8' && ev.newValue) {
+    try { handleCinemaCmd(JSON.parse(ev.newValue)); } catch(e) {}
   }
 });
 
