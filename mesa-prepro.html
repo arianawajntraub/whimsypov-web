@@ -754,6 +754,11 @@
     <div class="nav-links">
       <button class="btn gold" onclick="toggleAddFeedDrawer()">➕ Sumar nuevo RSS / sitio / hallazgo</button>
       <button class="btn green" onclick="pullLiveCommonsAndWiki()">🔄 Traer hallazgos y fotos CC0 ahora</button>
+      <button class="btn" onclick="exportFullPreproBackup()" title="Descarga un archivo con todas tus tarjetas, rótulos, fechas de vencimiento y gateras para que jamás se pierda nada">💾 Guardar Backup</button>
+      <label class="btn" style="cursor:pointer;" title="Cargar respaldo guardado">
+        📂 Restaurar
+        <input type="file" accept=".json" style="display:none;" onchange="importFullPreproBackup(event)">
+      </label>
       <a href="cabina-v8.html" target="_blank" class="btn primary">🎛️ Abrir Cabina en Vivo (v8)</a>
       <button class="btn" onclick="window.open('obs-salida.html?monitor=1', 'WhimsyCleanAirMonitor', 'width=860,height=484,menubar=no,toolbar=no,location=no,status=no')" style="border-color:rgba(74,222,128,0.55); color:#4ade80;">🪟 Monitor Flotante de Aire Limpio (Ensayar al costado)</button>
       <a href="obs-salida.html" target="_blank" class="btn">📺 Salida Limpia OBS</a>
@@ -802,11 +807,14 @@
   <!-- RSS FILTER BAR + DEEP TOPIC SCRAPER -->
   <div class="rss-toolbar">
     <div class="rss-tabs">
-      <button class="rss-tab active" onclick="filterFeed('all', this)">⚡ Todo el dial + Portales intercalados <span class="count" id="countAll">10</span></button>
-      <button class="rss-tab" onclick="filterFeed('transito', this)">🚦 El tránsito cultural (Museos, Excel & CC0) <span class="count" id="countTransito">5</span></button>
-      <button class="rss-tab" onclick="filterFeed('clima', this)">🌦️ El clima del mundo (Ciencia & Mente) <span class="count" id="countClima">2</span></button>
-      <button class="rss-tab" onclick="filterFeed('arrobar', this)">📣 Mentes para @arrobar <span class="count" id="countArrobar">2</span></button>
-      <button class="rss-tab" onclick="filterFeed('hilo', this)">🧵 Tu Archivo ARIS2 + Hilo Rojo <span class="count" id="countHilo">1</span></button>
+      <button class="rss-tab active" onclick="filterFeed('all', this)">⚡ Todo el dial <span class="count" id="countAll">10</span></button>
+      <button class="rss-tab" onclick="filterFeed('status_hoy', this)" style="border-color:rgba(74,222,128,0.5);">🟢 Va HOY al Aire <span class="count" id="countHoy">3</span></button>
+      <button class="rss-tab" onclick="filterFeed('status_gateras', this)" style="border-color:rgba(212,175,55,0.55);">🟡 En Gateras (Plan B) <span class="count" id="countGateras">2</span></button>
+      <button class="rss-tab" onclick="filterFeed('status_guardado', this)" style="border-color:rgba(167,139,250,0.55);">📦 Guardados c/Rótulo y Vto. <span class="count" id="countGuardado">5</span></button>
+      <button class="rss-tab" onclick="filterFeed('transito', this)">🚦 Tránsito Cultural <span class="count" id="countTransito">5</span></button>
+      <button class="rss-tab" onclick="filterFeed('clima', this)">🌦️ Clima del Mundo <span class="count" id="countClima">2</span></button>
+      <button class="rss-tab" onclick="filterFeed('arrobar', this)">📣 @Arrobar <span class="count" id="countArrobar">2</span></button>
+      <button class="rss-tab" onclick="filterFeed('hilo', this)">🧵 Archivo ARIS2 <span class="count" id="countHilo">1</span></button>
     </div>
     <div class="search-box">
       <input type="text" id="topicSearchInput" placeholder="Buscar tema + traer dossier largo y álbum CC0 (ej: Hilma af Klint, musgo, faros)..." onkeydown="if(event.key==='Enter') searchLiveTopic()">
@@ -882,12 +890,18 @@
         </div>
       </div>
 
-      <h2 style="font-family:'Newsreader',serif; font-size:1.22rem; color:var(--cream); margin-bottom:4px;">🧺 Canasta de armado de tu bloque (Fase 2)</h2>
-      <p style="font-size:0.76rem; color:var(--muted); margin-bottom:10px;">
-        Elegí <strong>2 o 3 tarjetas</strong> de la izquierda con <code>➕ Elegir para mi bloque</code>. Se tejen solas con sus álbumes de fotos y su pauta de ponchado.
+      <h2 style="font-family:'Newsreader',serif; font-size:1.22rem; color:var(--cream); margin-bottom:4px;">🧺 Canasta de armado de tu capítulo (Fase 2)</h2>
+      <p style="font-size:0.75rem; color:var(--muted); margin-bottom:8px;">
+        Todo lo que marcás como <code>🟢 Va HOY</code>, <code>🟡 En Gateras</code> o <code>📦 Guardado c/Rótulo y Vto.</code> <strong>queda grabado automáticamente en tu navegador</strong> para que jamás se pierda.
       </p>
 
-      <span class="field-label">1. Tarjetas elegidas para este bloque (<span id="basketCount">0</span>)</span>
+      <!-- CALCULADORA EN VIVO DE TIEMPO DEL CAPÍTULO + CHECKLIST DE PRE-PRO LISTA -->
+      <div id="chapterTimeCalcBox" style="background:rgba(12,12,18,0.95); border:1px solid rgba(232,160,191,0.45); border-radius:10px; padding:10px 12px; margin-bottom:10px;"></div>
+
+      <!-- FILA DE TEMAS EN GATERAS (PLAN B EN 1 CLIC SI CAMBIA ALGO EN EL AIRE) -->
+      <div id="gaterasQuickBox" style="background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.45); border-radius:10px; padding:10px 12px; margin-bottom:12px;"></div>
+
+      <span class="field-label">1. Tarjetas titulares que van HOY al aire (<span id="basketCount">0</span>)</span>
       <div class="selected-basket" id="basketList"></div>
 
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px;">
@@ -1686,8 +1700,142 @@
   let activeFilter = 'all';
   let openDossierIds = { 'colossal-maria-tomazou-excel': true, 'colossal-arkivism-cc0': true };
 
+  // BANCO PERSISTENTE DE ESTADOS (VA HOY / EN GATERAS / GUARDADO ROTULADO + FECHA DE VENCIMIENTO + CORRESPONSAL)
+  const DEFAULT_CARD_META = {
+    'colossal-maria-tomazou-excel': { status: 'hoy', rotulo: 'Especial Cine / Arte en Oficina', vencimiento: '', withCorr: true },
+    'colossal-arkivism-cc0': { status: 'hoy', rotulo: 'Palabra: PAPEL / Libros CC0', vencimiento: '', withCorr: true },
+    'archivo-propio-hilo-rojo': { status: 'hoy', rotulo: 'Hilo Rojo / Archivo ARIS2', vencimiento: '', withCorr: false },
+    'vam-reverso-oculto': { status: 'gateras', rotulo: 'Plan B de lujo (Londres V&A)', vencimiento: '', withCorr: true },
+    'bhl-botanica-secreta': { status: 'gateras', rotulo: 'Plan B Botánica / Naturaleza', vencimiento: '', withCorr: false },
+    'openalex-musica-cerebro': { status: 'guardado', rotulo: 'Ciencia / Neuroacústica', vencimiento: '2026-11-30', withCorr: true },
+    'copernicus-anomalia-termica': { status: 'guardado', rotulo: 'Clima del Mundo (Actualizable)', vencimiento: '2026-11-20', withCorr: false }
+  };
+
+  function loadCardMetaMap() {
+    let saved = {};
+    try {
+      saved = JSON.parse(localStorage.getItem('whimsy_cards_meta_v15') || '{}');
+    } catch (e) {}
+    const merged = { ...DEFAULT_CARD_META, ...saved };
+    allCards.forEach(c => {
+      if (!merged[c.id]) {
+        merged[c.id] = {
+          status: selectedCardIds.includes(c.id) ? 'hoy' : 'guardado',
+          rotulo: c.cat === 'clima' ? 'Clima / Ciencia' : (c.cat === 'arrobar' ? 'Para @arrobar' : 'Archivo Permanente (Evergreen)'),
+          vencimiento: '',
+          withCorr: !!c.embedVimeo
+        };
+      }
+    });
+    return merged;
+  }
+
+  let cardMetaMap = loadCardMetaMap();
+
+  function syncSelectedFromMeta() {
+    selectedCardIds = allCards.filter(c => (cardMetaMap[c.id]?.status === 'hoy')).map(c => c.id);
+  }
+  syncSelectedFromMeta();
+
+  function saveCardMetaMap() {
+    try {
+      localStorage.setItem('whimsy_cards_meta_v15', JSON.stringify(cardMetaMap));
+      syncGaterasToCabin();
+    } catch (e) {}
+  }
+
+  function setCardWorkflowStatus(cardId, newStatus) {
+    if (!cardMetaMap[cardId]) cardMetaMap[cardId] = { status: newStatus, rotulo: 'General', vencimiento: '', withCorr: false };
+    cardMetaMap[cardId].status = newStatus;
+    syncSelectedFromMeta();
+    saveCardMetaMap();
+    renderFeedGrid();
+    renderBasketAndWeave();
+  }
+
+  function updateCardRotulo(cardId, val) {
+    if (!cardMetaMap[cardId]) cardMetaMap[cardId] = { status: 'guardado', rotulo: val, vencimiento: '', withCorr: false };
+    cardMetaMap[cardId].rotulo = val;
+    saveCardMetaMap();
+  }
+
+  function updateCardVencimiento(cardId, val) {
+    if (!cardMetaMap[cardId]) cardMetaMap[cardId] = { status: 'guardado', rotulo: '', vencimiento: val, withCorr: false };
+    cardMetaMap[cardId].vencimiento = val;
+    saveCardMetaMap();
+    renderFeedGrid();
+  }
+
+  function toggleCardWithCorr(cardId, checked) {
+    if (!cardMetaMap[cardId]) cardMetaMap[cardId] = { status: 'hoy', rotulo: '', vencimiento: '', withCorr: checked };
+    cardMetaMap[cardId].withCorr = !!checked;
+    saveCardMetaMap();
+    renderBasketAndWeave();
+  }
+
+  function getVencimientoBadgeHtml(vencStr) {
+    if (!vencStr) {
+      return '<span style="font-family:\'JetBrains Mono\',monospace; font-size:0.66rem; color:#98f5be; background:rgba(74,222,128,0.1); padding:2px 7px; border-radius:4px;">♾️ No vence (Evergreen)</span>';
+    }
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const exp = new Date(vencStr + 'T00:00:00');
+    const diffDays = Math.round((exp - today) / (1000 * 60 * 60 * 24));
+    if (diffDays < 0) {
+      return `<span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:#FCA5A5; background:rgba(248,113,113,0.2); border:1px solid #F87171; padding:2px 7px; border-radius:4px;">🚨 VENCIDA (${vencStr}) · Actualizar dato</span>`;
+    } else if (diffDays <= 7) {
+      return `<span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:#FDE047; background:rgba(234,179,8,0.22); border:1px solid #EAB308; padding:2px 7px; border-radius:4px;">⏰ ¡VENCE EN ${diffDays} DÍAS! (${vencStr})</span>`;
+    }
+    return `<span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--gold); background:rgba(212,175,55,0.14); padding:2px 7px; border-radius:4px;">📅 Vence: ${vencStr} (faltan ${diffDays}d)</span>`;
+  }
+
+  function exportFullPreproBackup() {
+    const data = {
+      exportedAt: new Date().toISOString(),
+      cardMetaMap,
+      customCards: JSON.parse(localStorage.getItem('whimsy_custom_rss_cards_v13') || '[]')
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'respaldo-prepro-whimsy-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+  }
+
+  function importFullPreproBackup(ev) {
+    const f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const d = JSON.parse(reader.result);
+        if (d.cardMetaMap) {
+          cardMetaMap = d.cardMetaMap;
+          localStorage.setItem('whimsy_cards_meta_v15', JSON.stringify(cardMetaMap));
+        }
+        if (Array.isArray(d.customCards)) {
+          localStorage.setItem('whimsy_custom_rss_cards_v13', JSON.stringify(d.customCards));
+        }
+        allCards = loadAllCards();
+        syncSelectedFromMeta();
+        renderFeedGrid();
+        renderBasketAndWeave();
+        alert('✅ Respaldo restaurado con todos tus rótulos, fechas de vencimiento y gateras.');
+      } catch (e) {
+        alert('Archivo de respaldo inválido.');
+      }
+    };
+    reader.readAsText(f);
+  }
+
   function updateTabCounts() {
     document.getElementById('countAll').textContent = allCards.length;
+    const cHoy = document.getElementById('countHoy');
+    const cGat = document.getElementById('countGateras');
+    const cGua = document.getElementById('countGuardado');
+    if (cHoy) cHoy.textContent = allCards.filter(c => cardMetaMap[c.id]?.status === 'hoy').length;
+    if (cGat) cGat.textContent = allCards.filter(c => cardMetaMap[c.id]?.status === 'gateras').length;
+    if (cGua) cGua.textContent = allCards.filter(c => (cardMetaMap[c.id]?.status || 'guardado') === 'guardado').length;
     document.getElementById('countTransito').textContent = allCards.filter(c => c.cat === 'transito').length;
     document.getElementById('countClima').textContent = allCards.filter(c => c.cat === 'clima').length;
     document.getElementById('countArrobar').textContent = allCards.filter(c => c.cat === 'arrobar').length;
@@ -1721,11 +1869,18 @@
   function renderFeedGrid() {
     updateTabCounts();
     const grid = document.getElementById('feedGrid');
-    const visible = activeFilter === 'all' ? allCards : allCards.filter(c => c.cat === activeFilter);
+    let visible = allCards;
+    if (activeFilter === 'status_hoy') visible = allCards.filter(c => cardMetaMap[c.id]?.status === 'hoy');
+    else if (activeFilter === 'status_gateras') visible = allCards.filter(c => cardMetaMap[c.id]?.status === 'gateras');
+    else if (activeFilter === 'status_guardado') visible = allCards.filter(c => (cardMetaMap[c.id]?.status || 'guardado') === 'guardado');
+    else if (activeFilter !== 'all') visible = allCards.filter(c => c.cat === activeFilter);
 
     let htmlChunks = [];
     visible.forEach((card, cardIdx) => {
-      const isSelected = selectedCardIds.includes(card.id);
+      const meta = cardMetaMap[card.id] || { status: 'guardado', rotulo: 'General', vencimiento: '', withCorr: false };
+      const isSelected = meta.status === 'hoy';
+      const isGateras = meta.status === 'gateras';
+      const isGuardado = meta.status === 'guardado';
       const isDossierOpen = !!openDossierIds[card.id];
       const extraLinksHtml = (card.extraSources || []).map(s =>
         `<a href="${s.url}" target="_blank" rel="noopener" class="source-pill">🔗 ${s.label} ↗</a>`
@@ -1778,10 +1933,32 @@
       `).join('');
 
       htmlChunks.push(`
-        <div class="feed-card ${isSelected ? 'selected' : ''}" id="card-${card.id}">
+        <div class="feed-card ${isSelected ? 'selected' : ''}" id="card-${card.id}" style="${isGateras ? 'border-color:rgba(212,175,55,0.75); box-shadow:0 0 18px rgba(212,175,55,0.12);' : ''}">
           <div class="card-top-meta">
             <span class="badge ${card.cat}">${card.catLabel}</span>
-            <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--green);">✅ Fuente + Álbum local verificado · ${card.sourceName}</span>
+            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+              ${getVencimientoBadgeHtml(meta.vencimiento)}
+              <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--green);">✅ ${card.sourceName}</span>
+            </div>
+          </div>
+
+          <!-- BARRA DE DESTINO (VA HOY / EN GATERAS / GUARDADO CON RÓTULO Y VENCIMIENTO) -->
+          <div style="margin:8px 0 10px; padding:8px 10px; border-radius:8px; background:rgba(9,9,14,0.9); border:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center;">
+              <button class="btn ${isSelected ? 'green' : ''}" style="padding:4px 9px; font-size:0.7rem;" onclick="setCardWorkflowStatus('${card.id}', 'hoy')">🟢 Va HOY (Titular)</button>
+              <button class="btn ${isGateras ? 'gold' : ''}" style="padding:4px 9px; font-size:0.7rem;" onclick="setCardWorkflowStatus('${card.id}', 'gateras')">🟡 En GATERAS (Plan B listo)</button>
+              <button class="btn ${isGuardado ? 'primary' : ''}" style="padding:4px 9px; font-size:0.7rem;" onclick="setCardWorkflowStatus('${card.id}', 'guardado')">📦 Guardar p/otro día</button>
+              <label style="display:inline-flex; align-items:center; gap:4px; font-size:0.7rem; color:#DDD6FE; background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.35); padding:3px 8px; border-radius:6px; cursor:pointer;">
+                <input type="checkbox" ${meta.withCorr ? 'checked' : ''} onchange="toggleCardWithCorr('${card.id}', this.checked)">
+                🎙️ Pedir Corresponsal (${card.embedVimeo ? '+01:02' : '+00:38'})
+              </label>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--muted);">🏷️ Rótulo:</span>
+              <input type="text" value="${(meta.rotulo || '').replace(/"/g, '&quot;')}" placeholder="Ej: Palabra PAPEL, Lluvia..." onchange="updateCardRotulo('${card.id}', this.value)" style="background:#050508; border:1px solid var(--border); color:var(--cream); padding:3px 7px; border-radius:5px; font-size:0.7rem; width:145px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--muted);">⏳ Vence:</span>
+              <input type="date" value="${meta.vencimiento || ''}" onchange="updateCardVencimiento('${card.id}', this.value)" title="Si es una muestra o evento que cierra en una fecha, ponela acá; si lo dejás vacío queda permanente (No vence)" style="background:#050508; border:1px solid var(--border); color:var(--gold); padding:2px 6px; border-radius:5px; font-size:0.68rem;">
+            </div>
           </div>
 
           <h3 class="card-title">${card.title}</h3>
@@ -2349,24 +2526,167 @@
   }
 
   function toggleSelectCard(id) {
-    const idx = selectedCardIds.indexOf(id);
-    if (idx >= 0) {
-      selectedCardIds.splice(idx, 1);
-    } else {
-      selectedCardIds.push(id);
+    const cur = cardMetaMap[id]?.status || 'guardado';
+    setCardWorkflowStatus(id, cur === 'hoy' ? 'guardado' : 'hoy');
+  }
+
+  function fmtMinSec(totalSec) {
+    const m = Math.floor(totalSec / 60);
+    const s = Math.round(totalSec % 60);
+    return `${m} min ${String(s).padStart(2, '0')} s`;
+  }
+
+  function syncGaterasToCabin() {
+    try {
+      const gateras = allCards.filter(c => cardMetaMap[c.id]?.status === 'gateras').map(c => {
+        const firstP = (c.album && c.album[0]) ? c.album[0] : { url: 'evidencias/aris_flores_macro.jpg', caption: c.title };
+        return {
+          id: c.id,
+          title: c.title,
+          shortLabel: c.title.split(':')[0].slice(0, 34),
+          rotulo: cardMetaMap[c.id]?.rotulo || 'En Gateras',
+          summary: c.summary,
+          img: firstP.url,
+          caption: firstP.caption,
+          corrText: buildCardCorrespondentText(c),
+          corrLabel: '🎙️ Gatera al aire: ' + c.sourceName.slice(0, 32)
+        };
+      });
+      localStorage.setItem('whimsy_gateras_live_v15', JSON.stringify(gateras));
+      if (preproChannel) {
+        preproChannel.postMessage({ type: 'GATERAS_SYNC', payload: gateras });
+      }
+    } catch (e) {}
+  }
+
+  function launchGateraNowToAir(cardId) {
+    const card = allCards.find(c => c.id === cardId);
+    if (!card) return;
+    const firstP = (card.album && card.album[0]) ? card.album[0] : { url: 'evidencias/aris_flores_macro.jpg', caption: card.title };
+    const pushMsg = {
+      type: 'PREPRO_PUSH',
+      payload: {
+        headline: card.title,
+        kicker: '⚡ TEMA DE GATERAS EN VIVO · ' + (cardMetaMap[card.id]?.rotulo || card.sourceName),
+        fact: firstP.caption + ' · ' + (card.handles || []).join(' '),
+        newRightImage: firstP.url,
+        newRightTag: '[EN GATERAS → AIRE]',
+        newRightLabel: firstP.caption,
+        customCorrespondentText: buildCardCorrespondentText(card),
+        customCorrespondentLabel: '🎙️ Crónica en vivo: ' + card.sourceName.slice(0, 34),
+        speakCorrespondentNow: !!cardMetaMap[card.id]?.withCorr,
+        pntMsg: '⚡ Gatera disparada al Aire: ' + card.title.slice(0, 48),
+        ts: Date.now()
+      }
+    };
+    localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
+    if (preproChannel) preproChannel.postMessage(pushMsg);
+    document.getElementById('miniRightImg').src = firstP.url;
+    document.getElementById('miniRightCaption').textContent = '➡️ GATERA AL AIRE: ' + firstP.caption.slice(0, 38);
+    document.getElementById('miniLeftText').textContent = card.title;
+    const conf = document.getElementById('pushConfirmation');
+    if (conf) {
+      conf.style.display = 'block';
+      conf.innerHTML = '⚡ <strong>¡Tema de Gateras puesto AL AIRE en Cabina y Monitor!</strong> («' + card.title.slice(0, 46) + '...»).';
     }
-    renderFeedGrid();
-    renderBasketAndWeave();
   }
 
   function renderBasketAndWeave() {
     const listEl = document.getElementById('basketList');
     const countEl = document.getElementById('basketCount');
+    const calcBox = document.getElementById('chapterTimeCalcBox');
+    const gatBox = document.getElementById('gaterasQuickBox');
     const chosen = selectedCardIds.map(id => allCards.find(c => c.id === id)).filter(Boolean);
+    const gateras = allCards.filter(c => cardMetaMap[c.id]?.status === 'gateras');
     countEl.textContent = chosen.length;
+    syncGaterasToCabin();
+
+    // Render Gateras Box
+    if (gatBox) {
+      if (gateras.length === 0) {
+        gatBox.innerHTML = `
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold); font-weight:700;">🟡 BANCO EN GATERAS (0 TEMAS)</div>
+          <div style="font-size:0.72rem; color:var(--muted); margin-top:3px;">Tocá <code>🟡 En GATERAS</code> en 1 o 2 tarjetas de la izquierda para dejarlas listas como Plan B si algo cambia en vivo.</div>
+        `;
+      } else {
+        gatBox.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold); font-weight:700;">🟡 EN GATERAS LISTOS P/TRAER AL AIRE SI ALGO CAMBIA (${gateras.length})</span>
+            <span style="font-size:0.65rem; color:#98f5be;">Sincronizados con Cabina</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            ${gateras.map(g => `
+              <div style="background:rgba(8,8,12,0.9); border:1px solid rgba(212,175,55,0.35); border-radius:7px; padding:6px 8px; display:flex; justify-content:space-between; align-items:center; gap:6px; flex-wrap:wrap;">
+                <div style="font-size:0.73rem; color:var(--cream);">
+                  <strong style="color:var(--gold);">[${(cardMetaMap[g.id]?.rotulo || 'Plan B')}]</strong> ${g.title.slice(0, 44)}...
+                </div>
+                <div style="display:flex; gap:4px;">
+                  <button class="btn gold" style="padding:3px 7px; font-size:0.66rem;" onclick="launchGateraNowToAir('${g.id}')">🚀 Traer al Aire AHORA</button>
+                  <button class="btn green" style="padding:3px 7px; font-size:0.66rem;" onclick="setCardWorkflowStatus('${g.id}', 'hoy')">➕ A HOY</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    // Calculate live air duration of chosen chapter
+    let readingSec = 0;
+    let mediaSec = 0;
+    let corrSec = 0;
+    let totalPhotosChecked = 0;
+    let totalCorrChecked = 0;
+    let hasCinemaVideo = false;
+
+    chosen.forEach(c => {
+      const words = ((c.summary || '') + ' ' + (c.longDossier || '')).trim().split(/\s+/).length;
+      // Lectura + tu comentario libre al aire (~130 palabras por minuto + 45s de reflexión tuya por historia)
+      readingSec += Math.round((words / 130) * 60) + 45;
+      const checkedP = (c.album || []).filter(p => p.checked);
+      totalPhotosChecked += checkedP.length;
+      mediaSec += checkedP.length * 25; // 25s comentando cada foto/lámina proyectada
+      if (c.embedVimeo) {
+        hasCinemaVideo = true;
+        mediaSec += 205; // 03:25 del corto en Excel
+      }
+      if (cardMetaMap[c.id]?.withCorr) {
+        totalCorrChecked += 1;
+        corrSec += c.embedVimeo ? 62 : 38;
+      }
+    });
+    const musicAndBumpersSec = chosen.length > 0 ? 90 : 0; // 1m30s de apertura, placas y respiros Moby
+    const totalChapterSec = readingSec + mediaSec + corrSec + musicAndBumpersSec;
+
+    const chk1 = chosen.length >= 2;
+    const chk2 = totalPhotosChecked >= 3;
+    const chk3 = totalCorrChecked >= 1;
+    const chk4 = gateras.length >= 1;
+
+    if (calcBox) {
+      calcBox.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:6px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--pink); font-weight:700;">⏱️ TIEMPO ESTIMADO DEL CAPÍTULO DE HOY:</span>
+          <strong style="font-family:'JetBrains Mono',monospace; font-size:0.9rem; color:var(--green); background:rgba(74,222,128,0.12); padding:2px 8px; border-radius:6px; border:1px solid rgba(74,222,128,0.4);">${fmtMinSec(totalChapterSec)}</strong>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px 10px; font-size:0.7rem; color:var(--cream); margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.08);">
+          <div>📖 Tu lectura + comentario (${chosen.length} notas): <strong style="color:var(--gold);">${fmtMinSec(readingSec)}</strong></div>
+          <div>🖼️ Fotos (${totalPhotosChecked}) ${hasCinemaVideo ? '+ Film 03:25' : ''}: <strong style="color:var(--gold);">${fmtMinSec(mediaSec)}</strong></div>
+          <div>🎙️ Corresponsales pedidos (${totalCorrChecked}): <strong style="color:var(--gold);">${fmtMinSec(corrSec)}</strong></div>
+          <div>🎵 Cortinas Moby + Placas: <strong style="color:var(--gold);">${fmtMinSec(musicAndBumpersSec)}</strong></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--muted); margin-bottom:4px;">✅ SEMÁFORO DE «PRE-PRO LISTA PARA SALIR AL AIRE»:</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:3px 8px; font-size:0.69rem;">
+          <div style="color:${chk1 ? '#4ADE80' : '#FBBF24'};">${chk1 ? '✅' : '⚪'} 2 a 3 temas en «Va HOY» (${chosen.length})</div>
+          <div style="color:${chk2 ? '#4ADE80' : '#FBBF24'};">${chk2 ? '✅' : '⚪'} 3+ fotos/videos tildados (${totalPhotosChecked})</div>
+          <div style="color:${chk3 ? '#4ADE80' : '#FBBF24'};">${chk3 ? '✅' : '⚪'} 1+ corresponsal pedido (${totalCorrChecked})</div>
+          <div style="color:${chk4 ? '#4ADE80' : '#FBBF24'};">${chk4 ? '✅' : '⚪'} 1+ Plan B «En Gateras» (${gateras.length})</div>
+        </div>
+      `;
+    }
 
     if (chosen.length === 0) {
-      listEl.innerHTML = '<div style="font-size:0.78rem; color:var(--muted); padding:8px;">Todavía no elegiste tarjetas. Tocá <strong>➕ Elegir para mi Bloque</strong> en 2 o 3 tarjetas de la izquierda.</div>';
+      listEl.innerHTML = '<div style="font-size:0.78rem; color:var(--muted); padding:8px;">Todavía no marcaste tarjetas para HOY. Tocá <strong>🟢 Va HOY (Titular)</strong> en 2 o 3 tarjetas de la izquierda.</div>';
       document.getElementById('wovenTitle').value = '';
       document.getElementById('wovenScript').value = '';
       document.getElementById('editingCueBox').innerHTML = 'Elegí 2 o 3 tarjetas para armar la pauta de ponchado y el álbum unificado.';
@@ -2670,12 +2990,12 @@
     else allCards.unshift(polyCard);
 
     openDossierIds[cardId] = true;
-    if (!selectedBasketIds.includes(cardId)) {
-      selectedBasketIds.unshift(cardId);
-    }
+    cardMetaMap[cardId] = { status: 'hoy', rotulo: 'Palabra Rectora: ' + obj.word, vencimiento: '', withCorr: true };
+    syncSelectedFromMeta();
+    saveCardMetaMap();
     renderFeedGrid();
     renderBasketAndWeave();
-    pushBlockToCabin();
+    sendWovenBlockToCabin();
   }
 
   async function pullLiveCommonsAndWiki() {

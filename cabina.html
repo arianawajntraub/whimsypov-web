@@ -1764,6 +1764,9 @@
       </div>
     </div>
 
+    <!-- BANCO DE TEMAS EN GATERAS (SINCRONIZADO CON MESA DE PRE-PRO · 1 CLIC PARA TRAER AL AIRE SI CAMBIA ALGO) -->
+    <div id="cabinGaterasStrip" style="margin-bottom:8px;padding:7px 10px;border-radius:8px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.42);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;"></div>
+
     <!-- MESA DE PRE-AIRE (15 MIN ANTES): SECCIONES FLEXIBLES, GRAPHS CON IA, PNT Y BACKEND DE CAPTURAS WHATSAPP/PLAYLIST -->
     <div id="preAirDrawer" class="control-box" style="display:none;border-color:var(--gold);background:#141420;">
       <div class="box-header">
@@ -3827,12 +3830,90 @@ function applyIncomingCommand(msg) {
   }
 }
 
-studioBus.onmessage = (ev) => applyIncomingCommand(ev.data);
+studioBus.onmessage = (ev) => {
+  if (ev.data?.type === 'GATERAS_SYNC') renderCabinGaterasStrip(ev.data.payload);
+  else applyIncomingCommand(ev.data);
+};
 window.addEventListener('storage', (ev) => {
   if (ev.key === 'whimsy_prepro_push_v8' && ev.newValue) {
     try { applyIncomingCommand(JSON.parse(ev.newValue)); } catch (e) {}
+  } else if (ev.key === 'whimsy_gateras_live_v15' && ev.newValue) {
+    try { renderCabinGaterasStrip(JSON.parse(ev.newValue)); } catch (e) {}
   }
 });
+
+window.DEFAULT_CABIN_GATERAS = [
+  {
+    id: 'vam-reverso-oculto',
+    shortLabel: 'V&A Londres · El reverso oculto',
+    rotulo: 'Plan B de lujo (Londres)',
+    title: 'Victoria & Albert Museum (CC0): lo que esconden los reversos de los cuadros cuando nadie mira la pared',
+    summary: 'Los conservadores del V&A en Londres documentaron sellos de aduana, bocetos descartados y cartas pegadas del lado de atrás de los marcos.',
+    img: 'evidencias/prepro/vna_leonardo_notebook.jpg',
+    caption: 'Cuaderno manuscrito y reversos del V&A Museum (Londres)',
+    corrLabel: '🎙️ Gatera V&A Londres',
+    corrText: 'Desde los depósitos del Victoria and Albert Museum en Londres, el equipo de conservación abrió al público el reverso de sus obras históricas: detrás de los lienzos aparecieron bocetos tachados, etiquetas de viajes en barco y notas escritas a mano que habían permanecido ocultas contra el muro durante más de dos siglos.'
+  },
+  {
+    id: 'bhl-botanica-secreta',
+    shortLabel: 'Biodiversity Library · Botánica CC0',
+    rotulo: 'Plan B Botánica / Naturaleza',
+    title: 'Biodiversity Heritage Library (CC0): las expediciones botánicas ilustradas a mano por naturalistas',
+    summary: 'Más de 60 millones de páginas de herbarios y cuadernos de campo digitalizados en alta resolución y dominio público.',
+    img: 'evidencias/aris_flores_macro.jpg',
+    caption: 'Lámina botánica y archivo naturalista CC0',
+    corrLabel: '🎙️ Gatera Botánica CC0',
+    corrText: 'El consorcio internacional Biodiversity Heritage Library acaba de liberar miles de láminas botánicas pintadas a mano entre los siglos diecisiete y diecinueve, donde cada raíz y cada pétalo fueron registrados antes de que existiera la fotografía en color.'
+  }
+];
+
+window.currentCabinGateras = window.DEFAULT_CABIN_GATERAS;
+
+window.renderCabinGaterasStrip = function(list) {
+  if (Array.isArray(list) && list.length > 0) {
+    window.currentCabinGateras = list;
+  }
+  const el = document.getElementById('cabinGaterasStrip');
+  if (!el) return;
+  const items = window.currentCabinGateras || [];
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);font-weight:700;">🟡 EN GATERAS (SI ALGO CAMBIA EN VIVO · 1 CLIC AL AIRE):</span>
+      ${items.map((g, idx) => `
+        <button class="q-btn" style="border-color:rgba(212,175,55,0.55);color:#F5F0EB;" onclick="triggerCabinGatera(${idx}, false)" title="Pone el zócalo, la foto a la derecha y el texto de «${g.title}» al aire">🚀 ${g.shortLabel || g.title.slice(0,28)}</button>
+        <button class="q-btn" style="border-color:rgba(167,139,250,0.45);color:#DDD6FE;" onclick="triggerCabinGatera(${idx}, true)" title="Pone el tema al aire y dispara además su corresponsal">🎙️ + Crónica</button>
+      `).join('')}
+    </div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--muted);">Sincronizado con tu Mesa de Pre-Pro</span>
+  `;
+};
+
+window.triggerCabinGatera = function(idx, withVoice) {
+  const g = (window.currentCabinGateras || [])[idx];
+  if (!g) return;
+  applyIncomingCommand({
+    type: 'PREPRO_PUSH',
+    payload: {
+      headline: g.title,
+      kicker: '⚡ EN GATERAS → AIRE · ' + (g.rotulo || 'WHIMSY POV'),
+      fact: g.caption || g.summary,
+      newRightImage: g.img,
+      newRightTag: '[EN GATERAS → AIRE]',
+      newRightLabel: g.caption || g.shortLabel,
+      customCorrespondentLabel: g.corrLabel || 'Crónica en vivo',
+      customCorrespondentText: g.corrText || g.summary,
+      speakCorrespondentNow: !!withVoice,
+      pntMsg: '⚡ Gatera puesta al Aire: ' + (g.shortLabel || g.title)
+    }
+  });
+};
+
+try {
+  const savedGat = JSON.parse(localStorage.getItem('whimsy_gateras_live_v15') || 'null');
+  renderCabinGaterasStrip(savedGat);
+} catch (e) {
+  renderCabinGaterasStrip(window.DEFAULT_CABIN_GATERAS);
+}
 
 /* Inicializar PeerJS Cloud Broker para recibir cámara desde el celular en la playa o comandos desde el iPad */
 window.activePeerConnections = [];
