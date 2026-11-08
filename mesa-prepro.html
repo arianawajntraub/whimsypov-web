@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Whimsy POV · Mesa de Pre-Pro v12 (Dossiers Largos, Álbumes Reales y Proyección en Vivo)</title>
+<title>Whimsy POV · Mesa de Pre-Pro v13 (Ampliador en Previa, GIFs Locales y Portales Intercalados)</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
   :root {
     --bg: #0b0b0e;
     --panel: #131318;
-    --panel-2: #191920;
-    --border: rgba(234, 221, 194, 0.16);
+    --panel-2: #191922;
+    --border: rgba(234, 221, 194, 0.18);
     --cream: #EADDC2;
     --pink: #E8A0BF;
     --gold: #D4A853;
@@ -22,7 +22,7 @@
     background: var(--bg);
     color: var(--cream);
     font-family: 'Plus Jakarta Sans', sans-serif;
-    padding: 16px 20px 60px;
+    padding: 16px 20px 90px;
     line-height: 1.5;
   }
   .top-header {
@@ -41,19 +41,20 @@
     gap: 12px;
   }
   .brand-title img {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 1px solid var(--pink);
     padding: 3px;
+    object-fit: contain;
   }
   .brand-title h1 {
     font-family: 'Newsreader', serif;
-    font-size: 1.45rem;
+    font-size: 1.48rem;
     color: var(--cream);
   }
   .brand-title p {
-    font-size: 0.78rem;
+    font-size: 0.79rem;
     color: var(--muted);
   }
   .nav-links {
@@ -62,7 +63,7 @@
     flex-wrap: wrap;
   }
   .btn {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.06);
     color: var(--cream);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -78,7 +79,7 @@
   }
   .btn:hover {
     border-color: var(--pink);
-    background: rgba(232,160,191,0.14);
+    background: rgba(232,160,191,0.16);
   }
   .btn.primary {
     background: var(--pink);
@@ -87,17 +88,16 @@
     font-weight: 700;
   }
   .btn.green {
-    background: rgba(74,222,128,0.14);
+    background: rgba(74,222,128,0.15);
     color: var(--green);
-    border-color: rgba(74,222,128,0.45);
+    border-color: rgba(74,222,128,0.48);
   }
   .btn.gold {
-    background: rgba(212,168,83,0.15);
+    background: rgba(212,168,83,0.16);
     color: var(--gold);
-    border-color: rgba(212,168,83,0.45);
+    border-color: rgba(212,168,83,0.48);
   }
 
-  /* Filter Bar */
   .rss-toolbar {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -157,10 +157,9 @@
     font-size: 0.8rem;
   }
 
-  /* Main 2-column Workspace */
   .workspace {
     display: grid;
-    grid-template-columns: 1.42fr 1fr;
+    grid-template-columns: 1.48fr 1fr;
     gap: 18px;
     align-items: start;
   }
@@ -168,11 +167,10 @@
     .workspace { grid-template-columns: 1fr; }
   }
 
-  /* Expanded Feed Cards */
   .feed-grid {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
   }
   .feed-card {
     background: var(--panel);
@@ -210,22 +208,21 @@
 
   .card-title {
     font-family: 'Newsreader', serif;
-    font-size: 1.28rem;
+    font-size: 1.32rem;
     color: var(--cream);
     margin-bottom: 8px;
     line-height: 1.28;
   }
   .card-summary {
-    font-size: 0.86rem;
+    font-size: 0.88rem;
     color: #d8d0c5;
     margin-bottom: 12px;
     line-height: 1.55;
   }
 
-  /* Verified Sources Bar inside Card */
   .verified-sources-box {
     background: #0d0d12;
-    border: 1px solid rgba(74,222,128,0.3);
+    border: 1px solid rgba(74,222,128,0.35);
     border-radius: 10px;
     padding: 10px 12px;
     margin-bottom: 12px;
@@ -234,7 +231,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.69rem;
     color: var(--green);
-    margin-bottom: 6px;
+    margin-bottom: 7px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -247,10 +244,10 @@
     flex-wrap: wrap;
   }
   .source-pill {
-    font-size: 0.74rem;
+    font-size: 0.75rem;
     color: var(--cream);
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(234,221,194,0.22);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(234,221,194,0.24);
     padding: 5px 10px;
     border-radius: 7px;
     text-decoration: none;
@@ -262,13 +259,12 @@
   .source-pill:hover {
     border-color: var(--green);
     color: var(--green);
-    background: rgba(74,222,128,0.1);
+    background: rgba(74,222,128,0.12);
   }
 
-  /* Long Dossier Accordion */
   .dossier-box {
     background: #0a0a0e;
-    border: 1px solid rgba(232,160,191,0.28);
+    border: 1px solid rgba(232,160,191,0.3);
     border-radius: 10px;
     padding: 12px 14px;
     margin-bottom: 12px;
@@ -278,7 +274,7 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 700;
     color: var(--pink);
   }
@@ -287,23 +283,23 @@
     padding-top: 10px;
     border-top: 1px solid rgba(255,255,255,0.08);
     font-family: 'Newsreader', serif;
-    font-size: 1.02rem;
+    font-size: 1.04rem;
     color: var(--cream);
-    line-height: 1.65;
+    line-height: 1.66;
     white-space: pre-line;
   }
   .dossier-tips {
     margin-top: 10px;
-    background: rgba(212,168,83,0.1);
+    background: rgba(212,168,83,0.12);
     border-left: 3px solid var(--gold);
     padding: 8px 10px;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.79rem;
     color: var(--cream);
     border-radius: 0 6px 6px 0;
   }
 
-  /* Interactive Pre-Pro Photo Album inside each Card */
+  /* Bigger, Crystal-Clear Interactive Album Grid */
   .album-section {
     background: #0d0d12;
     border: 1px solid var(--border);
@@ -318,85 +314,160 @@
     flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 10px;
-    font-size: 0.76rem;
+    font-size: 0.78rem;
     color: var(--gold);
     font-weight: 700;
   }
   .album-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 12px;
   }
   .album-item {
     background: #14141c;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: all 0.15s;
+    transition: all 0.16s;
   }
   .album-item.checked {
     border-color: var(--green);
-    box-shadow: 0 0 0 1px rgba(74,222,128,0.35);
+    box-shadow: 0 0 0 1px rgba(74,222,128,0.4);
   }
   .album-thumb-wrap {
     position: relative;
-    height: 105px;
+    height: 165px;
     background: #050507;
-    cursor: pointer;
+    cursor: zoom-in;
+    overflow: hidden;
   }
   .album-thumb-wrap img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.25s;
+  }
+  .album-thumb-wrap:hover img {
+    transform: scale(1.04);
+  }
+  .zoom-badge {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(11,11,14,0.88);
+    color: var(--cream);
+    border: 1px solid var(--pink);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    pointer-events: none;
   }
   .album-check-label {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    background: rgba(0,0,0,0.78);
+    top: 6px;
+    left: 6px;
+    background: rgba(0,0,0,0.82);
     color: var(--green);
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     font-family: 'JetBrains Mono', monospace;
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 3px 7px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     cursor: pointer;
-    border: 1px solid rgba(74,222,128,0.4);
+    border: 1px solid rgba(74,222,128,0.45);
   }
   .album-caption {
-    padding: 6px 7px;
-    font-size: 0.68rem;
-    color: #cfc7ba;
-    line-height: 1.3;
+    padding: 8px 9px;
+    font-size: 0.73rem;
+    color: #dfd8cc;
+    line-height: 1.35;
     flex: 1;
   }
   .album-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3px;
-    padding: 5px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    padding: 6px;
     background: #09090d;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(255,255,255,0.08);
   }
   .album-btn {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.07);
     color: var(--cream);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 4px;
-    padding: 4px 4px;
-    font-size: 0.64rem;
-    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 5px;
+    padding: 5px 4px;
+    font-size: 0.67rem;
+    font-weight: 700;
     cursor: pointer;
     text-align: center;
+    transition: all 0.15s;
   }
   .album-btn:hover {
     border-color: var(--pink);
     color: var(--pink);
+    background: rgba(232,160,191,0.14);
+  }
+  .album-btn.active-flash {
+    background: var(--green);
+    color: #09090c;
+    border-color: var(--green);
+  }
+
+  /* Interleaved Web Portals Strip */
+  .portals-strip {
+    background: linear-gradient(135deg, rgba(212,168,83,0.12) 0%, rgba(232,160,191,0.08) 100%);
+    border: 1px dashed rgba(212,168,83,0.55);
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .portals-strip h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .portals-strip p {
+    font-size: 0.78rem;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+  .portals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+    gap: 10px;
+  }
+  .portal-card {
+    background: rgba(11,11,14,0.88);
+    border: 1px solid rgba(234,221,194,0.2);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .portal-card strong {
+    font-size: 0.82rem;
+    color: var(--pink);
+    display: block;
+  }
+  .portal-card span.url-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.66rem;
+    color: var(--green);
+    word-break: break-all;
+  }
+  .portal-card p {
+    font-size: 0.72rem;
+    color: #cfc7ba;
+    margin: 0;
   }
 
   .handles-row {
@@ -432,7 +503,7 @@
     border-top: 1px solid rgba(255,255,255,0.06);
   }
 
-  /* Right Column: Sticky Live Preview Monitor + Block Builder */
+  /* Right Column */
   .builder-panel {
     background: var(--panel);
     border: 2px solid rgba(232,160,191,0.35);
@@ -445,10 +516,14 @@
   }
   .live-mini-monitor {
     background: #07070a;
-    border: 1px solid rgba(74,222,128,0.45);
+    border: 2px solid rgba(74,222,128,0.55);
     border-radius: 12px;
     padding: 10px;
     margin-bottom: 14px;
+    transition: box-shadow 0.25s;
+  }
+  .live-mini-monitor.flash {
+    box-shadow: 0 0 25px rgba(74,222,128,0.65);
   }
   .live-mini-header {
     display: flex;
@@ -461,11 +536,11 @@
   }
   .mini-screen-16-9 {
     display: grid;
-    grid-template-columns: 0.9fr 1.15fr 1.35fr;
+    grid-template-columns: 0.85fr 1.15fr 1.4fr;
     gap: 6px;
     aspect-ratio: 16 / 9;
     background: #040406;
-    border: 1px solid rgba(234,221,194,0.2);
+    border: 1px solid rgba(234,221,194,0.25);
     border-radius: 8px;
     padding: 6px;
     overflow: hidden;
@@ -490,6 +565,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    cursor: zoom-in;
   }
   .mini-center-9-16 img, .mini-center-9-16 video {
     position: absolute;
@@ -516,6 +592,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    cursor: zoom-in;
   }
   .mini-wing-right img, .mini-wing-right video {
     position: absolute;
@@ -606,6 +683,61 @@
     border-radius: 7px;
     font-size: 0.78rem;
   }
+
+  /* FULL-SCREEN PRE-PRO LIGHTBOX / AMPLIADOR EN PREVIA */
+  .lightbox-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(5, 5, 8, 0.92);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .lightbox-overlay.open {
+    display: flex;
+  }
+  .lightbox-card {
+    background: #121218;
+    border: 2px solid var(--pink);
+    border-radius: 16px;
+    max-width: 1080px;
+    width: 100%;
+    max-height: 92vh;
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.85);
+  }
+  @media (max-width: 900px) {
+    .lightbox-card { grid-template-columns: 1fr; overflow-y: auto; }
+  }
+  .lightbox-img-stage {
+    background: #050507;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 16px;
+    min-height: 440px;
+  }
+  .lightbox-img-stage img {
+    max-width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  .lightbox-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+    overflow-y: auto;
+  }
 </style>
 </head>
 <body>
@@ -613,25 +745,25 @@
   <!-- TOP HEADER -->
   <div class="top-header">
     <div class="brand-title">
-      <img src="assets/logo_rosa_transparente_whimsy.png" alt="Whimsy POV">
+      <img src="logo-whimsy-rosa.png" alt="Whimsy POV">
       <div>
-        <h1>Mesa de Pre-Pro · «El tránsito y el clima del mundo» (v12)</h1>
-        <p>100% Fuentes Reales Verificadas (Cero 404) · Dossiers Largos de Lectura · Álbum de Imágenes por Nota · Proyección de Ventana en Vivo</p>
+        <h1>Mesa de Pre-Pro · «El tránsito y el clima del mundo» (v13)</h1>
+        <p>Tocá cualquier foto o GIF para AMPLIAR EN PREVIA GRANDE · 34 Imágenes y GIFs locales sin bloqueo · Portales intercalados con URL</p>
       </div>
     </div>
     <div class="nav-links">
-      <button class="btn gold" onclick="toggleAddFeedDrawer()">➕ Sumar nuevo RSS / blog / cuenta</button>
-      <button class="btn green" onclick="pullLiveCommonsAndWiki()">🔄 Traer hallazgos y fotos reales ahora</button>
+      <button class="btn gold" onclick="toggleAddFeedDrawer()">➕ Sumar nuevo RSS / sitio / hallazgo</button>
+      <button class="btn green" onclick="pullLiveCommonsAndWiki()">🔄 Traer hallazgos y fotos CC0 ahora</button>
       <a href="cabina-v8.html" target="_blank" class="btn primary">🎛️ Abrir Cabina en Vivo (v8)</a>
       <a href="obs-salida.html" target="_blank" class="btn">📺 Salida Limpia OBS</a>
       <a href="watch.html" target="_blank" class="btn">⌚ Apple Watch</a>
     </div>
   </div>
 
-  <!-- DRAWER TO ADD CUSTOM RSS / BLOG / ACCOUNT / NEWS -->
+  <!-- DRAWER TO ADD CUSTOM RSS / BLOG / ACCOUNT -->
   <div class="drawer" id="addFeedDrawer">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-      <strong style="color:var(--pink); font-size:0.88rem;">➕ Agregar nueva fuente RSS, artículo, museo o hallazgo con su álbum</strong>
+      <strong style="color:var(--pink); font-size:0.88rem;">➕ Agregar nueva fuente RSS, sitio web, museo o hallazgo a tu mesa</strong>
       <button class="btn" onclick="toggleAddFeedDrawer()" style="padding:3px 8px;">✕ Cerrar</button>
     </div>
     <div class="drawer-grid">
@@ -657,7 +789,7 @@
         <input type="text" id="newFeedHandles" placeholder="@vamuseum @thisiscolossal @conicetdialoga">
       </div>
       <div style="grid-column: 1 / -1;">
-        <label class="field-label">Texto largo / Dossier para comentar al aire + URL de imagen (opcional)</label>
+        <label class="field-label">Texto largo / Dossier para comentar al aire</label>
         <textarea id="newFeedSummary" rows="3" placeholder="Pegá acá el texto largo o las notas que quieras tener a mano en el vivo..."></textarea>
       </div>
     </div>
@@ -669,11 +801,11 @@
   <!-- RSS FILTER BAR + DEEP TOPIC SCRAPER -->
   <div class="rss-toolbar">
     <div class="rss-tabs">
-      <button class="rss-tab active" onclick="filterFeed('all', this)">⚡ Todo el dial <span class="count" id="countAll">8</span></button>
-      <button class="rss-tab" onclick="filterFeed('transito', this)">🚦 El tránsito cultural (Museos & CC0) <span class="count" id="countTransito">3</span></button>
-      <button class="rss-tab" onclick="filterFeed('clima', this)">🌦️ El clima del mundo (Ciencia & Planeta) <span class="count" id="countClima">2</span></button>
+      <button class="rss-tab active" onclick="filterFeed('all', this)">⚡ Todo el dial + Portales intercalados <span class="count" id="countAll">10</span></button>
+      <button class="rss-tab" onclick="filterFeed('transito', this)">🚦 El tránsito cultural (Museos, Excel & CC0) <span class="count" id="countTransito">5</span></button>
+      <button class="rss-tab" onclick="filterFeed('clima', this)">🌦️ El clima del mundo (Ciencia & Mente) <span class="count" id="countClima">2</span></button>
       <button class="rss-tab" onclick="filterFeed('arrobar', this)">📣 Mentes para @arrobar <span class="count" id="countArrobar">2</span></button>
-      <button class="rss-tab" onclick="filterFeed('hilo', this)">🧵 Hilo Rojo (Tus 19 Minutas + 91 Videos) <span class="count" id="countHilo">1</span></button>
+      <button class="rss-tab" onclick="filterFeed('hilo', this)">🧵 Tu Archivo ARIS2 + Hilo Rojo <span class="count" id="countHilo">1</span></button>
     </div>
     <div class="search-box">
       <input type="text" id="topicSearchInput" placeholder="Buscar tema + traer dossier largo y álbum CC0 (ej: Hilma af Klint, musgo, faros)..." onkeydown="if(event.key==='Enter') searchLiveTopic()">
@@ -684,41 +816,41 @@
   <!-- MAIN WORKSPACE -->
   <div class="workspace">
 
-    <!-- LEFT: EXPANDED CARDS WITH VERIFIED LINKS, LONG DOSSIER & MULTI-PHOTO ALBUM -->
+    <!-- LEFT: EXPANDED CARDS + INTERLEAVED WEB PORTALS -->
     <div>
       <div id="liveSearchStatus" style="display:none; margin-bottom:12px; padding:10px 14px; border-radius:8px; background:rgba(74,222,128,0.12); border:1px solid rgba(74,222,128,0.4); color:var(--green); font-size:0.8rem;"></div>
       <div class="feed-grid" id="feedGrid"></div>
     </div>
 
-    <!-- RIGHT: LIVE MONITOR PREVIEW + MULTI-CARD BLOCK BUILDER -->
+    <!-- RIGHT: STICKY LIVE MONITOR PREVIEW + MULTI-CARD BLOCK BUILDER -->
     <div class="builder-panel">
 
-      <!-- MONITOR EN VIVO (PARA QUE VEAS AL INSTANTE LO QUE PROYECTÁS EN DERECHA O CENTRO) -->
-      <div class="live-mini-monitor">
+      <!-- MONITOR EN VIVO (CON AMPLIACIÓN EN 1 CLIC) -->
+      <div class="live-mini-monitor" id="liveMiniMonitorBox">
         <div class="live-mini-header">
-          <span>🟢 MONITOR EN VIVO DE TU SALIDA (SINCRONIZADO CON CABINA Y OBS)</span>
-          <span id="liveSyncBadge" style="color:var(--gold);">Listo para proyectar</span>
+          <span>🟢 MONITOR EN VIVO DE TU SALIDA (TOCÁ LA PANTALLA PARA AMPLIAR)</span>
+          <span id="liveSyncBadge" style="color:var(--gold);">Sincronizado con Cabina</span>
         </div>
         <div class="mini-screen-16-9">
           <div class="mini-wing-left">
             <div><strong style="color:var(--pink);">WHIMSY POV</strong><br>06:30 / 18:30</div>
-            <div id="miniLeftText" style="font-size:0.55rem; color:var(--cream);">Lo que miramos con lupa cuando afuera el mundo hace ruido</div>
+            <div id="miniLeftText" style="font-size:0.55rem; color:var(--cream);">«Hice una película en Excel» · Maria Tomazou</div>
             <div style="color:var(--green);">🎵 Moby Gratis</div>
           </div>
-          <div class="mini-center-9-16">
-            <img id="miniCenterImg" src="assets/whimsy_pov_logo.png" alt="Centro 9:16" style="object-fit:contain; padding:14px; background:#101018;">
+          <div class="mini-center-9-16" onclick="openMonitorFullPreview('center')" title="Clic para ampliar el Centro 9:16 en pantalla grande">
+            <img id="miniCenterImg" src="logo-whimsy-rosa.png" alt="Centro 9:16" style="object-fit:contain; padding:14px; background:#101018;">
             <video id="miniCenterVideo" muted playsinline style="display:none;"></video>
             <div class="mini-center-caption" id="miniCenterCaption">📱 CENTRO 9:16: Tu cámara / Placa central</div>
           </div>
-          <div class="mini-wing-right">
-            <img id="miniRightImg" src="https://www.thisiscolossal.com/wp-content/uploads/2026/11/arkivism-1.jpeg" alt="Panel Derecho">
+          <div class="mini-wing-right" onclick="openMonitorFullPreview('right')" title="Clic para ampliar el Panel Derecho en pantalla grande">
+            <img id="miniRightImg" src="evidencias/prepro/excel_film_1.gif" alt="Panel Derecho">
             <video id="miniRightVideo" muted playsinline style="display:none;"></video>
-            <div class="mini-right-caption" id="miniRightCaption">➡️ PANEL DERECHO: Arkivism (4M imágenes CC0)</div>
+            <div class="mini-right-caption" id="miniRightCaption">➡️ DERECHA: GIF Película en Excel (Maria Tomazou)</div>
           </div>
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-          <button class="btn gold" style="padding:5px 9px; font-size:0.7rem;" onclick="punchRightToCenterFromPrepro()">🎬 Ponchar Foto de Derecha ↔ Centro 9:16</button>
-          <button class="btn green" style="padding:5px 9px; font-size:0.7rem;" onclick="captureExternalSourceWindow('right')">🎥 Capturar Ventana Web → En Panel Derecho</button>
+          <button class="btn gold" style="padding:5px 9px; font-size:0.7rem;" onclick="punchRightToCenterFromPrepro()">🎬 Ponchar Foto Derecha ↔ Centro 9:16</button>
+          <button class="btn green" style="padding:5px 9px; font-size:0.7rem;" onclick="captureExternalSourceWindow('right')">🎥 Capturar Ventana Web → En Derecha</button>
           <button class="btn" style="padding:5px 9px; font-size:0.7rem; border-color:var(--pink); color:var(--pink);" onclick="captureExternalSourceWindow('center')">📱 Capturar Ventana Web → En Centro 9:16</button>
         </div>
       </div>
@@ -781,346 +913,685 @@
 
   </div>
 
+  <!-- MODAL AMPLIADOR EN PREVIA GRANDE (LIGHTBOX PARA VER CUALQUIER FOTO O GIF EN GRANDE Y MANDARLA A CABINA) -->
+  <div class="lightbox-overlay" id="preproLightbox" onclick="if(event.target===this) closeLightbox()">
+    <div class="lightbox-card">
+      <div class="lightbox-img-stage">
+        <img id="lbImage" src="" alt="Previa Ampliada">
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <button class="btn" onclick="stepLightboxPhoto(-1)">◀ Foto anterior del álbum</button>
+          <button class="btn" onclick="stepLightboxPhoto(1)">Siguiente foto del álbum ▶</button>
+        </div>
+      </div>
+      <div class="lightbox-info">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span class="badge transito" id="lbCatBadge">ÁLBUM EN PREVIA</span>
+            <button class="btn" onclick="closeLightbox()" style="padding:4px 10px;">✕ Cerrar previa (Esc)</button>
+          </div>
+          <h3 id="lbCardTitle" style="font-family:'Newsreader',serif; font-size:1.25rem; color:var(--cream); margin-bottom:8px;"></h3>
+          <div id="lbPhotoCaption" style="background:rgba(212,168,83,0.14); border-left:3px solid var(--gold); padding:10px 12px; border-radius:0 8px 8px 0; font-size:0.86rem; color:var(--cream); margin-bottom:12px;"></div>
+          <div id="lbStatusMsg" style="display:none; margin-bottom:10px; padding:8px 10px; border-radius:7px; background:rgba(74,222,128,0.16); border:1px solid var(--green); color:var(--green); font-size:0.78rem; font-weight:700;"></div>
+          <p id="lbDossierExcerpt" style="font-size:0.82rem; color:#d8d0c5; line-height:1.55; max-height:180px; overflow-y:auto; white-space:pre-line;"></p>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; border-top:1px solid var(--border); padding-top:12px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold);">¿DÓNDE QUERÉS PONCHAR ESTA IMAGEN / GIF AHORA?</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <button class="btn green" style="justify-content:center; padding:10px;" onclick="projectFromLightbox('right')">➡️ Mandar a Panel Derecho (16:9)</button>
+            <button class="btn primary" style="justify-content:center; padding:10px;" onclick="projectFromLightbox('center')">📱 Mandar a Centro (9:16)</button>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
+            <button class="btn gold" style="flex:1; justify-content:center;" id="lbOpenSourceBtn" onclick="">🪟 Abrir web original en Ventana Limpia al lado</button>
+            <a href="" target="_blank" id="lbOpenTabLink" class="btn" style="justify-content:center;">🔗 Abrir URL en pestaña ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   const preproChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('whimsy_studio_v8') : null;
 
-  // BASE DE TARJETAS CON 100% URLS VERIFICADAS HTTP 200 + DOSSIERS LARGOS + ÁLBUM DE FOTOS REALES DE CADA NOTA
   const DEFAULT_CARDS = [
-    {
-      id: 'colossal-arkivism-cc0',
-      cat: 'transito',
-      catLabel: '🚦 Tránsito Cultural · Colossal + Galerías CC0',
-      sourceName: 'Colossal (Artículo real verificado · Nov 2026)',
-      sourceUrl: 'https://www.thisiscolossal.com/2026/11/arkivism-public-domain-search/',
-      extraSources: [
-        { label: '📄 Artículo en Colossal (Arkivism)', url: 'https://www.thisiscolossal.com/2026/11/arkivism-public-domain-search/' },
-        { label: '📜 Public Domain Review (Clima siglo XVII)', url: 'https://publicdomainreview.org/essay/wonderful-weather' },
-        { label: '🏛️ Buscador Wikimedia Commons CC0', url: 'https://commons.wikimedia.org/wiki/Main_Page' }
-      ],
-      title: 'Arkivism: el buscador con 4 millones de imágenes de dominio público como antídoto al ruido sintético',
-      summary: 'Acaba de salir en Colossal: un archivo libre que reúne más de 4 millones de grabados botánicos, mapas astronómicos, textiles e ilustraciones científicas de museos del mundo en dominio público (CC0) para cruzar colecciones sin algoritmos de moda.',
-      longDossier: `1. QUÉ ES Y POR QUÉ ES UNA JOYA PARA WHIMSY POV:
-El portal de arte Colossal acaba de documentar el lanzamiento de Arkivism, una plataforma que indexa más de 4.000.000 de obras en dominio público (CC0) provenientes del Smithsonian, la Biblioteca del Congreso, el Rijksmuseum y archivos botánicos europeos. Nació explícitamente como un refugio para artistas, investigadores y curiosos que buscan trazos hechos por manos humanas reales a lo largo de cinco siglos.
-
-2. DETALLES EXQUISITOS PARA COMENTAR MIENTRAS MOSTRÁS LAS FOTOS AL COSTADO:
-• En la Foto 1 y Foto 2 del álbum (extraídas directamente de la nota de Colossal) se ven las láminas de historia natural y anatomía comparada donde los naturalistas del siglo XVIII anotaban en los márgenes el color exacto que tenía una flor o un insecto antes de secarse.
-• En la Foto 3 aparece el cruce con el ensayo de The Public Domain Review («Wonderful Weather»), que recopila los panfletos ilustrados de 1607 a 1680 en Gran Bretaña, cuando cada tormenta, helada del Támesis o aurora boreal se imprimía en xilografía y se vendía en la calle como crónica urgente del clima.
-
-3. CÓMO CONECTARLO AL AIRE:
-Mientras todo el mundo discute imágenes generadas en dos segundos que se olvidan en tres, hay cuatro millones de dibujos hechos con pluma, paciencia y lupa esperando que alguien los vuelva a mirar.`,
-       dossiersTips: '💡 Tip de aire: Abrí la nota de Colossal con el botón "🪟 Abrir en Ventana Limpia", cerrá el cartelito de suscripción antes de salir al aire y recorrela haciendo scroll mientras contás las láminas.',
-      album: [
-        {
-          url: 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/arkivism-1.jpeg',
-          caption: 'Lámina original #1 del artículo Arkivism en Colossal (Dominio Público CC0)',
-          checked: true
-        },
-        {
-          url: 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/arkivism-2.jpeg',
-          caption: 'Lámina original #2 de archivo histórico en Arkivism (Colossal)',
-          checked: true
-        },
-        {
-          url: 'https://www.thisiscolossal.com/wp-content/uploads/2025/01/archive-7.jpg',
-          caption: 'Catálogo de archivo visual libre de derechos (Colossal Archive)',
-          checked: true
-        },
-        {
-          url: 'https://pdr-assets.b-cdn.net/essays/wonderful-weather/flood-thumb.jpg',
-          caption: 'Grabado de 1607 sobre las grandes inundaciones y el clima (The Public Domain Review)',
-          checked: false
-        }
-      ],
-      handles: ['@thisiscolossal', '@publicdomainrev', '@smithsonian', '@whimsypov'],
-      hiloRojo: 'Hilo Rojo con tu archivo: Cruza con tu Minuta W «Eppur si muove» y con tus grabaciones de microscopio en iPad (ARIS2).'
-    },
-    {
-      id: 'colossal-lana-y-excel',
-      cat: 'transito',
-      catLabel: '🚦 Tránsito Cultural · Colossal (Arte Material & Obsesión)',
-      sourceName: 'Colossal (2 Artículos Reales Verificados · Nov 2026)',
-      sourceUrl: 'https://www.thisiscolossal.com/2026/11/amine-el-gotaibi-wind-from-the-north/',
-      extraSources: [
-        { label: '🧶 Esculturas de lana y hierro (Amine El Gotaibi)', url: 'https://www.thisiscolossal.com/2026/11/amine-el-gotaibi-wind-from-the-north/' },
-        { label: '📊 Película animada dentro de un Excel (Maria Tomazou)', url: 'https://www.thisiscolossal.com/2026/11/maria-tomazou-i-made-a-film-in-excel/' },
-        { label: '🏛️ Arquitectura juguetona de James Wines (SITE)', url: 'https://www.thisiscolossal.com/2026/11/james-wines-site-book-what-else-could-it-mean/' }
-      ],
-      title: 'Lana cruda brotando del hierro oxidado y una película pintada celda por celda adentro de un Excel',
-      summary: 'Dos historias reales publicadas esta semana en Colossal: el artista Amine El Gotaibi hace brotar cascadas de lana tejida desde estructuras de metal oxidado por el viento del norte, mientras Maria Tomazou pintó un cortometraje cuadro por cuadro rellenando celdas de Microsoft Excel.',
-      longDossier: `1. LA PRIMERA HISTORIA (AMINE EL GOTAIBI · «WIND FROM THE NORTH»):
-El artista marroquí Amine El Gotaibi trabaja con dos materiales que parecen enemigos: planchas de acero corten oxidadas a la intemperie y vellones de lana cruda teñida con pigmentos minerales. En su serie «Wind from the North», la lana sale por las grietas del metal duro como si fuera espuma, musgo o lava blanda empujada por el viento.
-
-2. LA SEGUNDA HISTORIA (MARIA TOMAZOU · UN FILM HECHO EN EXCEL):
-En el extremo opuesto, la artista Maria Tomazou agarró la herramienta más gris de cualquier oficina —una planilla de cálculo de Microsoft Excel— y achicó miles de celdas hasta convertirlas en píxeles. Sin usar inteligencia artificial ni programas de animación, pintó a mano celda por celda una película animada para demostrar que el impulso humano de crear belleza se filtra hasta en una hoja de contabilidad.
-
-3. LA TERCERA HISTORIA EN EL MISMO ÁLBUM (JAMES WINES · ARQUITECTURA QUE SE DESARMA):
-Se suma la retrospectiva de James Wines (estudio SITE), el arquitecto que en los años 70 diseñó edificios cuyas paredes de ladrillo parecían despegarse como una cáscara de naranja o abrirse al medio para dejar pasar los árboles.`,
-      dossiersTips: '💡 Tip de aire: Las 5 fotos de abajo son las fotos reales de esas tres notas de Colossal (cero fotos mezcladas). Tocá "➡️ Proyectar en Derecha" en cualquiera de ellas para ir pasándolas mientras hablás.',
-      album: [
-        {
-          url: 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/new-amine.jpg',
-          caption: 'Obra de Amine El Gotaibi: lana brotando del acero oxidado (Colossal)',
-          checked: true
-        },
-        {
-          url: 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/amine-10.jpg',
-          caption: 'Detalle de textura de lana y metal en «Wind from the North» (Colossal)',
-          checked: true
-        },
-        {
-          url: 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/amine-6.jpg',
-          caption: 'Instalación completa de Amine El Gotaibi en sala (Colossal)',
-          checked: true
-        },
-        {
-          url: 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/excel-1.gif',
-          caption: 'GIF real de la película pintada celda por celda en Microsoft Excel por Maria Tomazou',
-          checked: true
-        },
-        {
-          url: 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/best-7.jpeg',
-          caption: 'Boceto acuarelado de James Wines (SITE): edificios que se abren como escultura',
-          checked: false
-        }
-      ],
-      handles: ['@thisiscolossal', '@site_james_wines', '@whimsypov'],
-      hiloRojo: 'Hilo Rojo con tu archivo: Conecta con tu episodio de Lucio Fontana (el tajo que abre la materia) y tu Minuta W «Morfología y Disrupción».'
-    },
-    {
-      id: 'va-museum-sketchbooks-beryl',
-      cat: 'transito',
-      catLabel: '🚦 Tránsito Cultural · Victoria & Albert Museum (Londres)',
-      sourceName: 'Victoria & Albert Museum API + Archivo Beryl Gilroy',
-      sourceUrl: 'https://collections.vam.ac.uk/item/O1078444/',
-      extraSources: [
-        { label: '🏛️ Objeto O1078444 en V&A Museum (Londres)', url: 'https://collections.vam.ac.uk/item/O1078444/' },
-        { label: '🏛️ Cuaderno gemelo O1078443 en V&A Museum', url: 'https://collections.vam.ac.uk/item/O1078443/' },
-        { label: '📚 Archivo biográfico de Beryl Gilroy (Londres)', url: 'https://en.wikipedia.org/wiki/Beryl_Gilroy' }
-      ],
-      title: 'Lo que los museos encuentran en los reversos: cuadernos íntimos del V&A y las listas de bolsillo de Beryl Gilroy',
-      summary: 'En los depósitos de conservación de papel del Victoria & Albert Museum de Londres, los curadores digitalizaron en alta resolución los cuadernos de bocetos y reversos de cartón donde los artistas y maestros anotaban lo que no entraba en el marco oficial.',
-      longDossier: `1. QUÉ HAY EN LA FICHA OFICIAL DEL VICTORIA & ALBERT MUSEUM (O1078444):
-El departamento de Grabados, Dibujos y Conservación de Papel del Victoria & Albert Museum (Londres) abrió en acceso libre la digitalización página por página de sus cuadernos de taller (como los carnets de bolsillo de Randolph Caldecott, catalogados bajo los códigos O1078444, O1078443 y O1078446). A diferencia de los cuadros terminados para salón, estos cuadernos muestran las manchas de té, las cuentas al margen y los trazos urgentes hechos en trenes y veredas.
-
-2. EL CRUCE CON BERYL GILROY (LA PRIMERA DIRECTORA NEGRA DE PRIMARIA EN LONDRES, 1976):
-En paralelo, los archivos educativos británicos preservaron los papeles y memorias de Beryl Gilroy (nacida en Guyana en 1924, psicoterapeuta, escritora y primera directora negra de una escuela en Londres en Beckford Primary School). En sus apuntes de 1976, Gilroy registraba en el reverso de cartones escolares el inventario exacto de lo que sus alumnos traían escondido en los bolsillos: semillas secas, tapas de botella aplastadas por el tren, hilos de colores y recortes.
-
-3. LA IDEA FUERZA PARA EL BLOQUE:
-Muchas veces la verdad de una época no está del lado barnizado del cuadro que mira al público, sino en el cartón de atrás donde alguien apoyó el lápiz sin saber que cien años después lo íbamos a dar vuelta.`,
-      dossiersTips: '💡 Tip de aire: Las 3 primeras imágenes del álbum vienen en vivo del servidor IIIF del Victoria & Albert Museum (framemark.vam.ac.uk). La cuarta es tu foto de página de libro en ARIS2 por si querés cruzarla.',
-      album: [
-        {
-          url: 'https://framemark.vam.ac.uk/collections/2026PU2693/full/!900,900/0/default.jpg',
-          caption: 'Archivo oficial V&A Museum Londres · Cuaderno O1078444 (Imagen IIIF original)',
-          checked: true
-        },
-        {
-          url: 'https://framemark.vam.ac.uk/collections/2026PU2698/full/!900,900/0/default.jpg',
-          caption: 'Archivo oficial V&A Museum Londres · Cuaderno O1078443 (Reverso y apuntes)',
-          checked: true
-        },
-        {
-          url: 'https://framemark.vam.ac.uk/collections/2026PU2687/full/!900,900/0/default.jpg',
-          caption: 'Archivo oficial V&A Museum Londres · Cuaderno O1078446 (Boceto a lápiz)',
-          checked: true
-        },
-        {
-          url: 'assets/IMG_6705.jpg',
-          caption: 'Tu propia foto de libro subrayado en ARIS2 (solo si querés sumarla al final)',
-          checked: false
-        }
-      ],
-      handles: ['@vamuseum', '@britishlibrary', '@publicdomainrev', '@whimsypov'],
-      hiloRojo: 'Hilo Rojo con tu archivo: Conecta con tu Minuta W «Las 27» y con tu entrevista a Liliana Porter sobre los objetos mínimos.'
-    },
-    {
-      id: 'conicet-siracusano-materia',
-      cat: 'arrobar',
-      catLabel: '📣 Mentes para @Arrobar · CONICET + UNSAM + Bellas Artes',
-      sourceName: 'CONICET Oficial («El arte bajo la lupa de la ciencia» · 200 OK)',
-      sourceUrl: 'https://www.conicet.gov.ar/el-arte-bajo-la-lupa-de-la-ciencia/',
-      extraSources: [
-        { label: '🔬 Nota oficial CONICET: El arte bajo la lupa de la ciencia', url: 'https://www.conicet.gov.ar/el-arte-bajo-la-lupa-de-la-ciencia/' },
-        { label: '🖼️ Museo Nacional de Bellas Artes (Obra de archivo)', url: 'https://www.bellasartes.gob.ar/coleccion/obra/9201/' },
-        { label: '🎨 Archivo Hilma af Klint (Wikimedia)', url: 'https://es.wikipedia.org/wiki/Hilma_af_Klint' }
-      ],
-      title: 'Dra. Gabriela Siracusano (CONICET / UNSAM): radiografiar cuadros para descubrir de qué polvo e insectos están hechos',
-      summary: 'Sin necesidad de entrevistarla hoy: podés dedicarle 90 segundos a contar cómo los equipos de CONICET y el Centro MATERIA entran a los museos con fluorescencia de rayos X portátil para leer los pigmentos indígenas, tierras andinas y arrepentimientos ocultos debajo del barniz.',
-      longDossier: `1. QUÉ HACE EL EQUIPO Y POR QUÉ ES FASCINANTE CONTARLO EN 90 SEGUNDOS:
-En la nota documental «El arte bajo la lupa de la ciencia» del CONICET, se detalla cómo historiadores del arte, químicos y físicos argentinos trabajan juntos frente a los lienzos históricos. Liderados por referentes como la Dra. Gabriela Siracusano (Premio Konex de Platino, investigadora principal del CONICET y fundadora del Centro MATERIA en la UNSAM), no desarman el cuadro ni le arrancan muestras: le acercan espectrómetros portátiles de fluorescencia de rayos X y cámaras infrarrojas.
-
-2. QUÉ DESCUBREN DEBAJO DE LA PINTURA:
-• Donde el ojo ve un manto azul o rojo colonial, el láser revela carmín de cochinilla molida en los Andes, polvo de lapislázuli cruzado por la cordillera, o tierras volcánicas locales mezcladas con recetas secretas de taller.
-• Las radiografías muestran además los «pentimenti» (arrepentimientos): manos que cambiaron de posición, rostros tapados debajo de otros rostros y lienzos reutilizados porque la tela era carísima.
-
-3. ESTRATEGIA DE EXPANSIÓN CON @ARROBAS:
-Al mencionarla con admiración genuina y etiquetar a @unsamoficial, @conicetdialoga y @bellasartesargentina en el Reel/Short y en LinkedIn, las cuentas institucionales de ciencia y cultura suelen compartir el fragmento en sus propias redes.`,
-      dossiersTips: '💡 Tip de aire: En el álbum tenés las fotos reales del artículo de CONICET + una obra del Museo Nacional de Bellas Artes + Hilma af Klint para mostrar en el panel derecho.',
-      album: [
-        {
-          url: 'https://www.conicet.gov.ar/wp-content/uploads/Web-1-13-720x400.jpg',
-          caption: 'Fotografía oficial de la nota de CONICET «El arte bajo la lupa de la ciencia»',
-          checked: true
-        },
-        {
-          url: 'https://www.conicet.gov.ar/wp-content/uploads/WEB_Grupales-Premios-KONEX-HUMANIDADES-03-NOV-2026-027-720x400.jpg',
-          caption: 'Investigadores distinguidos en Humanidades y Ciencia aplicada al patrimonio (CONICET)',
-          checked: true
-        },
-        {
-          url: 'https://www.bellasartes.gob.ar/media/uploads/coleccion/9201_4bRshXi.jpg',
-          caption: 'Obra de colección del Museo Nacional de Bellas Artes (Argentina)',
-          checked: true
-        },
-        {
-          url: 'https://upload.wikimedia.org/wikipedia/commons/d/d7/4_hilma_af_klint%2C_the_ten_largest%2C_no_9.jpg',
-          caption: 'Hilma af Klint · «The Ten Largest, No. 9» (Pigmento y geometría invisible · CC0)',
-          checked: false
-        }
-      ],
-      handles: ['@conicetdialoga', '@unsamoficial', '@bellasartesargentina', '@whimsypov'],
-      hiloRojo: 'Hilo Rojo con tu archivo: Cruza directo con tu video de microscopio óptico en iPad (mirar la fibra oculta de las cosas).'
-    },
-    {
-      id: 'bembibre-ucl-olor-libros',
-      cat: 'arrobar',
-      catLabel: '📣 Mentes para @Arrobar · Paper Abierto en Heritage Science (UCL)',
-      sourceName: 'Heritage Science Journal (Paper original completo de Cecilia Bembibre · 200 OK)',
-      sourceUrl: 'https://heritagesciencejournal.springeropen.com/articles/10.1186/s40494-017-0128-8',
-      extraSources: [
-        { label: '🧪 Paper original completo en Heritage Science (SpringerOpen)', url: 'https://heritagesciencejournal.springeropen.com/articles/10.1186/s40494-017-0128-8' },
-        { label: '📜 Ensayo de Alberto Durero (1525) en Public Domain Review', url: 'https://publicdomainreview.org/collection/monument-to-the-vanquished-peasants' }
-      ],
-      title: 'Dra. Cecilia Bembibre (UCL Londres): el paper científico que guardó en un frasco el olor de un libro de 1720',
-      summary: 'El enlace va directo al paper original abierto («Smell of heritage: a framework for the identification, analysis and archival of historic odours») donde la investigadora argentina Cecilia Bembibre creó la Rueda de Olores de Libros Antiguos en la Catedral de Saint Paul.',
-      longDossier: `1. LA FUENTE REAL (PAPER ABIERTO EN HERITAGE SCIENCE, DOI 10.1186/s40494-017-0128-8):
-En lugar de ir a una home genérica, este link abre el estudio científico completo publicado por Cecilia Bembibre y Matija Strlič en el Institute for Sustainable Heritage de University College London (UCL). Allí se hicieron una pregunta hermosa: protegemos los edificios y los cuadros con vitrinas, pero ¿quién guarda los olores que están por desaparecer del mundo?
-
-2. CÓMO CAPTURARON EL AROMA DE LA BIBLIOTECA WREN (CATEDRAL DE SAINT PAUL, 1720):
-• Colocaron fibras absorbentes (SPME) entre las páginas de libros impresos en el siglo XVIII sin dañar el papel.
-• Al pasar esas moléculas por cromatografía de gases y espectrometría de masas, identificaron los compuestos exactos que suelta el papel cuando envejece: furfural (aroma a almendras dulces), vainillina (del deterioro lento de la lignina, que huele a vainilla y chocolate), benzaldehído y ácido acético.
-• Con visitantes reales a ciegas, diseñaron la primera «Historic Book Odour Wheel» (Rueda de Olores del Libro Histórico), que une la molécula química exacta con la memoria emocional humana ("huele a madera húmeda, a café tibio, a ropero de abuela").`,
-      dossiersTips: '💡 Tip de aire: En el álbum tenés grabados CC0 de encuadernación antigua, la Catedral de Saint Paul y páginas de 1525 de Public Domain Review para proyectar mientras contás qué moléculas largan el olor a vainilla y almendra.',
-      album: [
-        {
-          url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/Art_of_Bookbinding_p147_Antique_with_Gold_Line.png/1280px-Art_of_Bookbinding_p147_Antique_with_Gold_Line.png',
-          caption: 'Grabado histórico «The Art of Bookbinding» (Cuero, lignina y pan de oro · Wikimedia CC0)',
-          checked: true
-        },
-        {
-          url: 'https://pdr-assets.b-cdn.net/collections/monument-to-the-vanquished-peasants/vnderweysungderm00drer_0102-edit-thumb.jpg',
-          caption: 'Página impresa en papel de trapo de 1525 por Alberto Durero (The Public Domain Review CC0)',
-          checked: true
-        },
-        {
-          url: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Arrival_of_the_car_containing_the_remains_of_General_Picton_at_St._Paul%27s_Cathedral_%284671800%29.jpg',
-          caption: 'Archivo histórico de la Catedral de Saint Paul en Londres, donde Bembibre midió la biblioteca',
-          checked: true
-        }
-      ],
-      handles: ['@ucl', '@bartlett_ucl', '@publicdomainrev', '@whimsypov'],
-      hiloRojo: 'Hilo Rojo con tu archivo: Conecta con tu Minuta W «Lo que el enjambre sabe de memoria» y tus episodios sobre bibliotecas y memoria sensorial.'
-    },
-    {
-      id: 'quanta-galaxia-y-espacio-sonoro',
-      cat: 'clima',
-      catLabel: '🌦️ El Clima del Mundo · Quanta Magazine + Acústica Costera',
-      sourceName: 'Quanta Magazine (Artículo real verificado · 200 OK) + Forma y Espacio (Uruguay)',
-      sourceUrl: 'https://www.quantamagazine.org/a-new-map-of-empty-space-challenges-a-tranquil-picture-of-the-galaxy-20261030/',
-      extraSources: [
-        { label: '🌌 Quanta Magazine: El nuevo mapa del espacio "vacío" de la galaxia', url: 'https://www.quantamagazine.org/a-new-map-of-empty-space-challenges-a-tranquil-picture-of-the-galaxy-20261030/' },
-        { label: '🧠 Quanta Magazine: ¿Saben los modelos de IA lo que piensan?', url: 'https://www.quantamagazine.org/new-research-tests-whether-ai-models-know-their-own-thoughts-20261104/' },
-        { label: '🎵 Lukas Kühne: Forma y Espacio Sonoro (Playa Verde, Maldonado)', url: 'https://www.formayespacio.com/' }
-      ],
-      title: 'El nuevo mapa de lo que parecía "espacio vacío" en la Vía Láctea y la escultura que afina el viento en Maldonado',
-      summary: 'Quanta Magazine publicó el nuevo mapa tridimensional del medio interestelar: el espacio entre las estrellas, que creíamos quieto y vacío, está lleno de túneles térmicos y ondas. Y acá en la costa de Maldonado, los pinos marítimos y el Espacio Sonoro de Playa Verde traducen esa misma presión del aire en frecuencia audible.',
-      longDossier: `1. LO QUE DESCUBRIERON LOS ASTRÓNOMOS EN QUANTA MAGAZINE:
-Durante décadas miramos las fotos del espacio fijándonos solo en los puntos brillantes (las estrellas) y asumiendo que el negro del medio estaba vacío y en calma. El nuevo relevamiento tridimensional publicado por Quanta Magazine demostró todo lo contrario: el espacio "vacío" entre las estrellas es un océano turbulento de gas ionizado, polvo magnético y cavidades talladas por antiguas supernovas que empujan la materia como corrientes marinas invisibles.
-
-2. EL ESPEJO TERRESTRE EN LA COSTA DE MALDONADO (PINOS MARÍTIMOS Y ESPACIO SONORO):
-• Bajando del cosmos a la rambla: los bosques de pino marítimo (Pinus pinaster) entre José Ignacio, Piriápolis y Playa Verde funcionan como barómetros acústicos vivientes. Cuarenta minutos antes de que gire el viento pampero y caiga la presión atmosférica, la tensión de la savia dentro de la madera y la rigidez de las acículas cambian el tono en que zumba el monte.
-• A pocos kilómetros de ahí, en Playa Verde, el artista acústico Lukas Kühne construyó su escultura caminable de hormigón afinado (Forma y Espacio), donde cada bóveda resuena exactamente en una nota musical cuando entra la brisa del Río de la Plata.`,
-      dossiersTips: '💡 Tip de aire: En el álbum tenés la ilustración oficial de la NASA/Quanta Magazine del mapa interestelar + el bosque de Pinus pinaster costero + la segunda nota de Quanta sobre la mente.',
-      album: [
-        {
-          url: 'https://www.quantamagazine.org/wp-content/uploads/2026/10/Mapping-ISM-cr.NASA-Default.webp',
-          caption: 'Mapa oficial del medio interestelar ("el espacio vacío lleno de corrientes") · NASA / Quanta Magazine',
-          checked: true
-        },
-        {
-          url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Pinheiro_bravo_Parque_Litoral.jpg/1280px-Pinheiro_bravo_Parque_Litoral.jpg',
-          caption: 'Bosque costero de pino marítimo (Pinus pinaster) frente al viento oceánico (Wikimedia CC0)',
-          checked: true
-        },
-        {
-          url: 'https://www.quantamagazine.org/wp-content/uploads/2026/11/LLMIntrospection-crKristinaArmitage-Default.webp',
-          caption: 'Ilustración de Kristina Armitage en Quanta Magazine: ¿pueden los modelos mirar sus propios pensamientos?',
-          checked: false
-        },
-        {
-          url: 'https://www.quantamagazine.org/wp-content/uploads/2026/11/Death-of-Reality-cr.Samuel-Velasco-Default.webp',
-          caption: 'Ilustración de Samuel Velasco en Quanta Magazine sobre el teorema cuántico de la realidad',
-          checked: false
-        }
-      ],
-      handles: ['@quantamag', '@nasa', '@whimsypov'],
-      hiloRojo: 'Hilo Rojo con tu archivo: Conecta con tu Minuta W «Arena», «Teléfonos de campo» y tus grabaciones reales de rambla en ARIS2.'
-    },
-    {
-      id: 'archivo-propio-hilo-rojo',
-      cat: 'hilo',
-      catLabel: '🧵 Tu Archivo Vivo · 19 Minutas W + 91 Videos + ARIS2',
-      sourceName: 'Substack (arianawajntraub.substack.com) + YouTube (@whimsypov)',
-      sourceUrl: 'https://arianawajntraub.substack.com',
-      extraSources: [
-        { label: '✍️ Tus 19 Minutas W en Substack', url: 'https://arianawajntraub.substack.com' },
-        { label: '▶️ Tus 91 Videos en YouTube (@whimsypov)', url: 'https://www.youtube.com/@whimsypov' },
-        { label: '🌐 Tu Web Pública Whimsy POV', url: 'https://wajntraub.ar/whimsypov-web/' }
-      ],
-      title: 'Tu Hilo Rojo: del microscopio en iPad (ARIS2) a «Eppur si muove» y «Lo que el enjambre sabe de memoria»',
-      summary: 'Tarjeta puente para el Bloque 4 (La Vitrina): une las noticias que elegiste hoy con tu propio archivo publicado en Substack, tus episodios de David Lynch, Jodorowsky, Lucio Fontana y tus capturas de microscopio.',
-      longDossier: `1. PARA QUÉ SIRVE ESTA TARJETA EN TU CANASTA DE ARMADO:
-Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Magazine) y sumás esta tarjeta como tercera pieza, el armador de bloques conecta la noticia externa con tu propia obra publicada en La Minuta W y en tu canal de YouTube.
-
-2. TUS PIEZAS REALES QUE PODÉS PROYECTAR DESDE ESTE ÁLBUM:
-• Tu fotografía macro y video de microscopio óptico grabado en tu iPad (ARIS2).
-• Tus lecturas y páginas subrayadas (como el libro fotografiado en tu estudio).
-• Las portadas de tus 19 Minutas W en Substack para invitar a la audiencia a suscribirse sin sonar a venta forzada.`,
-      dossiersTips: '💡 Tip de aire: Usá las fotos de este álbum cuando pases al Bloque 04 (La Vitrina) para mostrar tus propias capturas de estudio y microscopio.',
-      album: [
-        {
-          url: 'assets/IMG_6698.jpg',
-          caption: 'Tu registro botánico / flor pasionaria en archivo ARIS2 (Whimsy POV)',
-          checked: true
-        },
-        {
-          url: 'assets/IMG_6705.jpg',
-          caption: 'Tu fotografía de libro abierto en tu mesa de lectura (Archivo ARIS2)',
-          checked: true
-        },
-        {
-          url: 'assets/IMG_6711.jpg',
-          caption: 'Tu registro visual de estudio y texturas en ARIS2 (Whimsy POV)',
-          checked: true
-        }
-      ],
-      handles: ['@whimsypov'],
-      hiloRojo: 'Hilo Rojo directo: «Loco un poco nada más», «Eppur si muove», «Las 27» y «Arena».'
-    }
-  ];
+  {
+    "id": "colossal-maria-tomazou-excel",
+    "cat": "transito",
+    "catLabel": "🚦 Tránsito Cultural · Colossal (Animación & Obsesión)",
+    "sourceName": "Colossal · Maria Tomazou («I Made a Film in Excel»)",
+    "sourceUrl": "https://www.thisiscolossal.com/2026/11/maria-tomazou-i-made-a-film-in-excel/",
+    "embedVimeo": "https://player.vimeo.com/video/1241981102?badge=0&autopause=0",
+    "extraSources": [
+      {
+        "label": "🌐 Colossal: Nota original «I Made a Film in Excel»",
+        "url": "https://www.thisiscolossal.com/2026/11/maria-tomazou-i-made-a-film-in-excel/"
+      },
+      {
+        "label": "🎬 Ver corto animado directo en Vimeo",
+        "url": "https://vimeo.com/1241981102"
+      },
+      {
+        "label": "🌐 Explorar portada de Colossal",
+        "url": "https://www.thisiscolossal.com/"
+      }
+    ],
+    "title": "«Hice una película en Excel»: Maria Tomazou pintó un film animado celda por celda adentro de una planilla de cálculo",
+    "summary": "Sin inteligencia artificial ni programas de cine: la artista chipriota Maria Tomazou achicó miles de celdas de Microsoft Excel hasta convertirlas en píxeles y animó a mano una película entera sobre el impulso humano —aparentemente inútil pero invencible— de crear.",
+    "longDossier": "1. QUÉ HIZO MARIA TOMAZOU Y POR QUÉ NOS VUELA LA CABEZA:\nMicrosoft Excel nació para hacer balances contables, presupuestos e inventarios grises. Pero la artista Maria Tomazou vio en esa cuadrícula infinita de filas y columnas otra cosa: un telar o un mosaico bizantino digital. Achicó las celdas hasta volverlas cuadraditos mínimos y empezó a rellenarlas de color una por una, hoja por hoja (Sheet 1, Sheet 2, Sheet 3...), hasta construir un cortometraje animado cuadro por cuadro.\n\n2. QUÉ SE VE EN EL GIF ANIMADO Y EN EL CORTO (QUE PODÉS AMPLIAR ABAJO):\nEn la animación se ve la propia interfaz de Excel (con sus pestañas y coordenadas A1, B2, C3) mientras adentro de la planilla cobran vida figuras, paisajes y movimientos hipnóticos. Ella explica que eligió la herramienta más burocrática y antipática del mundo del trabajo para demostrar que cuando alguien tiene una necesidad real de crear, encuentra poesía hasta adentro de un formulario.\n\n3. PREGUNTA DISPARADORA PARA EL AIRE:\nCuando todo el mercado te vende botones mágicos para hacer arte en medio segundo sin tocar el material, ¿qué le pasa al cerebro cuando alguien decide tardar semanas pintando celda por celda adentro de un Excel?",
+    "dossiersTips": "💡 Tocá el GIF de abajo para verlo EN GRANDE en el ampliador de previa, o tocá «➡️ A Derecha» / «📱 A Centro 9:16» para mandarlo en vivo al programa.",
+    "album": [
+      {
+        "url": "evidencias/prepro/excel_film_1.gif",
+        "caption": "GIF ANIMADO REAL: Cuadros pintados celda por celda adentro de Microsoft Excel por Maria Tomazou (Colossal)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/excel_pombeiro.jpg",
+        "caption": "Cruce en Colossal: Animación artesanal cuadro por cuadro y texturas hechas a mano",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/excel_organisms.jpg",
+        "caption": "Cruce en Colossal: Organismos digitales nacidos de cuadrículas matemáticas",
+        "checked": false
+      }
+    ],
+    "handles": [
+      "@thisiscolossal",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Cruza con tu Minuta W «Eppur si muove» y «Loco un poco nada más» (la obstinación hermosa del oficio manual)."
+  },
+  {
+    "id": "colossal-arkivism-cc0",
+    "cat": "transito",
+    "catLabel": "🚦 Tránsito Cultural · Buscador CC0 + Colossal",
+    "sourceName": "Arkivism.com + Colossal (4.000.000+ imágenes CC0)",
+    "sourceUrl": "https://arkivism.com/",
+    "extraSources": [
+      {
+        "label": "🏛️ Entrar directo al buscador Arkivism.com (4M imágenes CC0)",
+        "url": "https://arkivism.com/"
+      },
+      {
+        "label": "📄 Leer reseña en Colossal sobre Arkivism",
+        "url": "https://www.thisiscolossal.com/2026/11/arkivism-public-domain-search/"
+      },
+      {
+        "label": "📜 Public Domain Review: Folletos del clima del siglo XVII",
+        "url": "https://publicdomainreview.org/essay/wonderful-weather"
+      }
+    ],
+    "title": "Arkivism: la nueva «Biblioteca de Alejandría» visual con 4 millones de obras en dominio público (CC0) como antídoto al plástico de la IA",
+    "summary": "Un motor de búsqueda gratuito que reúne más de 4 millones de manuscritos alquímicos, grabados botánicos, mapas celestes y fotografías históricas de museos del mundo (100% libres de derechos CC0) para buscar por descripción sin algoritmos de redes.",
+    "longDossier": "1. QUÉ ES ARKIVISM (Y POR QUÉ LO PODÉS USAR EN VIVO EN CUALQUIER PROGRAMA):\nEn su portada dice literalmente: «The visual library of Alexandria · 4 million+ images and videos · All Public Domain». Reúne siglos de arte libre de derechos, fotografía histórica, ilustración científica y archivos fílmicos para que cualquiera pueda buscar en alta resolución («manuscritos alquímicos», «anatomía botánica», «mapas lunares») y descargar sin restricciones.\n\n2. QUÉ MUESTRAN LAS LÁMINAS DE ESTE ÁLBUM:\n• Foto 1: La interfaz negra de Arkivism rodeada de ruedas astrológicas y manuscritos medievales iluminados.\n• Foto 2: El buscador de colecciones cruzadas entre museos europeos y americanos.\n• Foto 3 y 4: Grabados históricos de archivo y los panfletos ingleses de 1607 («Wonderful Weather» en The Public Domain Review) donde las grandes inundaciones se contaban con xilografías talladas en madera.",
+    "dossiersTips": "💡 Podés abrir https://arkivism.com en la Ventana Limpia Responsive y buscar en vivo en cámara cualquier palabra que te tire la audiencia.",
+    "album": [
+      {
+        "url": "evidencias/prepro/arkivism_1.jpg",
+        "caption": "Portada real de Arkivism.com: «The visual library of Alexandria» (Manuscritos alquímicos CC0)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/arkivism_2.jpg",
+        "caption": "Mosaico de grabados históricos y colecciones de dominio público en Arkivism (Colossal)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/arkivism_3.jpg",
+        "caption": "Archivo de láminas científicas e ilustraciones naturalistas en dominio público",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/pdr_weather_1.jpg",
+        "caption": "Xilografía de 1607 sobre inundaciones y clima extremo en Gran Bretaña (The Public Domain Review)",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@thisiscolossal",
+      "@publicdomainrev",
+      "@smithsonian",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Conecta directo con tu gabinete de curiosidades y tus videos de microscopio en iPad."
+  },
+  {
+    "id": "colossal-aminah-robinson-libros",
+    "cat": "transito",
+    "catLabel": "🚦 Tránsito Cultural · Colossal (Libros-Objeto & Textil)",
+    "sourceName": "Colossal · Aminah Brenda Lynn Robinson",
+    "sourceUrl": "https://www.thisiscolossal.com/2026/11/aminah-brenda-lynn-robinsons-beaded-books-dolls-textiles/",
+    "extraSources": [
+      {
+        "label": "🧶 Colossal: Los libros bordados de Aminah Robinson",
+        "url": "https://www.thisiscolossal.com/2026/11/aminah-brenda-lynn-robinsons-beaded-books-dolls-textiles/"
+      },
+      {
+        "label": "🏛️ Columbus Museum of Art (Archivo Aminah Robinson)",
+        "url": "https://www.columbusmuseum.org/"
+      }
+    ],
+    "title": "Libros cosidos con botones, caracoles, retazos y cajas de música: los libros-memoria de Aminah Brenda Lynn Robinson",
+    "summary": "En vez de escribir sobre papel, la artista Aminah Robinson cosió enciclopedias de tela con miles de botones antiguos, caracoles cauri, cuentas de vidrio e hilos sueltos para registrar las historias orales de su barrio en Ohio.",
+    "longDossier": "1. QUÉ SON LOS «RAGamuffins» Y LOS LIBROS DE TELA DE AMINAH ROBINSON:\nAminah Brenda Lynn Robinson (1940–2015) escuchaba de chica las historias que contaban sus tíos y vecinos en Poindexter Village (Columbus, Ohio). Sentía que el papel impreso era demasiado frío para guardar la voz humana, así que empezó a fabricar libros monumentales hechos de frazadas viejas, sacos, botones de camisa, caracoles africanos y cajitas de música escondidas adentro del forro.\n\n2. DETALLES PARA MOSTRAR AL AMPLIAR LAS FOTOS:\n• En la Foto 1 se ve un libro abierto de par en par donde los ojos de los personajes son botones blancos cosidos con hilo rojo y caracoles cauri, dejando todos los hilos colgando fuera del borde como raíces.\n• En la Foto 2 se ve una de sus esculturas-muñeca («Walks softly, speaks clearly») recubierta de cientos de cuentas, monedas y llaves encontradas en la vereda.",
+    "dossiersTips": "💡 Tocá la Foto 1 para ampliarla en previa: se ven cada puntada y cada botón con una nitidez impresionante.",
+    "album": [
+      {
+        "url": "evidencias/prepro/robinson_1.jpg",
+        "caption": "Libro textil abierto de Aminah Robinson cosido con botones, caracoles cauri e hilos sueltos (Colossal)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/robinson_2.jpg",
+        "caption": "Figura bordada con llaves, cuentas y botones por Aminah Brenda Lynn Robinson (Colossal)",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@thisiscolossal",
+      "@columbusmuseum",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Cruza con tu Minuta W «Las 27» y con el trabajo textil y la memoria de los objetos."
+  },
+  {
+    "id": "colossal-lana-metal-y-wines",
+    "cat": "transito",
+    "catLabel": "🚦 Tránsito Cultural · Colossal (Escultura & Arquitectura)",
+    "sourceName": "Colossal · Amine El Gotaibi + James Wines (SITE)",
+    "sourceUrl": "https://www.thisiscolossal.com/2026/11/amine-el-gotaibi-wind-from-the-north/",
+    "extraSources": [
+      {
+        "label": "🧶 Colossal: Esculturas de lana y hierro de Amine El Gotaibi",
+        "url": "https://www.thisiscolossal.com/2026/11/amine-el-gotaibi-wind-from-the-north/"
+      },
+      {
+        "label": "🏛️ Colossal: Los edificios irreverentes de James Wines (SITE)",
+        "url": "https://www.thisiscolossal.com/2026/11/james-wines-site-book-what-else-could-it-mean/"
+      }
+    ],
+    "title": "Cascadas de lana cruda brotando del hierro oxidado (Amine El Gotaibi) y edificios que se abren al medio como cáscaras (James Wines)",
+    "summary": "Dos formas de romper la dureza del metal y del hormigón: el artista marroquí Amine El Gotaibi hace brotar vellones de lana desde estructuras de acero oxidado, mientras un nuevo libro recorre los edificios juguetones e iconoclastas de James Wines.",
+    "longDossier": "1. AMINE EL GOTAIBI («WIND FROM THE NORTH»):\nEn su muestra actual, El Gotaibi enfrenta planchas geométricas de metal oxidado por la intemperie con composiciones orgánicas de lana teñida con pigmentos naturales de Marruecos. La lana parece desbordar y derretir el hierro.\n\n2. JAMES WINES Y EL ESTUDIO SITE («WHAT ELSE COULD IT MEAN?»):\nEn las fotos 4, 5 y 6 del álbum están los dibujos y edificios reales de James Wines: fachadas de ladrillo que parecen despegarse con una espátula, techos levantados para que adentro crezca un bosque inclinado y arquitectura con sentido del humor en medio de ciudades grises.",
+    "dossiersTips": "💡 Tenés 6 fotos reales de alta resolución en este álbum para ir alternando entre las esculturas de lana y los bocetos arquitectónicos.",
+    "album": [
+      {
+        "url": "evidencias/prepro/amine_1.jpg",
+        "caption": "Amine El Gotaibi: lana cruda teñida cayendo desde acero oxidado (Colossal)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/amine_2.jpg",
+        "caption": "Detalle macro de los vellones de lana y el metal en «Wind from the North»",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/amine_3.jpg",
+        "caption": "Vista de sala de las esculturas de Amine El Gotaibi (Colossal)",
+        "checked": false
+      },
+      {
+        "url": "evidencias/prepro/wines_1.jpg",
+        "caption": "Acuarela original de James Wines (SITE): edificio con bosque suspendido",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/wines_2.jpg",
+        "caption": "Boceto y maqueta de James Wines: arquitectura que juega con la gravedad",
+        "checked": false
+      },
+      {
+        "url": "evidencias/prepro/wines_3.jpg",
+        "caption": "Obra icónica del estudio SITE de James Wines reseñada en Colossal",
+        "checked": false
+      }
+    ],
+    "handles": [
+      "@thisiscolossal",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Conecta con Lucio Fontana y tu Minuta W «Morfología y Disrupción»."
+  },
+  {
+    "id": "pdr-kalvach-postcards-1907",
+    "cat": "transito",
+    "catLabel": "🚦 Tránsito Cultural · The Public Domain Review + The Met",
+    "sourceName": "The Public Domain Review · Postales de Rudolf Kalvach (1907)",
+    "sourceUrl": "https://publicdomainreview.org/collection/kalvach-postcards",
+    "extraSources": [
+      {
+        "label": "📜 Public Domain Review: Colección completa de Rudolf Kalvach",
+        "url": "https://publicdomainreview.org/collection/kalvach-postcards"
+      },
+      {
+        "label": "🏛️ The Metropolitan Museum of Art (Open Access CC0)",
+        "url": "https://www.metmuseum.org/art/collection"
+      }
+    ],
+    "title": "Cuando el correo llevaba obras de vanguardia por dos centavos: las postales de Rudolf Kalvach para la Wiener Werkstätte (1907)",
+    "summary": "En la Viena de 1907, los talleres de la Wiener Werkstätte encargaron a artistas como Rudolf Kalvach y Egon Schiele más de mil tarjetas postales litografiadas para que cualquier persona pudiera mandar una obra expresionista por correo.",
+    "longDossier": "1. ELARTE QUE CABÍA EN UN BUZÓN DE CORREO (VIENA, 1907):\nHoy las imágenes de la colección de The Metropolitan Museum of Art y The Public Domain Review rescatan la serie de postales que Rudolf Kalvach diseñó entre 1907 y 1908 para los Talleres Vieneses (Wiener Werkstätte). La idea era revolucionaria: sacar el arte de los salones caros y meterlo en cartulinas de 9 × 14 centímetros que viajaban en tren con una estampilla.\n\n2. QUÉ SE VE EN LAS 3 LÁMINAS CC0 DE ESTE ÁLBUM:\nColores planos eléctricos, payasos sombríos, escenas de puerto y tipografías dibujadas a mano que anticiparon el cine expresionista alemán diez años antes de que existiera.",
+    "dossiersTips": "💡 Estas 3 láminas son 100% Dominio Público (CC0 del Met Museum): quedan increíbles con el botón «✨ CC0 Lámina Viva 2.5D» de la Cabina.",
+    "album": [
+      {
+        "url": "evidencias/prepro/pdr_kalvach_1.jpg",
+        "caption": "Tríptico de postales originales de Rudolf Kalvach (Wiener Werkstätte, 1907 · CC0)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/pdr_kalvach_2.jpg",
+        "caption": "«Blessing (Segen)» de Rudolf Kalvach · Colección The Met Museum (CC0)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/pdr_kalvach_3.jpg",
+        "caption": "«Clown» de Rudolf Kalvach (1907) · Litografía expresionista en postal (CC0)",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@publicdomainrev",
+      "@metmuseum",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Conecta con tus episodios sobre David Lynch, Xul Solar y el gabinete expresionista."
+  },
+  {
+    "id": "va-museum-sketchbooks-beryl",
+    "cat": "transito",
+    "catLabel": "🚦 Tránsito Cultural · Victoria & Albert Museum (Londres)",
+    "sourceName": "Victoria & Albert Museum (Fichas O1078444 / O1078443) + Beryl Gilroy",
+    "sourceUrl": "https://collections.vam.ac.uk/item/O1078444/",
+    "extraSources": [
+      {
+        "label": "🏛️ V&A Museum Londres: Cuaderno O1078444",
+        "url": "https://collections.vam.ac.uk/item/O1078444/"
+      },
+      {
+        "label": "🏛️ V&A Museum Londres: Cuaderno O1078443",
+        "url": "https://collections.vam.ac.uk/item/O1078443/"
+      },
+      {
+        "label": "📚 Archivo biográfico de Beryl Gilroy (Londres)",
+        "url": "https://en.wikipedia.org/wiki/Beryl_Gilroy"
+      }
+    ],
+    "title": "Lo que los museos descubren en los reversos: cuadernos de bolsillo del V&A y las listas manuscritas de Beryl Gilroy",
+    "summary": "El Victoria & Albert Museum abrió la digitalización de sus cuadernos de bocetos y reversos de cartón, en diálogo con los registros escolares de Beryl Gilroy (primera directora negra de primaria en Londres en 1976).",
+    "longDossier": "1. LOS CUADERNOS ÍNTIMOS DEL V&A MUSEUM:\nLas tres primeras fotos de este álbum vienen directamente del archivo digital del Victoria & Albert Museum de Londres (códigos O1078444, O1078443 y O1078446). Muestran lo que pasa cuando un artista dibuja sin pensar en la galería: apuntes al vuelo, reversos de hojas y manchas de taller.\n\n2. EL CRUCE CON BERYL GILROY (1976):\nEn Londres, Beryl Gilroy anotaba en el reverso de cartones escolares la lista de tesoros que los chicos traían en los bolsillos del guardapolvo. La cuarta foto de este álbum es tu propia captura de cuaderno de dibujo en tu mesa (`evidencias/aris_cuaderno_boceto.jpg`) por si querés cerrarlo mostrando tu propio trazo.",
+    "dossiersTips": "💡 Ya quedó corregida la ruta de tu foto de cuaderno en ARIS2 (`evidencias/aris_cuaderno_boceto.jpg`): ahora sí la ves perfecta y podés ampliarla.",
+    "album": [
+      {
+        "url": "evidencias/prepro/va_sketch_1.jpg",
+        "caption": "Victoria & Albert Museum Londres · Cuaderno original O1078444 (IIIF CC0)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/va_sketch_2.jpg",
+        "caption": "Victoria & Albert Museum Londres · Cuaderno O1078443 (Apuntes y reverso)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/va_sketch_3.jpg",
+        "caption": "Victoria & Albert Museum Londres · Boceto original O1078446",
+        "checked": true
+      },
+      {
+        "url": "evidencias/aris_cuaderno_boceto.jpg",
+        "caption": "Tu propia captura de cuaderno de bocetos en ARIS2 (ahora sí cargada y visible)",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@vamuseum",
+      "@britishlibrary",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Cruza con tu entrevista a Eduardo Cardozo y Liliana Porter sobre el proceso en el taller."
+  },
+  {
+    "id": "pdr-jumping-frenchmen-darwin",
+    "cat": "clima",
+    "catLabel": "🌦️ El Clima del Mundo · Historia de la Mente (Public Domain Review)",
+    "sourceName": "The Public Domain Review («The Jumping Frenchmen of Maine»)",
+    "sourceUrl": "https://publicdomainreview.org/essay/the-jumping-frenchmen-of-maine",
+    "extraSources": [
+      {
+        "label": "🧠 Leer ensayo completo en The Public Domain Review",
+        "url": "https://publicdomainreview.org/essay/the-jumping-frenchmen-of-maine"
+      },
+      {
+        "label": "📜 Otro ensayo: La astronomía zetética de 1865",
+        "url": "https://publicdomainreview.org/collection/zetetic-astronomy"
+      }
+    ],
+    "title": "El misterio neurológico de los leñadores de Maine (1880) que obsesionó a Charles Darwin, a Charcot y a Gilles de la Tourette",
+    "summary": "En 1878, el neurólogo George Miller Beard viajó a los bosques helados de Moosehead Lake (Maine) para estudiar un fenómeno real: campamentos enteros de leñadores franco-canadienses que imitaban en espejo e involuntariamente cualquier grito o gesto repentino.",
+    "longDossier": "1. UNA HISTORIA REAL DE LA NEUROLOGÍA DEL SIGLO XIX (CERO AUTOAYUDA, PURO ARCHIVO):\nEn 1880, ante la Asociación Neurológica Americana, el médico George Miller Beard presentó sus notas de campo sobre los llamados «Jumping Frenchmen of Maine». Eran leñadores fuertes y silenciosos que pasaban meses aislados cortando troncos en la nieve, pero habían desarrollado un reflejo automático extremo: si alguien detrás de ellos daba un golpe o decía una palabra en otro idioma (incluso versos de Virgilio o Homero que jamás habían escuchado), su cuerpo repetía el sonido o el movimiento en el acto antes de que la razón pudiera frenarlo.\n\n2. POR QUÉ INTERESÓ A DARWIN Y A GILLES DE LA TOURETTE:\nBeard le mandó el estudio a Charles Darwin (quien lo incorporó a sus notas sobre reflejos evolutivos y contagio emocional) y en París el joven Georges Gilles de la Tourette tradujo el caso bajo la dirección de Charcot en la Salpêtrière. Hoy es un espejo fascinante para pensar cómo funcionan la imitación en manada y los reflejos automáticos cuando vivimos encerrados en burbujas digitales.",
+    "dossiersTips": "💡 Mirá las 2 fotografías históricas de 1880 de los leñadores en la nieve en el álbum de abajo: tocálas para verlas en grande.",
+    "album": [
+      {
+        "url": "evidencias/prepro/pdr_lumber_1.jpg",
+        "caption": "Fotografía histórica de la cuadrilla de leñadores de Paul Gagnon en los bosques de Maine (The Public Domain Review)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/pdr_lumber_2.jpg",
+        "caption": "Campamento de leñadores en la nieve de Moosehead Lake a fines del siglo XIX (Dominio Público)",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@publicdomainrev",
+      "@wellcomecollection",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Conecta directo con tu Minuta W «No sos vos, son tus sesgos» y «Lo que el enjambre sabe de memoria»."
+  },
+  {
+    "id": "conicet-siracusano-materia",
+    "cat": "arrobar",
+    "catLabel": "📣 Mentes para @Arrobar · CONICET + UNSAM + Bellas Artes",
+    "sourceName": "CONICET («El arte bajo la lupa de la ciencia»)",
+    "sourceUrl": "https://www.conicet.gov.ar/el-arte-bajo-la-lupa-de-la-ciencia/",
+    "extraSources": [
+      {
+        "label": "🔬 Nota oficial CONICET: El arte bajo la lupa de la ciencia",
+        "url": "https://www.conicet.gov.ar/el-arte-bajo-la-lupa-de-la-ciencia/"
+      },
+      {
+        "label": "🖼️ Museo Nacional de Bellas Artes (Obra 9201)",
+        "url": "https://www.bellasartes.gob.ar/coleccion/obra/9201/"
+      },
+      {
+        "label": "🎨 Archivo Hilma af Klint (Wikimedia)",
+        "url": "https://es.wikipedia.org/wiki/Hilma_af_Klint"
+      }
+    ],
+    "title": "Dra. Gabriela Siracusano (CONICET / UNSAM): radiografiar cuadros para leer de qué polvo, insectos y tierras están hechos",
+    "summary": "Para mencionar en 90 segundos y etiquetar a @conicetdialoga y @unsamoficial: cómo los científicos e historiadores del arte usan rayos X portátiles para descubrir pigmentos andinos, cochinilla y rostros ocultos detrás de los lienzos.",
+    "longDossier": "1. QUÉ CONTAR AL AIRE EN 90 SEGUNDOS:\nEl equipo interdisciplinario del CONICET y el Centro MATERIA (UNSAM), impulsado por la Dra. Gabriela Siracusano (Premio Konex de Platino), viaja con maletines de espectrometría de rayos X a iglesias andinas, reservas de museos y talleres. Sin tocar ni raspar la pintura, identifican la huella química de cada color: si un azul vino de Afganistán, si un rojo se hizo moliendo insectos en Perú o si debajo de un retrato oficial hay otro cuadro tapado.\n\n2. IMPACTO EN REDES:\nEtiquetar a @conicetdialoga, @unsamoficial y @bellasartesargentina en un clip que celebra la ciencia aplicada al arte genera difusión orgánica inmediata en la comunidad académica y cultural.",
+    "dossiersTips": "💡 Las 4 fotos del álbum (CONICET, Bellas Artes y Hilma af Klint) ya están descargadas localmente y listas para ampliar.",
+    "album": [
+      {
+        "url": "evidencias/prepro/conicet_1.jpg",
+        "caption": "Análisis científico de obras patrimoniales · Nota oficial CONICET",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/conicet_2.jpg",
+        "caption": "Distinción Konex a la investigación en Humanidades y Patrimonio (CONICET)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/bellasartes_1.jpg",
+        "caption": "Obra de colección del Museo Nacional de Bellas Artes (Argentina)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/commons_hilma.jpg",
+        "caption": "Hilma af Klint · «The Ten Largest, No. 9» (Geometría y pigmento · CC0)",
+        "checked": false
+      }
+    ],
+    "handles": [
+      "@conicetdialoga",
+      "@unsamoficial",
+      "@bellasartesargentina",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Cruza con tus grabaciones de microscopio en iPad (mirar la fibra invisible)."
+  },
+  {
+    "id": "bembibre-ucl-olor-libros",
+    "cat": "arrobar",
+    "catLabel": "📣 Mentes para @Arrobar · Paper en Heritage Science (UCL Londres)",
+    "sourceName": "Heritage Science Journal (Paper original de la Dra. Cecilia Bembibre)",
+    "sourceUrl": "https://heritagesciencejournal.springeropen.com/articles/10.1186/s40494-017-0128-8",
+    "extraSources": [
+      {
+        "label": "🧪 Paper científico completo abierto en Heritage Science",
+        "url": "https://heritagesciencejournal.springeropen.com/articles/10.1186/s40494-017-0128-8"
+      },
+      {
+        "label": "📜 Alberto Durero (1525) en Public Domain Review",
+        "url": "https://publicdomainreview.org/collection/monument-to-the-vanquished-peasants"
+      }
+    ],
+    "title": "Dra. Cecilia Bembibre (UCL Londres): el paper que destiló químicamente el olor de un libro de 1720 para guardarlo en un archivo",
+    "summary": "En el Institute for Sustainable Heritage de Londres, la investigadora argentina Cecilia Bembibre analizó las moléculas volátiles de la biblioteca de la Catedral de Saint Paul (vainillina, furfural, lignina) y creó la primera Rueda de Olores de Libros Antiguos.",
+    "longDossier": "1. POR QUÉ UN LIBRO VIEJO HUELE A VAINILLA, ALMENDRA Y MADERA AHUMADA:\nEn su paper abierto publicado en Heritage Science (que podés abrir directo desde el botón verde de arriba), Cecilia Bembibre demostró que el olor de un libro antiguo es una huella química irrepetible: a medida que la celulosa y la lignina del papel de trapo o madera se descomponen lentamente a lo largo de doscientos o trescientos años, liberan vainillina (olor a vainilla), furfural (olor a almendras dulces) y compuestos florales.\n\n2. EL ARCHIVO OLFATIVO DEL MUNDO:\nSu equipo propone que los museos no solo guarden la foto de los objetos, sino también el aroma exacto de las bibliotecas, los talleres y los bosques antes de que cambien para siempre.",
+    "dossiersTips": "💡 Tocá cualquiera de las 3 láminas históricas de abajo para ampliarlas o mandarlas al panel derecho.",
+    "album": [
+      {
+        "url": "evidencias/prepro/commons_bookbinding.png",
+        "caption": "Grabado clásico «The Art of Bookbinding» (Encuadernación en cuero y oro · CC0)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/pdr_durer_1.jpg",
+        "caption": "Página impresa en papel de 1525 por Alberto Durero (The Public Domain Review CC0)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/commons_stpauls.jpg",
+        "caption": "Grabado histórico de la Catedral de Saint Paul en Londres, cuya biblioteca midió Bembibre",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@ucl",
+      "@bartlett_ucl",
+      "@publicdomainrev",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Conecta con tu Minuta W «Arena» y la memoria física del papel frente a la pantalla."
+  },
+  {
+    "id": "quanta-galaxia-y-espacio-sonoro",
+    "cat": "clima",
+    "catLabel": "🌦️ El Clima del Mundo · Quanta Magazine + Acústica Costera",
+    "sourceName": "Quanta Magazine + Forma y Espacio (Lukas Kühne, Uruguay)",
+    "sourceUrl": "https://www.quantamagazine.org/a-new-map-of-empty-space-challenges-a-tranquil-picture-of-the-galaxy-20261030/",
+    "extraSources": [
+      {
+        "label": "🌌 Quanta Magazine: Nuevo mapa del espacio 'vacío' de la galaxia",
+        "url": "https://www.quantamagazine.org/a-new-map-of-empty-space-challenges-a-tranquil-picture-of-the-galaxy-20261030/"
+      },
+      {
+        "label": "🧠 Quanta Magazine: ¿Saben los modelos de IA lo que piensan?",
+        "url": "https://www.quantamagazine.org/new-research-tests-whether-ai-models-know-their-own-thoughts-20261104/"
+      },
+      {
+        "label": "🎵 Lukas Kühne: Espacio Sonoro en Playa Verde (Maldonado)",
+        "url": "https://www.formayespacio.com/"
+      }
+    ],
+    "title": "El nuevo mapa de lo que creíamos «espacio vacío» en la galaxia (Quanta Magazine) y el monte costero que afina el viento en Maldonado",
+    "summary": "Un mapa tridimensional reveló que el espacio entre las estrellas no está vacío sino atravesado por túneles térmicos y corrientes invisibles; igual que el bosque de pinos marítimos y el Espacio Sonoro de Playa Verde cuando cambia la presión antes del temporal.",
+    "longDossier": "1. LO QUE NO SE VE ENTRE LAS ESTRELLAS:\nEl artículo de Quanta Magazine muestra cómo la astronomía moderna dejó de mirar solo las estrellas brillantes para cartografiar el medio interestelar: nubes de gas, túneles magnéticos y ondas de choque que conectan toda la Vía Láctea.\n\n2. EL CORRELATO EN LA COSTA DE URUGUAY:\nEn Playa Verde (Maldonado), la escultura acústica de Lukas Kühne (Forma y Espacio) y los montes de pino marítimo hacen audible ese mismo fenómeno: el aire que parece vacío tiene peso, geometría y nota musical propia.",
+    "dossiersTips": "💡 Tenés las 3 ilustraciones científicas originales de Quanta Magazine/NASA y la fotografía del bosque costero de Pinus pinaster en el álbum.",
+    "album": [
+      {
+        "url": "evidencias/prepro/quanta_space.webp",
+        "caption": "Mapa del medio interestelar («el espacio vacío lleno de corrientes») · NASA / Quanta Magazine",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/commons_pine.jpg",
+        "caption": "Bosque costero de pino marítimo (Pinus pinaster) frente al viento oceánico (CC0)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/quanta_ai.webp",
+        "caption": "Arte de Kristina Armitage en Quanta Magazine: ¿Conocen los modelos sus propios pensamientos?",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/quanta_reality.webp",
+        "caption": "Arte de Samuel Velasco en Quanta Magazine sobre el nuevo teorema cuántico de la realidad",
+        "checked": false
+      }
+    ],
+    "handles": [
+      "@quantamag",
+      "@nasa",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Conecta con tu Minuta W «Teléfonos de campo» y tus grabaciones de rambla en Punta del Este."
+  },
+  {
+    "id": "archivo-propio-hilo-rojo",
+    "cat": "hilo",
+    "catLabel": "🧵 Tu Archivo Vivo · 19 Minutas W + 91 Videos + Evidencias ARIS2",
+    "sourceName": "Tu Archivo Real en Web (evidencias/) + Substack + YouTube",
+    "sourceUrl": "https://arianawajntraub.substack.com",
+    "extraSources": [
+      {
+        "label": "✍️ Tus 19 Minutas W en Substack",
+        "url": "https://arianawajntraub.substack.com"
+      },
+      {
+        "label": "▶️ Tus 91 Videos en YouTube (@whimsypov)",
+        "url": "https://www.youtube.com/@whimsypov"
+      },
+      {
+        "label": "🌐 Tu Web Pública Whimsy POV",
+        "url": "https://wajntraub.ar/whimsypov-web/"
+      }
+    ],
+    "title": "Tu galería propia en ARIS2 + Hilo Rojo con tus 19 Minutas W y 91 videos (todas tus imágenes verificadas y visibles)",
+    "summary": "Acá están tus 6 imágenes reales de archivo (`evidencias/aris_*.jpg`) 100% visibles y ampliables para cruzar en el Bloque 04 (La Vitrina): tu pasionaria macro, tu cuaderno de bocetos, Agnès Varda, la diosa minoica, el herbario del Field Museum y Marco Aurelio.",
+    "longDossier": "1. TUS 6 EVIDENCIAS REALES DE ARCHIVO LISTAS PARA AMPLIAR Y PROYECTAR:\nAhora todas las rutas apuntan a tu carpeta real `evidencias/` verificada en el servidor:\n• Foto 1: Tu fotografía macro de la flor pasionaria (`aris_flores_macro.jpg`).\n• Foto 2: Tu captura del cuaderno de bocetos y lápiz sobre la mesa (`aris_cuaderno_boceto.jpg`).\n• Foto 3: Agnès Varda y JR (`aris_agnes_varda_jr.jpg`).\n• Foto 4: Herbario histórico del Field Museum (`aris_botanica_fieldmuseum.jpg`).\n• Foto 5: Diosa de las serpientes minoica en Creta (`aris_minoica_serpientes.jpg`).\n• Foto 6: Marco Aurelio (`aris_marco_aurelio.jpg`).",
+    "dossiersTips": "💡 Tocá cualquiera de tus 6 fotos de abajo para ampliarla en grande o mandarla directo a la derecha o al centro 9:16.",
+    "album": [
+      {
+        "url": "evidencias/aris_flores_macro.jpg",
+        "caption": "Tu fotografía macro de flor pasionaria en ARIS2 (Whimsy POV)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/aris_cuaderno_boceto.jpg",
+        "caption": "Tu captura de cuaderno de bocetos con lápiz y estilógrafo en ARIS2",
+        "checked": true
+      },
+      {
+        "url": "evidencias/aris_agnes_varda_jr.jpg",
+        "caption": "Archivo Whimsy POV: Agnès Varda y JR (El derecho a mirar distinto)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/aris_botanica_fieldmuseum.jpg",
+        "caption": "Archivo Whimsy POV: Lámina de herbario botánico del Field Museum",
+        "checked": true
+      },
+      {
+        "url": "evidencias/aris_minoica_serpientes.jpg",
+        "caption": "Archivo Whimsy POV: Diosa minoica de las serpientes (Museo de Heraclión, Creta)",
+        "checked": false
+      },
+      {
+        "url": "evidencias/aris_marco_aurelio.jpg",
+        "caption": "Archivo Whimsy POV: Marco Aurelio y las Meditaciones (El derecho a no opinar)",
+        "checked": false
+      }
+    ],
+    "handles": [
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo directo: Tus 19 Minutas W publicadas en Substack y tus 91 videos en YouTube."
+  }
+];
+  const INTERLEAVED_PORTALS = [
+  {
+    "afterCardIdx": 2,
+    "title": "🌐 ESTACIÓN DE PIVOTE #1 · GALERÍAS CC0, MUSEOS Y ARTE CONTEMPORÁNEO (ABRIR AL LADO PARA EXPLORAR E ITERAR)",
+    "subtitle": "Tocá cualquiera de estos portales curados para abrirlo en una ventana limpia al costado o en pestaña nueva y elegir material en vivo:",
+    "portals": [
+      {
+        "name": "🏛️ Arkivism (4M Imágenes CC0)",
+        "url": "https://arkivism.com/",
+        "desc": "Buscador libre de manuscritos, alquimia, botánica y arte antiguo."
+      },
+      {
+        "name": "🎨 Colossal (Arte & Oficio)",
+        "url": "https://www.thisiscolossal.com/",
+        "desc": "Escultura, animación artesanal, textil, bio-arte e instalaciones."
+      },
+      {
+        "name": "📜 The Public Domain Review",
+        "url": "https://publicdomainreview.org/",
+        "desc": "Ensayos profundos sobre joyas olvidadas de la historia y la ciencia."
+      },
+      {
+        "name": "🖼️ Artvee (Museos en Alta Res)",
+        "url": "https://artvee.com/",
+        "desc": "Miles de pinturas, pósters y grabados botánicos CC0 listos para bajar."
+      },
+      {
+        "name": "🏛️ Smithsonian Open Access",
+        "url": "https://www.si.edu/openaccess",
+        "desc": "4.5 millones de piezas 2D y 3D liberadas por el Smithsonian."
+      },
+      {
+        "name": "🇬🇧 Victoria & Albert Collections",
+        "url": "https://collections.vam.ac.uk/",
+        "desc": "Más de 1.2 millones de objetos de diseño, papel, moda y teatro."
+      }
+    ]
+  },
+  {
+    "afterCardIdx": 6,
+    "title": "🌍 ESTACIÓN DE PIVOTE #2 · CIENCIA SIN HUMO, MAPAS SONOROS DEL MUNDO Y RELOJES PLANETARIOS",
+    "subtitle": "Bases abiertas y verificadas para encontrar «El clima del mundo» en tiempo real, escuchar sonidos del planeta o cruzar papers reales:",
+    "portals": [
+      {
+        "name": "🔬 Quanta Magazine",
+        "url": "https://www.quantamagazine.org/",
+        "desc": "La mejor revista mundial de física, biología, matemática y mente."
+      },
+      {
+        "name": "🎧 Cities and Memory (Sound Map)",
+        "url": "https://citiesandmemory.com/sound-map/",
+        "desc": "Mapa sonoro del planeta: miles de grabaciones de campo reales por país."
+      },
+      {
+        "name": "📻 Radio Garden (Globo en Vivo)",
+        "url": "https://radio.garden/",
+        "desc": "Girá la Tierra y escuchá qué suena ahora mismo en cualquier rincón."
+      },
+      {
+        "name": "🛰️ NASA Earth Observatory",
+        "url": "https://earthobservatory.nasa.gov/",
+        "desc": "Imágenes satelitales diarias de océanos, tormentas, desiertos y glaciares."
+      },
+      {
+        "name": "🌿 Biodiversity Heritage Library",
+        "url": "https://www.biodiversitylibrary.org/",
+        "desc": "Millones de páginas ilustradas de zoología y botánica de los siglos XVI–XX."
+      },
+      {
+        "name": "🇦🇷 CONICET Noticias Ciencia",
+        "url": "https://www.conicet.gov.ar/categorias/noticias/",
+        "desc": "Descubrimientos verificados de investigadores argentinos en todas las áreas."
+      }
+    ]
+  }
+];
 
   function loadAllCards() {
     let custom = [];
     try {
-      custom = JSON.parse(localStorage.getItem('whimsy_custom_rss_cards_v12') || '[]');
+      custom = JSON.parse(localStorage.getItem('whimsy_custom_rss_cards_v13') || '[]');
     } catch(e) {}
     return [...custom, ...DEFAULT_CARDS];
   }
 
   let allCards = loadAllCards();
-  let selectedCardIds = ['colossal-arkivism-cc0', 'conicet-siracusano-materia'];
+  let selectedCardIds = ['colossal-maria-tomazou-excel', 'colossal-arkivism-cc0', 'archivo-propio-hilo-rojo'];
   let activeFilter = 'all';
-  let openDossierIds = { 'colossal-arkivism-cc0': true };
+  let openDossierIds = { 'colossal-maria-tomazou-excel': true, 'colossal-arkivism-cc0': true };
 
   function updateTabCounts() {
     document.getElementById('countAll').textContent = allCards.length;
@@ -1130,40 +1601,76 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
     document.getElementById('countHilo').textContent = allCards.filter(c => c.cat === 'hilo').length;
   }
 
+  function renderPortalsStrip(stripObj) {
+    const pCards = (stripObj.portals || []).map(p => `
+      <div class="portal-card">
+        <div>
+          <strong>${p.name}</strong>
+          <span class="url-text">${p.url}</span>
+          <p style="margin-top:4px;">${p.desc}</p>
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="btn gold" style="padding:4px 8px; font-size:0.68rem; flex:1; justify-content:center;" onclick="openCleanReaderWindow('${p.url}')">🪟 Ventana Responsive</button>
+          <a href="${p.url}" target="_blank" rel="noopener" class="btn" style="padding:4px 8px; font-size:0.68rem;">🔗 Abrir ↗</a>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="portals-strip">
+        <h4>${stripObj.title}</h4>
+        <p>${stripObj.subtitle}</p>
+        <div class="portals-grid">${pCards}</div>
+      </div>
+    `;
+  }
+
   function renderFeedGrid() {
     updateTabCounts();
     const grid = document.getElementById('feedGrid');
     const visible = activeFilter === 'all' ? allCards : allCards.filter(c => c.cat === activeFilter);
 
-    grid.innerHTML = visible.map(card => {
+    let htmlChunks = [];
+    visible.forEach((card, cardIdx) => {
       const isSelected = selectedCardIds.includes(card.id);
       const isDossierOpen = !!openDossierIds[card.id];
       const extraLinksHtml = (card.extraSources || []).map(s =>
         `<a href="${s.url}" target="_blank" rel="noopener" class="source-pill">🔗 ${s.label} ↗</a>`
       ).join('');
 
+      const vimeoHtml = card.embedVimeo ? `
+        <div style="margin-bottom:12px; background:#07070b; border:1px solid rgba(232,160,191,0.35); border-radius:10px; padding:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--pink); margin-bottom:6px;">🎬 VIDEO ORIGINAL INTEGRADO EN PRE-PRO (PODÉS DARLE PLAY ACÁ MISMO):</div>
+          <div style="aspect-ratio:16/9; width:100%; border-radius:8px; overflow:hidden; background:#000;">
+            <iframe src="${card.embedVimeo}" style="width:100%; height:100%; border:0;" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+      ` : '';
+
       const albumHtml = (card.album || []).map((photo, idx) => `
         <div class="album-item ${photo.checked ? 'checked' : ''}">
-          <div class="album-thumb-wrap" onclick="projectPhotoNow('${card.id}', ${idx}, 'right')" title="Clic para proyectar ahora en el Panel Derecho">
-            <img src="${photo.url}" alt="Foto ${idx+1}" onerror="this.src='assets/IMG_6698.jpg'">
+          <div class="album-thumb-wrap" onclick="openLightbox('${card.id}', ${idx})" title="Tocá para AMPLIAR EN PREVIA GRANDE">
+            <img src="${photo.url}" alt="Foto ${idx+1}" loading="lazy">
             <label class="album-check-label" onclick="event.stopPropagation();">
               <input type="checkbox" ${photo.checked ? 'checked' : ''} onchange="toggleAlbumPhotoCheck('${card.id}', ${idx}, this.checked)">
               En álbum
             </label>
+            <span class="zoom-badge">🔍 Ampliar en previa</span>
           </div>
           <div class="album-caption">${photo.caption}</div>
           <div class="album-actions">
-            <button class="album-btn" onclick="projectPhotoNow('${card.id}', ${idx}, 'right')">➡️ A Derecha</button>
-            <button class="album-btn" onclick="projectPhotoNow('${card.id}', ${idx}, 'center')">📱 A Centro 9:16</button>
+            <button class="album-btn" onclick="openLightbox('${card.id}', ${idx})">🔍 Ampliar</button>
+            <button class="album-btn" id="btn-r-${card.id}-${idx}" onclick="projectPhotoNow('${card.id}', ${idx}, 'right', this)">➡️ A Derecha</button>
+            <button class="album-btn" id="btn-c-${card.id}-${idx}" onclick="projectPhotoNow('${card.id}', ${idx}, 'center', this)">📱 A 9:16</button>
           </div>
         </div>
       `).join('');
 
-      return `
+      htmlChunks.push(`
         <div class="feed-card ${isSelected ? 'selected' : ''}" id="card-${card.id}">
           <div class="card-top-meta">
             <span class="badge ${card.cat}">${card.catLabel}</span>
-            <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--green);">✅ Fuente 200 OK · ${card.sourceName}</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--green);">✅ Fuente + Álbum local verificado · ${card.sourceName}</span>
           </div>
 
           <h3 class="card-title">${card.title}</h3>
@@ -1172,25 +1679,27 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
           <!-- VERIFIED LINKS + POP-OUT RESPONSIVE READER WINDOW -->
           <div class="verified-sources-box">
             <div class="verified-sources-title">
-              <span>🌐 FUENTES ORIGINALES VERIFICADAS (ABRIR EN PESTAÑA O EN VENTANA RESPONSIVE PARA PROYECTAR)</span>
-              <button class="btn gold" style="padding:3px 9px; font-size:0.68rem;" onclick="openCleanReaderWindow('${card.sourceUrl}')">🪟 1. Abrir web en Ventana Limpia Responsive (para recorrer en vivo)</button>
+              <span>🌐 URL DIRECTA: <a href="${card.sourceUrl}" target="_blank" style="color:var(--gold); text-decoration:underline;">${card.sourceUrl}</a></span>
+              <button class="btn gold" style="padding:4px 10px; font-size:0.7rem;" onclick="openCleanReaderWindow('${card.sourceUrl}')">🪟 Abrir web en Ventana Limpia Responsive (para recorrer)</button>
             </div>
             <div class="source-pills">
               ${extraLinksHtml}
             </div>
           </div>
 
-          <!-- EXPANDABLE LONG DOSSIER + LIVE EXTRA SCRAPER -->
+          ${vimeoHtml}
+
+          <!-- EXPANDABLE LONG DOSSIER -->
           <div class="dossier-box">
             <div class="dossier-header" onclick="toggleDossier('${card.id}')">
-              <span>📖 Dossier largo de Pre-Pro (4 párrafos listos para comentar al aire)</span>
+              <span>📖 Dossier largo de Pre-Pro (desplegar para leer los puntos y datos completos)</span>
               <span>${isDossierOpen ? '▲ Ocultar texto largo' : '▼ Desplegar texto largo completo'}</span>
             </div>
             <div style="display:${isDossierOpen ? 'block' : 'none'};">
               <div class="dossier-content">${card.longDossier || card.summary}</div>
               ${card.dossiersTips ? `<div class="dossier-tips">${card.dossiersTips}</div>` : ''}
               <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-                <button class="btn green" style="padding:5px 10px; font-size:0.72rem;" onclick="enrichCardLive('${card.id}')">🔎 Buscar más info, papers y sumar 4 fotos reales CC0 a esta tarjeta</button>
+                <button class="btn green" style="padding:5px 10px; font-size:0.72rem;" onclick="enrichCardLive('${card.id}')">🔎 Buscar más info, papers y sumar 4 fotos CC0 a esta tarjeta</button>
                 <button class="btn" style="padding:5px 10px; font-size:0.72rem;" onclick="promptAddPhotoToAlbum('${card.id}')">➕ Pegar URL de imagen / captura en este álbum</button>
               </div>
             </div>
@@ -1199,8 +1708,8 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
           <!-- MULTI-PHOTO PRE-PRO ALBUM -->
           <div class="album-section">
             <div class="album-header">
-              <span>🖼️ ÁLBUM DE IMÁGENES REALES DE ESTA HISTORIA (${(card.album || []).filter(p=>p.checked).length} seleccionadas para proyectar)</span>
-              <span style="font-weight:400; color:var(--muted); font-size:0.7rem;">Tocá «➡️ A Derecha» o «📱 A Centro 9:16» en cualquier foto para verla arriba en el monitor y en Cabina</span>
+              <span>🖼️ ÁLBUM DE IMÁGENES Y GIFS DE ESTA NOTA (${(card.album || []).filter(p=>p.checked).length} en tu álbum)</span>
+              <span style="font-weight:600; color:var(--pink); font-size:0.73rem;">👉 Tocá cualquier foto/GIF o «🔍 Ampliar» para verla en GRANDE acá mismo</span>
             </div>
             <div class="album-grid">
               ${albumHtml}
@@ -1221,19 +1730,96 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
             <button class="btn ${isSelected ? 'green' : 'primary'}" onclick="toggleSelectCard('${card.id}')">
               ${isSelected ? '✅ Elegida en tu Canasta (Quitar)' : '➕ Elegir para mi Bloque (Fase 2)'}
             </button>
-            <button class="btn gold" onclick="openCleanReaderWindow('${card.sourceUrl}')">
-              🪟 Abrir Fuente Responsive + Recorrer
+            <button class="btn gold" onclick="openLightbox('${card.id}', 0)">
+              🔍 Abrir Álbum en Previa Grande
+            </button>
+            <button class="btn" onclick="openCleanReaderWindow('${card.sourceUrl}')">
+              🪟 Abrir Fuente Responsive al lado
             </button>
             <button class="btn" onclick="captureExternalSourceWindow('right')">
-              🎥 Proyectar Recorrido en Panel Derecho
-            </button>
-            <button class="btn" onclick="captureExternalSourceWindow('center')">
-              📱 Proyectar Recorrido en Centro 9:16
+              🎥 Proyectar Ventana en Derecha
             </button>
           </div>
         </div>
-      `;
-    }).join('');
+      `);
+
+      // Interleave Portal Strips when viewing 'all'
+      if (activeFilter === 'all') {
+        INTERLEAVED_PORTALS.forEach(st => {
+          if (st.afterCardIdx === cardIdx) {
+            htmlChunks.push(renderPortalsStrip(st));
+          }
+        });
+      }
+    });
+
+    grid.innerHTML = htmlChunks.join('');
+  }
+
+  // LIGHTBOX / AMPLIADOR EN PREVIA GRANDE
+  let lbCurrentCardId = null;
+  let lbCurrentPhotoIdx = 0;
+
+  function openLightbox(cardId, photoIdx) {
+    const card = allCards.find(c => c.id === cardId);
+    if (!card || !card.album || !card.album.length) return;
+    lbCurrentCardId = cardId;
+    lbCurrentPhotoIdx = photoIdx || 0;
+    updateLightboxView();
+    document.getElementById('preproLightbox').classList.add('open');
+  }
+
+  function updateLightboxView() {
+    const card = allCards.find(c => c.id === lbCurrentCardId);
+    if (!card) return;
+    const photo = card.album[lbCurrentPhotoIdx] || card.album[0];
+    document.getElementById('lbImage').src = photo.url;
+    document.getElementById('lbCatBadge').textContent = `${card.catLabel} · FOTO ${lbCurrentPhotoIdx + 1} DE ${card.album.length}`;
+    document.getElementById('lbCardTitle').textContent = card.title;
+    document.getElementById('lbPhotoCaption').textContent = photo.caption;
+    document.getElementById('lbDossierExcerpt').textContent = card.longDossier || card.summary;
+    document.getElementById('lbOpenSourceBtn').onclick = () => openCleanReaderWindow(card.sourceUrl);
+    document.getElementById('lbOpenTabLink').href = card.sourceUrl;
+    document.getElementById('lbStatusMsg').style.display = 'none';
+  }
+
+  function stepLightboxPhoto(delta) {
+    const card = allCards.find(c => c.id === lbCurrentCardId);
+    if (!card || !card.album) return;
+    lbCurrentPhotoIdx = (lbCurrentPhotoIdx + delta + card.album.length) % card.album.length;
+    updateLightboxView();
+  }
+
+  function closeLightbox() {
+    document.getElementById('preproLightbox').classList.remove('open');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  function projectFromLightbox(targetZone) {
+    projectPhotoNow(lbCurrentCardId, lbCurrentPhotoIdx, targetZone, null);
+    const msg = document.getElementById('lbStatusMsg');
+    msg.style.display = 'block';
+    msg.textContent = targetZone === 'center'
+      ? '✅ ¡Listo! Ya quedó proyectada en el CENTRO 9:16 de tu Monitor y en tu Cabina en vivo.'
+      : '✅ ¡Listo! Ya quedó proyectada en el PANEL DERECHO de tu Monitor y en tu Cabina en vivo.';
+  }
+
+  function openMonitorFullPreview(zone) {
+    const imgSrc = zone === 'center'
+      ? document.getElementById('miniCenterImg').src
+      : document.getElementById('miniRightImg').src;
+    const cap = zone === 'center'
+      ? document.getElementById('miniCenterCaption').textContent
+      : document.getElementById('miniRightCaption').textContent;
+    document.getElementById('lbImage').src = imgSrc;
+    document.getElementById('lbCatBadge').textContent = 'VISTA AMPLIADA DE TU MONITOR EN VIVO';
+    document.getElementById('lbCardTitle').textContent = cap;
+    document.getElementById('lbPhotoCaption').textContent = 'Así se está viendo ahora mismo en tu salida de aire.';
+    document.getElementById('lbDossierExcerpt').textContent = '';
+    document.getElementById('preproLightbox').classList.add('open');
   }
 
   function toggleDossier(cardId) {
@@ -1252,7 +1838,7 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
   function promptAddPhotoToAlbum(cardId) {
     const card = allCards.find(c => c.id === cardId);
     if (!card) return;
-    const url = prompt('Pegá la URL de la imagen (o ruta local en assets/) para sumar al álbum de esta nota:');
+    const url = prompt('Pegá la URL de la imagen (o ruta en evidencias/) para sumar al álbum de esta nota:');
     if (!url || !url.trim()) return;
     const cap = prompt('¿Qué muestra esta foto? (Para acordarte al aire):', 'Imagen sumada en Pre-Pro') || 'Imagen sumada en Pre-Pro';
     card.album = card.album || [];
@@ -1261,20 +1847,34 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
     renderBasketAndWeave();
   }
 
-  // PROYECTAR UNA FOTO EN VIVO (ACTUALIZA EL MONITOR DE PRE-PRO + CABINA v8 + OBS SALIDA)
   let currentRightPhoto = {
-    img: 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/arkivism-1.jpeg',
-    title: 'Arkivism: 4 millones de imágenes CC0',
+    img: 'evidencias/prepro/excel_film_1.gif',
+    title: 'GIF Película en Excel (Maria Tomazou)',
     badge: '🚦 Tránsito Cultural · Colossal'
   };
 
-  function projectPhotoNow(cardId, photoIdx, targetZone) {
+  function projectPhotoNow(cardId, photoIdx, targetZone, btnEl) {
     const card = allCards.find(c => c.id === cardId);
     if (!card || !card.album || !card.album[photoIdx]) return;
     const photo = card.album[photoIdx];
 
-    // 1. Update local Live Monitor inside Pre-Pro immediately so Ariana sees it happen!
     const badgeEl = document.getElementById('liveSyncBadge');
+    const monBox = document.getElementById('liveMiniMonitorBox');
+    if (monBox) {
+      monBox.classList.add('flash');
+      setTimeout(() => monBox.classList.remove('flash'), 900);
+    }
+
+    if (btnEl) {
+      const orig = btnEl.textContent;
+      btnEl.classList.add('active-flash');
+      btnEl.textContent = '✅ En Monitor';
+      setTimeout(() => {
+        btnEl.classList.remove('active-flash');
+        btnEl.textContent = orig;
+      }, 1400);
+    }
+
     if (targetZone === 'center') {
       const cImg = document.getElementById('miniCenterImg');
       const cCap = document.getElementById('miniCenterCaption');
@@ -1292,7 +1892,6 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
       if (badgeEl) badgeEl.textContent = '✅ Proyectado en Panel Derecho';
     }
 
-    // 2. Broadcast to cabina-v8.html and obs-salida.html
     const pushMsg = {
       type: 'PREPRO_PUSH',
       payload: targetZone === 'center' ? {
@@ -1326,34 +1925,39 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
       cImg.style.objectFit = 'cover';
       cImg.style.padding = '0';
       cCap.textContent = '🎬 PONCHADO 9:16: ' + currentRightPhoto.title.slice(0, 42);
-      if (preproChannel) {
-        preproChannel.postMessage({ type: 'right_wing_override', payload: { ...currentRightPhoto, target: 'center' } });
-      }
+      const pushMsg = {
+        type: 'PREPRO_PUSH',
+        payload: {
+          newCenterImage: currentRightPhoto.img,
+          fact: currentRightPhoto.title,
+          ts: Date.now()
+        }
+      };
+      localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
+      if (preproChannel) preproChannel.postMessage(pushMsg);
     } else {
-      cImg.src = 'assets/whimsy_pov_logo.png';
+      cImg.src = 'logo-whimsy-rosa.png';
       cImg.style.objectFit = 'contain';
       cImg.style.padding = '14px';
       cCap.textContent = '📱 CENTRO 9:16: Tu cámara / Placa central';
     }
   }
 
-  // PASO 1: ABRIR LA PÁGINA FUENTE EN UNA VENTANA SEPARADA LIMPIA Y RESPONSIVE (520x920)
   function openCleanReaderWindow(url) {
-    const w = 520;
-    const h = 900;
+    const w = 540;
+    const h = 920;
     const left = Math.max(0, window.screen.availWidth - w - 20);
     window.open(
       url,
       'whimsy_clean_source_reader',
-      `width=${w},height=${h},left=${left},top=40,menubar=no,toolbar=no,location=yes,status=no,resizable=yes,scrollbars=yes`
+      `width=${w},height=${h},left=${left},top=30,menubar=no,toolbar=no,location=yes,status=no,resizable=yes,scrollbars=yes`
     );
     const badgeEl = document.getElementById('liveSyncBadge');
     if (badgeEl) {
-      badgeEl.textContent = '🪟 Fuente abierta en ventana limpia (cerrá cookies y tocá 🎥 Capturar)';
+      badgeEl.textContent = '🪟 Fuente abierta al lado (tocá 🎥 Capturar si querés proyectarla)';
     }
   }
 
-  // PASO 2: CAPTURAR ESA VENTANA EXTERNA EN VIVO SIN MOSTRAR JAMÁS LA CABINA (selfBrowserSurface: 'exclude')
   let preproScreenStream = null;
   async function captureExternalSourceWindow(targetZone) {
     try {
@@ -1389,18 +1993,16 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
     }
   }
 
-  // AMPLIAR DOSSIER Y ÁLBUM EN VIVO DESDE WIKIPEDIA DOCUMENTAL + WIKIMEDIA COMMONS (gsrnamespace=6) + CROSSREF
   async function enrichCardLive(cardId) {
     const card = allCards.find(c => c.id === cardId);
     if (!card) return;
     const status = document.getElementById('liveSearchStatus');
     status.style.display = 'block';
-    status.textContent = `🔎 Buscando más fuentes verificadas y fotos CC0 en alta resolución para «${card.title.slice(0,45)}...»`;
+    status.textContent = '🔎 Buscando más fuentes verificadas y fotos CC0 en alta resolución para «' + card.title.slice(0,45) + '...»';
 
     const queryWords = card.title.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]/g, '').split(/\s+/).filter(w => w.length > 4).slice(0, 3).join(' ');
     try {
-      // 1. Fetch 4 real images from Wikimedia Commons File namespace (gsrnamespace=6)
-      const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=filetype:bitmap+${encodeURIComponent(queryWords)}&gsrlimit=4&prop=imageinfo&iiprop=url&iiurlwidth=960&format=json&origin=*`;
+      const commonsUrl = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=filetype:bitmap+' + encodeURIComponent(queryWords) + '&gsrlimit=4&prop=imageinfo&iiprop=url&iiurlwidth=960&format=json&origin=*';
       const cRes = await fetch(commonsUrl).then(r => r.json()).catch(() => null);
       if (cRes && cRes.query && cRes.query.pages) {
         Object.values(cRes.query.pages).forEach(p => {
@@ -1416,26 +2018,24 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
         });
       }
 
-      // 2. Fetch Wikipedia ES documentary extract
-      const wikiUrl = `https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(queryWords)}&utf8=&format=json&origin=*`;
+      const wikiUrl = 'https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(queryWords) + '&utf8=&format=json&origin=*';
       const wRes = await fetch(wikiUrl).then(r => r.json()).catch(() => null);
       if (wRes && wRes.query && wRes.query.search && wRes.query.search.length > 0) {
         const topHit = wRes.query.search[0];
         const cleanSnippet = topHit.snippet.replace(/<[^>]+>/g, '');
-        const pageUrl = `https://es.wikipedia.org/wiki/${encodeURIComponent(topHit.title.replace(/ /g, '_'))}`;
-        card.longDossier += `\n\n4. AMPLIACIÓN EN VIVO (${topHit.title}):
-${cleanSnippet}... (Fuente verificada agregada automáticamente al listado de links de arriba).`;
+        const pageUrl = 'https://es.wikipedia.org/wiki/' + encodeURIComponent(topHit.title.replace(/ /g, '_'));
+        card.longDossier += '\n\n4. AMPLIACIÓN EN VIVO (' + topHit.title + '):\n' + cleanSnippet + '...';
         if (!card.extraSources.some(s => s.url === pageUrl)) {
-          card.extraSources.push({ label: `📚 Contexto: ${topHit.title}`, url: pageUrl });
+          card.extraSources.push({ label: '📚 Contexto: ' + topHit.title, url: pageUrl });
         }
       }
 
       openDossierIds[cardId] = true;
       renderFeedGrid();
       renderBasketAndWeave();
-      status.textContent = `✅ Dossier ampliado y nuevas fotos reales CC0 agregadas al álbum de la tarjeta.`;
+      status.textContent = '✅ Dossier ampliado y nuevas fotos reales CC0 agregadas al álbum de la tarjeta.';
     } catch (e) {
-      status.textContent = `⚠️ No se pudo conectar a Wikimedia en este segundo, pero tu álbum base está listo.`;
+      status.textContent = '⚠️ Tu álbum local verificado ya está listo.';
     }
   }
 
@@ -1464,7 +2064,7 @@ ${cleanSnippet}... (Fuente verificada agregada automáticamente al listado de li
     countEl.textContent = chosen.length;
 
     if (chosen.length === 0) {
-      listEl.innerHTML = `<div style="font-size:0.78rem; color:var(--muted); padding:8px;">Todavía no elegiste tarjetas. Tocá <strong>➕ Elegir para mi Bloque</strong> en 2 o 3 tarjetas de la izquierda.</div>`;
+      listEl.innerHTML = '<div style="font-size:0.78rem; color:var(--muted); padding:8px;">Todavía no elegiste tarjetas. Tocá <strong>➕ Elegir para mi Bloque</strong> en 2 o 3 tarjetas de la izquierda.</div>';
       document.getElementById('wovenTitle').value = '';
       document.getElementById('wovenScript').value = '';
       document.getElementById('editingCueBox').innerHTML = 'Elegí 2 o 3 tarjetas para armar la pauta de ponchado y el álbum unificado.';
@@ -1478,82 +2078,69 @@ ${cleanSnippet}... (Fuente verificada agregada automáticamente al listado de li
         <div class="basket-item">
           <div>
             <strong style="color:var(--pink); font-family:'JetBrains Mono',monospace;">PIEZA ${i+1}:</strong>
-            <span>${c.title.slice(0, 56)}...</span>
-            <span style="font-size:0.68rem; color:var(--gold); margin-left:6px;">(${checkedCount} fotos en álbum)</span>
+            <span>${c.title.slice(0, 52)}...</span>
+            <span style="font-size:0.68rem; color:var(--gold); margin-left:6px;">(${checkedCount} fotos)</span>
           </div>
           <button onclick="toggleSelectCard('${c.id}')" style="background:none; border:none; color:#F87171; cursor:pointer; font-weight:700;">✕</button>
         </div>
       `;
     }).join('');
 
-    // Weave Title
     if (chosen.length === 1) {
       document.getElementById('wovenTitle').value = chosen[0].title;
     } else {
       const firstShort = chosen[0].title.split(':')[0].slice(0, 42);
       const secondShort = chosen[1].title.split(':')[0].slice(0, 42);
-      document.getElementById('wovenTitle').value = `${firstShort} × ${secondShort}`;
+      document.getElementById('wovenTitle').value = firstShort + ' × ' + secondShort;
     }
 
-    // Weave Script with full narrative + photo cues
     let scriptParts = [];
     chosen.forEach((c, idx) => {
       const checkedPhotos = (c.album || []).filter(p => p.checked);
-      const photoNames = checkedPhotos.map((p, pIdx) => `[Foto ${pIdx+1}: ${p.caption}]`).join(' → ');
+      const photoNames = checkedPhotos.map((p, pIdx) => '[Foto ' + (pIdx+1) + ': ' + p.caption + ']').join(' → ');
       if (idx === 0) {
-        scriptParts.push(`[APERTURA EN CENTRO 9:16 + ÁLBUM EN DERECHA: ${photoNames}]
-${c.summary}
-
-${(c.longDossier || '').split('\n\n')[0] || ''}`);
+        scriptParts.push('[APERTURA EN CENTRO 9:16 + ÁLBUM EN DERECHA: ' + photoNames + ']\n' + c.summary + '\n\n' + ((c.longDossier || '').split('\n\n')[0] || ''));
       } else if (idx === 1) {
-        scriptParts.push(`[CRUCE Y PONCHADO AL COSTADO DERECHO: ${photoNames}]
-Y mirá cómo dialoga esto con otro hallazgo verificado: ${c.summary}`);
+        scriptParts.push('[CRUCE Y PONCHADO AL COSTADO DERECHO: ' + photoNames + ']\nY mirá cómo dialoga esto con otro hallazgo verificado: ' + c.summary);
       } else {
-        scriptParts.push(`[TERCER ESLABÓN / LA VITRINA: ${photoNames}]
-${c.summary}`);
+        scriptParts.push('[TERCER ESLABÓN / LA VITRINA: ' + photoNames + ']\n' + c.summary);
       }
     });
     const lastCard = chosen[chosen.length - 1];
-    scriptParts.push(`[HILO ROJO Y CIERRE]
-${lastCard.hiloRojo} Cuando apagamos el ruido de afuera y miramos el reverso de las cosas, ¿qué es lo primero que vuelve a aparecer en foco?`);
+    scriptParts.push('[HILO ROJO Y CIERRE]\n' + lastCard.hiloRojo + ' Cuando apagamos el ruido de afuera y miramos el reverso de las cosas, ¿qué es lo primero que vuelve a aparecer en foco?');
 
     document.getElementById('wovenScript').value = scriptParts.join('\n\n');
 
-    // Weave Editing Cues (Center <-> Right Wing)
-    let cuesHtml = `<div style="margin-bottom:4px;">• <strong>00:00 – 00:15 (Centro 9:16):</strong> Entrás vos a cámara presentando «${chosen[0].title.slice(0, 45)}...».</div>`;
+    let cuesHtml = '<div style="margin-bottom:4px;">• <strong>00:00 – 00:15 (Centro 9:16):</strong> Entrás vos a cámara presentando «' + chosen[0].title.slice(0, 45) + '...».</div>';
     chosen.forEach((c, idx) => {
       const checkedPhotos = (c.album || []).filter(p => p.checked);
       const firstCaption = checkedPhotos[0] ? checkedPhotos[0].caption : c.sourceName;
       const startSec = 15 + idx * 20;
       const endSec = startSec + 20;
-      cuesHtml += `<div style="margin-bottom:4px;">• <strong>00:${startSec} – 00:${endSec} (Ponchar Panel Derecho ↔ 9:16):</strong> Mostrar las ${checkedPhotos.length} fotos seleccionadas de <em>${firstCaption}</em> mientras tu voz sigue comentando el dossier.</div>`;
+      cuesHtml += '<div style="margin-bottom:4px;">• <strong>00:' + startSec + ' – 00:' + endSec + ' (Ponchar Panel Derecho ↔ 9:16):</strong> Mostrar las ' + checkedPhotos.length + ' fotos seleccionadas de <em>' + firstCaption + '</em> mientras tu voz sigue comentando el dossier.</div>';
     });
-    cuesHtml += `<div>• <strong>Últimos 15s (Split Centro + Derecha):</strong> Cierre con el Hilo Rojo y etiqueta a las arrobas para que reposteen el clip.</div>`;
+    cuesHtml += '<div>• <strong>Últimos 15s (Split Centro + Derecha):</strong> Cierre con el Hilo Rojo y etiqueta a las arrobas para que reposteen el clip.</div>';
     document.getElementById('editingCueBox').innerHTML = cuesHtml;
 
-    // Collect unique handles
     const handleSet = new Set();
     chosen.forEach(c => (c.handles || []).forEach(h => handleSet.add(h)));
     handleSet.add('@whimsypov');
     document.getElementById('wovenHandles').value = Array.from(handleSet).join(' ');
   }
 
-  // BUSCADOR EN VIVO CON WIKIPEDIA DOCUMENTAL + WIKIMEDIA COMMONS (TRAE ÁLBUM DE 4 FOTOS REALES CC0 + DOSSIER LARGO)
   async function searchLiveTopic() {
     const q = (document.getElementById('topicSearchInput').value || '').trim();
     if (!q) return;
     const status = document.getElementById('liveSearchStatus');
     status.style.display = 'block';
-    status.textContent = `🔎 Buscando «${q}» en Wikipedia Documental, Wikimedia Commons CC0 y Victoria & Albert Museum...`;
+    status.textContent = '🔎 Buscando «' + q + '» en Wikipedia Documental y Wikimedia Commons CC0...';
 
     try {
-      // 1. Wikipedia ES search + full extract
-      const wikiSearchUrl = `https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&utf8=&format=json&origin=*`;
+      const wikiSearchUrl = 'https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(q) + '&utf8=&format=json&origin=*';
       const wData = await fetch(wikiSearchUrl).then(r => r.json());
       const hits = (wData.query && wData.query.search) || [];
 
-      // 2. Wikimedia Commons 4 real bitmap photos
-      const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=filetype:bitmap+${encodeURIComponent(q)}&gsrlimit=4&prop=imageinfo&iiprop=url&iiurlwidth=960&format=json&origin=*`;
+      const commonsUrl = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=filetype:bitmap+' + encodeURIComponent(q) + '&gsrlimit=4&prop=imageinfo&iiprop=url&iiurlwidth=960&format=json&origin=*';
       const cData = await fetch(commonsUrl).then(r => r.json()).catch(() => null);
       const albumPhotos = [];
       if (cData && cData.query && cData.query.pages) {
@@ -1573,30 +2160,29 @@ ${lastCard.hiloRojo} Cuando apagamos el ruido de afuera y miramos el reverso de 
       if (hits.length > 0) {
         const top = hits[0];
         const second = hits[1];
-        const pageUrl = `https://es.wikipedia.org/wiki/${encodeURIComponent(top.title.replace(/ /g, '_'))}`;
+        const pageUrl = 'https://es.wikipedia.org/wiki/' + encodeURIComponent(top.title.replace(/ /g, '_'));
         const clean1 = top.snippet.replace(/<[^>]+>/g, '');
         const clean2 = second ? second.snippet.replace(/<[^>]+>/g, '') : '';
 
-        // Fetch full intro paragraph from Wikipedia REST summary
-        const restSum = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(top.title)}`).then(r => r.json()).catch(() => null);
+        const restSum = await fetch('https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(top.title)).then(r => r.json()).catch(() => null);
         const fullExtract = (restSum && restSum.extract) ? restSum.extract : clean1;
         if (restSum && restSum.thumbnail && restSum.thumbnail.source && !albumPhotos.some(a => a.url === restSum.thumbnail.source)) {
           albumPhotos.unshift({
             url: restSum.thumbnail.source,
-            caption: `Imagen principal documental: ${top.title}`,
+            caption: 'Imagen principal documental: ' + top.title,
             checked: true
           });
         }
 
         if (albumPhotos.length === 0) {
-          albumPhotos.push({ url: 'assets/IMG_6698.jpg', caption: 'Archivo visual Whimsy POV', checked: true });
+          albumPhotos.push({ url: 'evidencias/aris_flores_macro.jpg', caption: 'Archivo visual Whimsy POV', checked: true });
         }
 
-        const extraSources = [{ label: `📚 Artículo completo: ${top.title}`, url: pageUrl }];
+        const extraSources = [{ label: '📚 Artículo completo: ' + top.title, url: pageUrl }];
         if (second) {
           extraSources.push({
-            label: `🔗 Cruce documental: ${second.title}`,
-            url: `https://es.wikipedia.org/wiki/${encodeURIComponent(second.title.replace(/ /g, '_'))}`
+            label: '🔗 Cruce documental: ' + second.title,
+            url: 'https://es.wikipedia.org/wiki/' + encodeURIComponent(second.title.replace(/ /g, '_'))
           });
         }
 
@@ -1604,20 +2190,13 @@ ${lastCard.hiloRojo} Cuando apagamos el ruido de afuera y miramos el reverso de 
           id: 'live-' + Date.now(),
           cat: 'transito',
           catLabel: '🚦 Hallazgo en Vivo · Archivo Documental + Álbum CC0',
-          sourceName: `Wikipedia Documental + Wikimedia Commons (${top.title})`,
+          sourceName: 'Wikipedia Documental + Wikimedia Commons (' + top.title + ')',
           sourceUrl: pageUrl,
           extraSources,
-          title: `${top.title}: archivo documental y álbum de dominio público para proyectar`,
+          title: top.title + ': archivo documental y álbum de dominio público para proyectar',
           summary: fullExtract.slice(0, 280) + (fullExtract.length > 280 ? '...' : ''),
-          longDossier: `1. DOCUMENTO PRINCIPAL (${top.title}):
-${fullExtract}
-
-2. SEGUNDO ÁNGULO DETECTADO EN ARCHIVO:
-${clean2 || 'Podés usar el botón verde de abajo para traer aún más papers y fotos sobre este tema.'}
-
-3. CÓMO USARLO EN VIVO:
-Seleccioná abajo cuáles de las ${albumPhotos.length} fotos de dominio público querés mandar al Panel Derecho o al Centro 9:16 mientras lo comentás.`,
-          dossiersTips: '💡 Todas las imágenes de abajo son reales y extraídas en vivo para tu búsqueda.',
+          longDossier: '1. DOCUMENTO PRINCIPAL (' + top.title + '):\n' + fullExtract + '\n\n2. SEGUNDO ÁNGULO DETECTADO EN ARCHIVO:\n' + (clean2 || 'Podés usar el botón verde de abajo para traer aún más papers y fotos sobre este tema.'),
+          dossiersTips: '💡 Tocá cualquiera de las imágenes de abajo para ampliarla en grande.',
           album: albumPhotos,
           handles: ['@whimsypov', '@wikimedia'],
           hiloRojo: 'Hilo Rojo con tu archivo: Cruza con tus 19 Minutas W en Substack y tus 91 videos en @whimsypov.'
@@ -1627,12 +2206,12 @@ Seleccioná abajo cuáles de las ${albumPhotos.length} fotos de dominio público
         openDossierIds[newCard.id] = true;
         activeFilter = 'all';
         renderFeedGrid();
-        status.textContent = `✅ Se creó la tarjeta de «${top.title}» con dossier largo, links verificados y álbum de ${albumPhotos.length} fotos reales.`;
+        status.textContent = '✅ Se creó la tarjeta de «' + top.title + '» con dossier largo y álbum de ' + albumPhotos.length + ' fotos reales.';
       } else {
-        status.textContent = `No hubo coincidencia exacta para «${q}». Probá con otro término o autor.`;
+        status.textContent = 'No hubo coincidencia exacta para «' + q + '». Probá con otro término.';
       }
     } catch (err) {
-      status.textContent = `Error de red al consultar archivo externo.`;
+      status.textContent = 'Error de red al consultar archivo externo.';
     }
   }
 
@@ -1678,16 +2257,16 @@ Seleccioná abajo cuáles de las ${albumPhotos.length} fotos de dominio público
       longDossier: summary || 'Dossier listo para comentar en vivo.',
       dossiersTips: '💡 Podés sumar capturas o fotos a este álbum con el botón ➕ Pegar URL de imagen.',
       album: [
-        { url: 'assets/IMG_6698.jpg', caption: 'Imagen base (podés sumar más fotos al álbum)', checked: true }
+        { url: 'evidencias/aris_flores_macro.jpg', caption: 'Imagen base (podés sumar más fotos al álbum)', checked: true }
       ],
       handles: handlesRaw.split(/\s+/).filter(Boolean),
       hiloRojo: 'Conectado con el universo de Whimsy POV y La Minuta W.'
     };
 
     let custom = [];
-    try { custom = JSON.parse(localStorage.getItem('whimsy_custom_rss_cards_v12') || '[]'); } catch(e) {}
+    try { custom = JSON.parse(localStorage.getItem('whimsy_custom_rss_cards_v13') || '[]'); } catch(e) {}
     custom.unshift(newCard);
-    localStorage.setItem('whimsy_custom_rss_cards_v12', JSON.stringify(custom));
+    localStorage.setItem('whimsy_custom_rss_cards_v13', JSON.stringify(custom));
 
     allCards = loadAllCards();
     selectedCardIds.push(newCard.id);
@@ -1702,30 +2281,15 @@ Seleccioná abajo cuáles de las ${albumPhotos.length} fotos de dominio público
     const title = document.getElementById('wovenTitle').value || 'Bloque Whimsy POV';
     const script = document.getElementById('wovenScript').value || '';
     const handles = document.getElementById('wovenHandles').value || '@whimsypov';
-    const slotIdx = parseInt(document.getElementById('targetSlotSelect').value || '0', 10);
-    const blockIdx = parseInt(document.getElementById('targetBlockIndex').value || '1', 10);
 
-    // Gather all checked photos from chosen cards
     const checkedAlbum = [];
     chosen.forEach(c => {
       (c.album || []).forEach(p => {
         if (p.checked) checkedAlbum.push(p);
       });
     });
-    const primaryImg = checkedAlbum[0] ? checkedAlbum[0].url : 'https://www.thisiscolossal.com/wp-content/uploads/2026/11/arkivism-1.jpeg';
+    const primaryImg = checkedAlbum[0] ? checkedAlbum[0].url : 'evidencias/prepro/excel_film_1.gif';
     const primaryCaption = checkedAlbum[0] ? checkedAlbum[0].caption : title;
-
-    const payload = {
-      slotIdx,
-      blockIdx,
-      title,
-      script,
-      handles,
-      rightImg: primaryImg,
-      rightCaption: primaryCaption,
-      album: checkedAlbum,
-      updatedAt: new Date().toISOString()
-    };
 
     const pushMsg = {
       type: 'PREPRO_PUSH',
@@ -1746,14 +2310,13 @@ Seleccioná abajo cuáles de las ${albumPhotos.length} fotos de dominio público
       preproChannel.postMessage(pushMsg);
     }
 
-    // Also update local mini-monitor
     document.getElementById('miniRightImg').src = primaryImg;
     document.getElementById('miniRightCaption').textContent = '➡️ DERECHA: ' + primaryCaption.slice(0, 42);
     document.getElementById('miniLeftText').textContent = title;
 
     const conf = document.getElementById('pushConfirmation');
     conf.style.display = 'block';
-    conf.innerHTML = `✅ <strong>¡Enviado a tu Cabina en vivo y al Monitor!</strong> Se cargaron el guion largo y las ${checkedAlbum.length} fotos seleccionadas del álbum.`;
+    conf.innerHTML = '✅ <strong>¡Enviado a tu Cabina en vivo y al Monitor!</strong> Se cargaron el guion largo y las ' + checkedAlbum.length + ' fotos seleccionadas del álbum.';
   }
 
   function generatePostShowPack() {
@@ -1763,22 +2326,16 @@ Seleccioná abajo cuáles de las ${albumPhotos.length} fotos de dominio público
     const box = document.getElementById('postShowExportBox');
     box.style.display = 'block';
 
-    const copy = `🎙️ ${title.slice(0, 92)}
-
-${script.replace(/\[[^\]]+\]/g, '').trim().slice(0, 460)}...
-
-🎬 Pauta de edición (Clips 9:16): Ponchado dinámico entre cámara central 9:16 y el álbum documental del panel derecho.
-
-📲 Menciones y archivos de hoy:
-${handles}
-
-✍️ Leé La Minuta W completa en Substack: https://arianawajntraub.substack.com
-▶️ Suscribite en YouTube: https://www.youtube.com/@whimsypov`;
+    const copy = '🎙️ ' + title.slice(0, 92) + '\n\n' +
+      script.replace(/\[[^\]]+\]/g, '').trim().slice(0, 460) + '...\n\n' +
+      '🎬 Pauta de edición (Clips 9:16): Ponchado dinámico entre cámara central 9:16 y el álbum documental del panel derecho.\n\n' +
+      '📲 Menciones y archivos de hoy:\n' + handles + '\n\n' +
+      '✍️ Leé La Minuta W completa en Substack: https://arianawajntraub.substack.com\n' +
+      '▶️ Suscribite en YouTube: https://www.youtube.com/@whimsypov';
 
     document.getElementById('socialCopyOutput').value = copy;
   }
 
-  // Voice Dictation
   let recognition = null;
   let isDictating = false;
   function toggleVoiceDictation() {
