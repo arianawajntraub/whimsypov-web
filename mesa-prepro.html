@@ -747,8 +747,8 @@
     <div class="brand-title">
       <img src="logo-whimsy-rosa.png" alt="Whimsy POV">
       <div>
-        <h1>Mesa de Pre-Pro · «El tránsito y el clima del mundo» (v13)</h1>
-        <p>Tocá cualquier foto o GIF para AMPLIAR EN PREVIA GRANDE · 34 Imágenes y GIFs locales sin bloqueo · Portales intercalados con URL</p>
+        <h1>Mesa de Pre-Pro · «El tránsito y el clima del mundo» (v14)</h1>
+        <p>Categoría «Cine / Obra y Monitor al Aire» (16:9 Sala Limpia con Mosca + Graph a la izquierda · o 9:16 Smart p/Shorts) + Crónicas de Lanzamiento</p>
       </div>
     </div>
     <div class="nav-links">
@@ -850,8 +850,10 @@
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
           <button class="btn gold" style="padding:5px 9px; font-size:0.7rem;" onclick="punchRightToCenterFromPrepro()">🎬 Ponchar Foto Derecha ↔ Centro 9:16</button>
-          <button class="btn green" style="padding:5px 9px; font-size:0.7rem;" onclick="captureExternalSourceWindow('right')">🎥 Capturar Ventana Web → En Derecha</button>
-          <button class="btn" style="padding:5px 9px; font-size:0.7rem; border-color:var(--pink); color:var(--pink);" onclick="captureExternalSourceWindow('center')">📱 Capturar Ventana Web → En Centro 9:16</button>
+          <button class="btn primary" style="padding:5px 9px; font-size:0.7rem;" onclick="triggerCinemaFromCard('colossal-maria-tomazou-excel', '16x9')">🍿 Cine 16:9 (Solo Mosca + Graph Izq)</button>
+          <button class="btn green" style="padding:5px 9px; font-size:0.7rem;" onclick="triggerCinemaFromCard('colossal-maria-tomazou-excel', '9x16')">📱 Cine Smart 9:16 (p/Shorts)</button>
+          <button class="btn" style="padding:5px 9px; font-size:0.7rem;" onclick="stopCinemaModeFromPrepro()">🛑 Volver a 3 Columnas</button>
+          <button class="btn" style="padding:5px 9px; font-size:0.7rem;" onclick="captureExternalSourceWindow('right')">🎥 Capturar Ventana → Derecha</button>
         </div>
       </div>
 
@@ -913,14 +915,19 @@
 
   </div>
 
-  <!-- MODAL AMPLIADOR EN PREVIA GRANDE (LIGHTBOX PARA VER CUALQUIER FOTO O GIF EN GRANDE Y MANDARLA A CABINA) -->
+  <!-- MODAL AMPLIADOR EN PREVIA GRANDE (LIGHTBOX PARA VER CUALQUIER FOTO O GIF EN GRANDE Y MANDARLA A CABINA O MODO CINE) -->
   <div class="lightbox-overlay" id="preproLightbox" onclick="if(event.target===this) closeLightbox()">
     <div class="lightbox-card">
       <div class="lightbox-img-stage">
         <img id="lbImage" src="" alt="Previa Ampliada">
-        <div style="display:flex; gap:10px; margin-top:12px;">
+        <iframe id="lbIframe" src="" style="display:none; width:100%; aspect-ratio:16/9; border:none; border-radius:8px; background:#000;" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; justify-content:center;">
           <button class="btn" onclick="stepLightboxPhoto(-1)">◀ Foto anterior del álbum</button>
           <button class="btn" onclick="stepLightboxPhoto(1)">Siguiente foto del álbum ▶</button>
+          <button class="btn gold" id="lbToggleVideoBtn" style="display:none;" onclick="toggleLightboxVideoView()">🎬 Ver Video Vimeo en este Monitor</button>
+        </div>
+        <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--green); text-align:center;">
+          💡 Si activás «🍿 Poner este Monitor al Aire», cada vez que toques ◀ / ▶ cambia en vivo en tu pantalla de salida con su Graph al lado de la Mosca.
         </div>
       </div>
       <div class="lightbox-info">
@@ -929,21 +936,30 @@
             <span class="badge transito" id="lbCatBadge">ÁLBUM EN PREVIA</span>
             <button class="btn" onclick="closeLightbox()" style="padding:4px 10px;">✕ Cerrar previa (Esc)</button>
           </div>
-          <h3 id="lbCardTitle" style="font-family:'Newsreader',serif; font-size:1.25rem; color:var(--cream); margin-bottom:8px;"></h3>
-          <div id="lbPhotoCaption" style="background:rgba(212,168,83,0.14); border-left:3px solid var(--gold); padding:10px 12px; border-radius:0 8px 8px 0; font-size:0.86rem; color:var(--cream); margin-bottom:12px;"></div>
-          <div id="lbStatusMsg" style="display:none; margin-bottom:10px; padding:8px 10px; border-radius:7px; background:rgba(74,222,128,0.16); border:1px solid var(--green); color:var(--green); font-size:0.78rem; font-weight:700;"></div>
-          <p id="lbDossierExcerpt" style="font-size:0.82rem; color:#d8d0c5; line-height:1.55; max-height:180px; overflow-y:auto; white-space:pre-line;"></p>
+          <h3 id="lbCardTitle" style="font-family:'Newsreader',serif; font-size:1.2rem; color:var(--cream); margin-bottom:8px;"></h3>
+          <div id="lbPhotoCaption" style="background:rgba(212,168,83,0.14); border-left:3px solid var(--gold); padding:10px 12px; border-radius:0 8px 8px 0; font-size:0.84rem; color:var(--cream); margin-bottom:10px;"></div>
+          <div id="lbStatusMsg" style="display:none; margin-bottom:10px; padding:8px 10px; border-radius:7px; background:rgba(74,222,128,0.16); border:1px solid var(--green); color:var(--green); font-size:0.76rem; font-weight:700;"></div>
+          <p id="lbDossierExcerpt" style="font-size:0.8rem; color:#d8d0c5; line-height:1.52; max-height:150px; overflow-y:auto; white-space:pre-line;"></p>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:8px; border-top:1px solid var(--border); padding-top:12px;">
-          <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold);">¿DÓNDE QUERÉS PONCHAR ESTA IMAGEN / GIF AHORA?</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--pink);">🍿 CATEGORÍA «CINE / OBRA Y MONITOR AL AIRE» (CON GRAPH A LA IZQUIERDA DE LA MOSCA):</div>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-            <button class="btn green" style="justify-content:center; padding:10px;" onclick="projectFromLightbox('right')">➡️ Mandar a Panel Derecho (16:9)</button>
-            <button class="btn primary" style="justify-content:center; padding:10px;" onclick="projectFromLightbox('center')">📱 Mandar a Centro (9:16)</button>
+            <button class="btn primary" style="justify-content:center; padding:9px; font-size:0.74rem;" onclick="projectMonitorCinemaFromLightbox('16x9')">🍿 Monitor al Aire 16:9 (Solo Mosca + Graph Izq)</button>
+            <button class="btn gold" style="justify-content:center; padding:9px; font-size:0.74rem;" onclick="projectMonitorCinemaFromLightbox('9x16')">📱 Modo Smart 9:16 (Encuadre p/Shorts)</button>
           </div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
-            <button class="btn gold" style="flex:1; justify-content:center;" id="lbOpenSourceBtn" onclick="">🪟 Abrir web original en Ventana Limpia al lado</button>
-            <a href="" target="_blank" id="lbOpenTabLink" class="btn" style="justify-content:center;">🔗 Abrir URL en pestaña ↗</a>
+          <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:8px;">
+            <button class="btn" style="justify-content:center; padding:8px; font-size:0.73rem; border-color:#A78BFA; color:#DDD6FE;" onclick="triggerCardCorrespondentStory(lbCurrentCardId)">🎙️ Crónica del Lanzamiento (Voz Jaffa/Varón)</button>
+            <button class="btn" style="justify-content:center; padding:8px; font-size:0.73rem;" onclick="stopCinemaModeFromPrepro()">🛑 Volver Cabina a 3 Columnas</button>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--gold); margin-top:4px;">¿O ENVIAR A LAS COLUMNAS HABITUALES DE LA CABINA?</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <button class="btn green" style="justify-content:center; padding:8px; font-size:0.73rem;" onclick="projectFromLightbox('right')">➡️ Mandar a Panel Derecho (16:9)</button>
+            <button class="btn" style="justify-content:center; padding:8px; font-size:0.73rem;" onclick="projectFromLightbox('center')">📱 Mandar a Centro (9:16)</button>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:2px;">
+            <button class="btn gold" style="flex:1; justify-content:center; font-size:0.72rem;" id="lbOpenSourceBtn" onclick="">🪟 Abrir web original en Ventana Limpia</button>
+            <a href="" target="_blank" id="lbOpenTabLink" class="btn" style="justify-content:center; font-size:0.72rem;">🔗 Abrir URL ↗</a>
           </div>
         </div>
       </div>
@@ -957,32 +973,35 @@
   {
     "id": "colossal-maria-tomazou-excel",
     "cat": "transito",
-    "catLabel": "🚦 Tránsito Cultural · Colossal (Animación & Obsesión)",
-    "sourceName": "Colossal · Maria Tomazou («I Made a Film in Excel»)",
+    "catLabel": "🚦 Tránsito Cultural · Colossal (Categoría Cine / Obra al Aire)",
+    "sourceName": "Colossal · Maria Tomazou («I Made a Film in Excel» · Londres)",
     "sourceUrl": "https://www.thisiscolossal.com/2026/11/maria-tomazou-i-made-a-film-in-excel/",
     "embedVimeo": "https://player.vimeo.com/video/1241981102?badge=0&autopause=0",
+    "miniGraphKicker": "🎬 EN PANTALLA · «I MADE A FILM IN EXCEL»",
+    "miniGraphText": "Maria Tomazou (Londres) · Música: Rich Farris · Animado celda por celda en Excel",
+    "correspondentStory": "Crónica espontánea desde Londres sobre el lanzamiento de «I Made a Film in Excel». Cuando la animadora chipriota radicada en Londres Maria Tomazou estrenó este cortometraje, reveló en su reportaje con Grace Ebert para Colossal tres secretos del detrás de escena que parecen salidos de un taller mecánico. Primero: la música existió antes que la imagen; el compositor e ingeniero de sonido Rich Farris grabó la partitura y la narración primero, y ella usó los golpes de ese audio como metrónomo para pintar la planilla. Segundo: no hay trucos de posproducción; achicó las columnas de Microsoft Excel hasta convertirlas en una cuadrícula cuadrada, dibujó asteriscos en las columnas C y F desde la fila mil doscientos sesenta y nueve como si fueran las perforaciones de una cinta de treinta y cinco milímetros, y animó la película entera simplemente apretando la flecha hacia abajo para hacer correr miles de filas. En la entrevista dejó una frase que resume toda la obra: el hecho de que algo no tenga un propósito utilitario no significa que no valga la pena hacerlo. Y conecta este trabajo con el maestro japonés de ochenta años Tatsuo Horiuchi, que pinta paisajes tradicionales en Excel porque el software de diseño le parecía demasiado caro.",
     "extraSources": [
       {
-        "label": "🌐 Colossal: Nota original «I Made a Film in Excel»",
+        "label": "🌐 Colossal: Entrevista de Grace Ebert a Maria Tomazou (5 nov)",
         "url": "https://www.thisiscolossal.com/2026/11/maria-tomazou-i-made-a-film-in-excel/"
       },
       {
-        "label": "🎬 Ver corto animado directo en Vimeo",
+        "label": "🎬 Ver corto animado original en Vimeo (con subtítulos)",
         "url": "https://vimeo.com/1241981102"
       },
       {
-        "label": "🌐 Explorar portada de Colossal",
-        "url": "https://www.thisiscolossal.com/"
+        "label": "🎨 Sitio oficial de Maria Tomazou (Londres)",
+        "url": "https://www.mariatomazou.com/"
       }
     ],
     "title": "«Hice una película en Excel»: Maria Tomazou pintó un film animado celda por celda adentro de una planilla de cálculo",
-    "summary": "Sin inteligencia artificial ni programas de cine: la artista chipriota Maria Tomazou achicó miles de celdas de Microsoft Excel hasta convertirlas en píxeles y animó a mano una película entera sobre el impulso humano —aparentemente inútil pero invencible— de crear.",
-    "longDossier": "1. QUÉ HIZO MARIA TOMAZOU Y POR QUÉ NOS VUELA LA CABEZA:\nMicrosoft Excel nació para hacer balances contables, presupuestos e inventarios grises. Pero la artista Maria Tomazou vio en esa cuadrícula infinita de filas y columnas otra cosa: un telar o un mosaico bizantino digital. Achicó las celdas hasta volverlas cuadraditos mínimos y empezó a rellenarlas de color una por una, hoja por hoja (Sheet 1, Sheet 2, Sheet 3...), hasta construir un cortometraje animado cuadro por cuadro.\n\n2. QUÉ SE VE EN EL GIF ANIMADO Y EN EL CORTO (QUE PODÉS AMPLIAR ABAJO):\nEn la animación se ve la propia interfaz de Excel (con sus pestañas y coordenadas A1, B2, C3) mientras adentro de la planilla cobran vida figuras, paisajes y movimientos hipnóticos. Ella explica que eligió la herramienta más burocrática y antipática del mundo del trabajo para demostrar que cuando alguien tiene una necesidad real de crear, encuentra poesía hasta adentro de un formulario.\n\n3. PREGUNTA DISPARADORA PARA EL AIRE:\nCuando todo el mercado te vende botones mágicos para hacer arte en medio segundo sin tocar el material, ¿qué le pasa al cerebro cuando alguien decide tardar semanas pintando celda por celda adentro de un Excel?",
-    "dossiersTips": "💡 Tocá el GIF de abajo para verlo EN GRANDE en el ampliador de previa, o tocá «➡️ A Derecha» / «📱 A Centro 9:16» para mandarlo en vivo al programa.",
+    "summary": "Sin inteligencia artificial ni programas de cine: la artista chipriota Maria Tomazou (Londres) y el compositor Rich Farris crearon un corto donde miles de filas de Microsoft Excel funcionan como una cinta de 35 mm al hacer scroll hacia abajo.",
+    "longDossier": "1. EL DETRÁS DE ESCENA REAL (LO QUE CONTÓ MARIA TOMAZOU EN SU LANZAMIENTO Y REPORTAJE EN COLOSSAL):\n• Cómo nació con la música primero: El músico y diseñador sonoro Rich Farris compuso la banda sonora y los subtítulos antes de que existiera un solo dibujo. Maria Tomazou tomó esa pista de audio y decidió animarla adentro del programa más burocrático de cualquier oficina: Microsoft Excel.\n• El truco físico de las filas 1269 a 1271: En lugar de usar programas de video, achicó el ancho de las columnas hasta volverlas cuadradas, puso asteriscos (*) en las columnas C y F imitando las perforaciones laterales del celuloide de 35 mm y pintó cada cuadro en bloques sucesivos de filas. Cuando mantiene apretada la tecla de bajar fila en Excel, la planilla corre a velocidad de cine y el personaje cobra vida.\n• La cita textual de Maria Tomazou a la periodista Grace Ebert (Colossal, 5 de noviembre): «Just because something doesn’t have a purpose doesn’t mean it isn’t worth doing» («El hecho de que algo no tenga un propósito utilitario no significa que no valga la pena hacerlo»).\n• El guiño a Tatsuo Horiuchi: En el reportaje cuenta cómo la inspiraron los pioneros que hackean herramientas de oficina, como el artista japonés de 80 años Tatsuo Horiuchi, que empezó a pintar montañas y cerezos en Excel al jubilarse porque no quería gastar plata en programas de ilustración.\n\n2. CÓMO SALE AL AIRE EN TU PROGRAMA (NUEVA CATEGORÍA «CINE / OBRA AL AIRE»):\n• Botón «🍿 Modo Cine 16:9 (Solo Mosca + Graph a la izquierda)»: Desaparecen las columnas laterales y el zócalo inferior para que se lean perfecto los subtítulos originales de Vimeo. Queda únicamente tu Mosca arriba a la derecha y, pegado a su izquierda adentro del margen seguro, el Mini-Graph explicando qué estamos viendo mientras vos comentás encima con tu micrófono Shure MV51.\n• Botón «📱 Modo Smart 9:16 (Encuadre p/Shorts)»: Encuadra el video o tu Monitor de Previa a lo ancho del corredor central 9:16 con la Mosca y el Mini-Graph arriba, ideal para grabar el momento de reacción que sí va a Reels y TikTok.",
+    "dossiersTips": "💡 Tocá «🍿 Cine 16:9 (Solo Mosca + Graph Izq)» para ver el corto limpio con sus subtítulos y tu Mosca, o «🎙️ Crónica del Lanzamiento» para que la voz de estudio cuente la historia de Maria Tomazou y Rich Farris.",
     "album": [
       {
         "url": "evidencias/prepro/excel_film_1.gif",
-        "caption": "GIF ANIMADO REAL: Cuadros pintados celda por celda adentro de Microsoft Excel por Maria Tomazou (Colossal)",
+        "caption": "GIF ANIMADO REAL: Filas 1269–1271 pintadas celda por celda en Microsoft Excel por Maria Tomazou (Colossal)",
         "checked": true
       },
       {
@@ -998,9 +1017,58 @@
     ],
     "handles": [
       "@thisiscolossal",
+      "@mariatomazou",
+      "@richfarris",
       "@whimsypov"
     ],
     "hiloRojo": "Hilo Rojo con tu archivo: Cruza con tu Minuta W «Eppur si muove» y «Loco un poco nada más» (la obstinación hermosa del oficio manual)."
+  },
+  {
+    "id": "van-ijken-microscopio-celula",
+    "cat": "clima",
+    "catLabel": "🌦️ El Clima del Mundo · Cine Microscópico Real (Categoría Cine / Obra al Aire)",
+    "sourceName": "Jan van IJken («Becoming» · Microscopía en Vivo CC) + Ernst Haeckel",
+    "sourceUrl": "https://www.janvanijken.com/becoming/",
+    "miniGraphKicker": "🔬 EN PANTALLA · «BECOMING» (MICROSCOPÍA REAL)",
+    "miniGraphText": "Jan van IJken (Países Bajos) · División celular en tiempo real sin tinción artificial",
+    "correspondentStory": "Crónica espontánea desde Países Bajos sobre el documental microscópico «Becoming», del cineasta y fotógrafo biológico Jan van IJken. Durante meses, van IJken montó una cámara de alta precisión sobre un microscopio óptico con iluminación de campo oscuro para filmar, sin una sola gota de colorante artificial ni animación digital, cómo una única célula translúcida de tritón alpino se pliega y se divide en dos, en cuatro y en dieciséis hasta formar un organismo vivo. En las entrevistas de presentación en festivales científicos europeos, explicó que lo que más conmueve a los biólogos y a los artistas que ven la película es descubrir que la primera hora de vida de casi cualquier vertebrado sigue exactamente la misma coreografía geométrica que Ernst Haeckel había dibujado a mano en mil novecientos cuatro.",
+    "extraSources": [
+      {
+        "label": "🔬 Sitio oficial del film «Becoming» de Jan van IJken",
+        "url": "https://www.janvanijken.com/becoming/"
+      },
+      {
+        "label": "📜 Public Domain Review: Kunstformen der Natur de Ernst Haeckel",
+        "url": "https://publicdomainreview.org/collection/ernst-haeckels-kunstformen-der-natur"
+      }
+    ],
+    "title": "«Becoming» de Jan van IJken: el film microscópico real donde una célula se divide frente a la lente como si fuera arquitectura sagrada",
+    "summary": "Otra joya 100% real de la misma estirpe hipnótica que el film de Excel: el cineasta neerlandés Jan van IJken filmó al microscopio la embriogénesis real de una célula dividiéndose en silencio, en diálogo directo con tus grabaciones de microscopio en ARIS2.",
+    "longDossier": "1. CUÁNTO MÁS PODEMOS PRODUCIR DE ESTA NATURALEZA (100% VERDAD Y CERO HUMO):\nMe preguntabas cuánto podemos producir de esta misma naturaleza hipnótica y verdadera. Acá tenés el segundo ejemplar listo para salir en «🍿 Modo Cine 16:9 (Solo Mosca + Graph Izq)» o desde tu Monitor de Previa: el registro real en time-lapse microscópico donde una célula embrionaria se pliega sobre sí misma con una precisión geométrica que corta el aliento.\n\n2. EL CRUCE CON ERNST HAECKEL (1904) Y TU MICROSCOPIO EN ARIS2:\nEn el álbum tenés tanto el GIF real en movimiento de la división celular (`micro_newt_cell.gif`) como la lámina original en dominio público de Ernst Haeckel (`commons_haeckel.jpg`). Podés abrir tu Monitor de Previa, ponerlo al aire con el botón «🍿 Monitor al Aire 16:9» y pasar en vivo del movimiento microscópico real al grabado de 1904 mientras suena Moby Gratis.",
+    "dossiersTips": "💡 Tocá el GIF de la célula abajo para abrirlo en tu Monitor de Previa y mandarlo al aire con el Mini-Graph a la izquierda de la Mosca.",
+    "album": [
+      {
+        "url": "evidencias/prepro/micro_newt_cell.gif",
+        "caption": "GIF REAL EN MOVIMIENTO: División celular embrionaria filmada al microscopio (Time-lapse biológico real)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/commons_haeckel.jpg",
+        "caption": "Ernst Haeckel (1904) · «Kunstformen der Natur» (Formas geométricas de la vida microscópica · CC0)",
+        "checked": true
+      },
+      {
+        "url": "evidencias/aris_flores_macro.jpg",
+        "caption": "Cruce con tu propio archivo macro en ARIS2 (Whimsy POV)",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@janvanijken",
+      "@publicdomainrev",
+      "@whimsypov"
+    ],
+    "hiloRojo": "Hilo Rojo directo: Tus propias grabaciones de microscopio en iPad (ARIS2) + «Lo que miramos con lupa cuando afuera el mundo hace ruido»."
   },
   {
     "id": "colossal-arkivism-cc0",
@@ -1639,13 +1707,31 @@
       ).join('');
 
       const vimeoHtml = card.embedVimeo ? `
-        <div style="margin-bottom:12px; background:#07070b; border:1px solid rgba(232,160,191,0.35); border-radius:10px; padding:10px;">
-          <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--pink); margin-bottom:6px;">🎬 VIDEO ORIGINAL INTEGRADO EN PRE-PRO (PODÉS DARLE PLAY ACÁ MISMO):</div>
-          <div style="aspect-ratio:16/9; width:100%; border-radius:8px; overflow:hidden; background:#000;">
+        <div style="margin-bottom:12px; background:#07070b; border:1px solid rgba(232,160,191,0.45); border-radius:10px; padding:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--pink);">🎬 CATEGORÍA «CINE / OBRA AL AIRE» INTEGRADA (CON SUBTÍTULOS ORIGINALES Y TU MIC ARRIBA):</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--green);">✅ Mini-Graph listo a la izquierda de la Mosca</span>
+          </div>
+          <div style="aspect-ratio:16/9; width:100%; border-radius:8px; overflow:hidden; background:#000; margin-bottom:10px;">
             <iframe src="${card.embedVimeo}" style="width:100%; height:100%; border:0;" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
           </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn primary" style="font-size:0.73rem; padding:7px 11px;" onclick="triggerCinemaFromCard('${card.id}', '16x9')">🍿 Mandar Video al Aire 16:9 (Solo Mosca + Graph Izq)</button>
+            <button class="btn gold" style="font-size:0.73rem; padding:7px 11px;" onclick="triggerCinemaFromCard('${card.id}', '9x16')">📱 Mandar en Modo Smart 9:16 (Encuadre p/Shorts)</button>
+            <button class="btn" style="font-size:0.73rem; padding:7px 11px; border-color:#A78BFA; color:#DDD6FE;" onclick="triggerCardCorrespondentStory('${card.id}')">🎙️ Crónica del Lanzamiento y Reportaje (Voz Jaffa/Varón)</button>
+            <button class="btn" style="font-size:0.73rem; padding:7px 11px;" onclick="stopCinemaModeFromPrepro()">🛑 Volver Cabina a 3 Columnas</button>
+          </div>
         </div>
-      ` : '';
+      ` : `
+        <div style="margin-bottom:12px; background:rgba(212,168,83,0.06); border:1px solid rgba(212,168,83,0.28); border-radius:10px; padding:9px 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold);">🍿 MODO CINE / MONITOR AL AIRE + CRÓNICA DE LANZAMIENTO:</span>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn primary" style="font-size:0.7rem; padding:5px 9px;" onclick="triggerCinemaFromCard('${card.id}', '16x9')">🍿 Monitor 16:9 (Solo Mosca + Graph Izq)</button>
+            <button class="btn gold" style="font-size:0.7rem; padding:5px 9px;" onclick="triggerCinemaFromCard('${card.id}', '9x16')">📱 Smart 9:16 (p/Shorts)</button>
+            <button class="btn" style="font-size:0.7rem; padding:5px 9px; border-color:#A78BFA; color:#DDD6FE;" onclick="triggerCardCorrespondentStory('${card.id}')">🎙️ Crónica del Lanzamiento / Detrás de escena</button>
+          </div>
+        </div>
+      `;
 
       const albumHtml = (card.album || []).map((photo, idx) => `
         <div class="album-item ${photo.checked ? 'checked' : ''}">
@@ -1756,27 +1842,61 @@
     grid.innerHTML = htmlChunks.join('');
   }
 
-  // LIGHTBOX / AMPLIADOR EN PREVIA GRANDE
+  // LIGHTBOX / AMPLIADOR EN PREVIA GRANDE + SINCRONIZACIÓN EN VIVO CON MODO CINE
   let lbCurrentCardId = null;
   let lbCurrentPhotoIdx = 0;
+  let lbShowingVideo = false;
+  let lbActiveCinemaMode = 'off'; // 'off' | '16x9' | '9x16'
 
   function openLightbox(cardId, photoIdx) {
     const card = allCards.find(c => c.id === cardId);
     if (!card || !card.album || !card.album.length) return;
     lbCurrentCardId = cardId;
     lbCurrentPhotoIdx = photoIdx || 0;
+    lbShowingVideo = false;
     updateLightboxView();
     document.getElementById('preproLightbox').classList.add('open');
+  }
+
+  function toggleLightboxVideoView() {
+    const card = allCards.find(c => c.id === lbCurrentCardId);
+    if (!card || !card.embedVimeo) return;
+    lbShowingVideo = !lbShowingVideo;
+    updateLightboxView();
   }
 
   function updateLightboxView() {
     const card = allCards.find(c => c.id === lbCurrentCardId);
     if (!card) return;
     const photo = card.album[lbCurrentPhotoIdx] || card.album[0];
-    document.getElementById('lbImage').src = photo.url;
-    document.getElementById('lbCatBadge').textContent = `${card.catLabel} · FOTO ${lbCurrentPhotoIdx + 1} DE ${card.album.length}`;
+    const imgEl = document.getElementById('lbImage');
+    const ifrEl = document.getElementById('lbIframe');
+    const toggleBtn = document.getElementById('lbToggleVideoBtn');
+
+    if (card.embedVimeo) {
+      toggleBtn.style.display = 'inline-flex';
+      toggleBtn.textContent = lbShowingVideo ? '🖼️ Volver a ver Fotos/GIF del Álbum' : '🎬 Ver Video Vimeo en este Monitor';
+    } else {
+      toggleBtn.style.display = 'none';
+      lbShowingVideo = false;
+    }
+
+    if (lbShowingVideo && card.embedVimeo) {
+      imgEl.style.display = 'none';
+      ifrEl.style.display = 'block';
+      if (ifrEl.src !== card.embedVimeo) ifrEl.src = card.embedVimeo;
+      document.getElementById('lbCatBadge').textContent = `${card.catLabel} · VIDEO EN MONITOR`;
+      document.getElementById('lbPhotoCaption').textContent = `${card.miniGraphKicker || '🎬 VIDEO ORIGINAL'} — ${card.miniGraphText || card.sourceName}`;
+    } else {
+      ifrEl.style.display = 'none';
+      ifrEl.src = '';
+      imgEl.style.display = 'block';
+      imgEl.src = photo.url;
+      document.getElementById('lbCatBadge').textContent = `${card.catLabel} · FOTO ${lbCurrentPhotoIdx + 1} DE ${card.album.length}`;
+      document.getElementById('lbPhotoCaption').textContent = photo.caption;
+    }
+
     document.getElementById('lbCardTitle').textContent = card.title;
-    document.getElementById('lbPhotoCaption').textContent = photo.caption;
     document.getElementById('lbDossierExcerpt').textContent = card.longDossier || card.summary;
     document.getElementById('lbOpenSourceBtn').onclick = () => openCleanReaderWindow(card.sourceUrl);
     document.getElementById('lbOpenTabLink').href = card.sourceUrl;
@@ -1786,8 +1906,13 @@
   function stepLightboxPhoto(delta) {
     const card = allCards.find(c => c.id === lbCurrentCardId);
     if (!card || !card.album) return;
+    lbShowingVideo = false;
     lbCurrentPhotoIdx = (lbCurrentPhotoIdx + delta + card.album.length) % card.album.length;
     updateLightboxView();
+    // Si el Monitor de Previa está puesto al aire en Modo Cine, actualizar en vivo la foto y el Mini-Graph al lado de la Mosca
+    if (lbActiveCinemaMode === '16x9' || lbActiveCinemaMode === '9x16') {
+      projectMonitorCinemaFromLightbox(lbActiveCinemaMode);
+    }
   }
 
   function closeLightbox() {
@@ -1797,6 +1922,146 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
   });
+
+  function buildCardMiniGraph(card, customSub) {
+    return {
+      kicker: card.miniGraphKicker || ('🎬 EN PANTALLA · ' + (card.sourceName || 'WHIMSY POV').toUpperCase().slice(0, 38)),
+      text: customSub || card.miniGraphText || (card.title.slice(0, 68) + (card.title.length > 68 ? '...' : ''))
+    };
+  }
+
+  function buildCardCorrespondentText(card) {
+    if (card.correspondentStory) return card.correspondentStory;
+    const firstParagraph = ((card.longDossier || card.summary || '').split('\n\n')[0] || card.summary || '').replace(/^[0-9]+\.\s*[^\n]+\n/, '');
+    return `Crónica espontánea de producción sobre ${card.sourceName}. Detrás de este hallazgo verificado en el archivo de hoy: ${card.summary} ${firstParagraph}`;
+  }
+
+  function triggerCinemaFromCard(cardId, mode) {
+    const card = allCards.find(c => c.id === cardId) || allCards[0];
+    if (!card) return;
+    lbActiveCinemaMode = mode;
+    const hasVimeo = !!card.embedVimeo;
+    const firstPhoto = (card.album && card.album[0]) ? card.album[0] : { url: 'evidencias/prepro/excel_film_1.gif', caption: card.title };
+    const mg = buildCardMiniGraph(card, hasVimeo ? card.miniGraphText : firstPhoto.caption);
+
+    const pushMsg = {
+      type: 'PREPRO_PUSH',
+      payload: {
+        cinemaMode: mode,
+        cinemaMediaType: hasVimeo ? 'vimeo' : 'image',
+        cinemaMediaSrc: hasVimeo ? card.embedVimeo : firstPhoto.url,
+        moscaMiniGraphKicker: mg.kicker,
+        moscaMiniGraphText: mg.text,
+        customCorrespondentText: buildCardCorrespondentText(card),
+        customCorrespondentLabel: '🎙️ Crónica del lanzamiento: ' + card.sourceName.slice(0, 36),
+        pntMsg: mode === '16x9'
+          ? '🍿 MODO CINE 16:9 ACTIVO (Solo Mosca + Mini-Graph a la izquierda · Subtítulos limpios)'
+          : '📱 MODO CINE SMART 9:16 ACTIVO (Encuadrado en corredor central p/Shorts + Graph junto a Mosca)',
+        ts: Date.now()
+      }
+    };
+    localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
+    if (preproChannel) preproChannel.postMessage(pushMsg);
+
+    const badgeEl = document.getElementById('liveSyncBadge');
+    if (badgeEl) {
+      badgeEl.textContent = mode === '16x9'
+        ? '🍿 Al Aire: Cine 16:9 (Solo Mosca + Graph Izq)'
+        : '📱 Al Aire: Cine Smart 9:16 (p/Shorts)';
+    }
+    const cImg = document.getElementById('miniCenterImg');
+    const cCap = document.getElementById('miniCenterCaption');
+    if (cImg && firstPhoto.url) {
+      cImg.src = firstPhoto.url;
+      cImg.style.objectFit = 'contain';
+      cImg.style.padding = '2px';
+    }
+    if (cCap) {
+      cCap.textContent = (mode === '16x9' ? '🍿 CINE 16:9 + MOSCA: ' : '📱 SMART 9:16: ') + mg.text.slice(0, 42);
+    }
+  }
+
+  function projectMonitorCinemaFromLightbox(mode) {
+    const card = allCards.find(c => c.id === lbCurrentCardId) || allCards[0];
+    if (!card) return;
+    lbActiveCinemaMode = mode;
+    const photo = (card.album && card.album[lbCurrentPhotoIdx]) ? card.album[lbCurrentPhotoIdx] : (card.album && card.album[0]);
+    const useVimeo = lbShowingVideo && !!card.embedVimeo;
+    const mg = buildCardMiniGraph(card, useVimeo ? card.miniGraphText : (photo ? photo.caption : card.title));
+
+    const pushMsg = {
+      type: 'PREPRO_PUSH',
+      payload: {
+        cinemaMode: mode,
+        cinemaMediaType: useVimeo ? 'vimeo' : 'image',
+        cinemaMediaSrc: useVimeo ? card.embedVimeo : (photo ? photo.url : 'evidencias/prepro/excel_film_1.gif'),
+        moscaMiniGraphKicker: mg.kicker,
+        moscaMiniGraphText: mg.text,
+        customCorrespondentText: buildCardCorrespondentText(card),
+        customCorrespondentLabel: '🎙️ Crónica del lanzamiento: ' + card.sourceName.slice(0, 36),
+        pntMsg: mode === '16x9'
+          ? '🍿 MONITOR DE PREVIA AL AIRE EN 16:9 (Solo Mosca + Mini-Graph a la izquierda)'
+          : '📱 MONITOR DE PREVIA EN MODO SMART 9:16 (Encuadre p/Shorts + Graph junto a Mosca)',
+        ts: Date.now()
+      }
+    };
+    localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
+    if (preproChannel) preproChannel.postMessage(pushMsg);
+
+    const msg = document.getElementById('lbStatusMsg');
+    msg.style.display = 'block';
+    msg.textContent = mode === '16x9'
+      ? '🍿 ¡Tu Monitor está AL AIRE en 16:9 Limpio! Quedó solo la Mosca + el Mini-Graph a su izquierda. Si tocás ◀ / ▶ cambian las fotos en vivo.'
+      : '📱 ¡Tu Monitor está AL AIRE en Modo Smart 9:16! Encuadrado en el centro para Shorts con el Mini-Graph junto a la Mosca.';
+  }
+
+  function stopCinemaModeFromPrepro() {
+    lbActiveCinemaMode = 'off';
+    const pushMsg = {
+      type: 'PREPRO_PUSH',
+      payload: {
+        cinemaMode: 'off',
+        pntMsg: '🛑 Modo Cine apagado: Cabina restaurada a 3 columnas',
+        ts: Date.now()
+      }
+    };
+    localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
+    if (preproChannel) preproChannel.postMessage(pushMsg);
+    const badgeEl = document.getElementById('liveSyncBadge');
+    if (badgeEl) badgeEl.textContent = '✅ Cabina en 3 Columnas habituales';
+    const msg = document.getElementById('lbStatusMsg');
+    if (msg) {
+      msg.style.display = 'block';
+      msg.textContent = '🛑 Modo Cine desactivado: la Cabina volvió a las 3 columnas habituales.';
+    }
+  }
+
+  function triggerCardCorrespondentStory(cardId) {
+    const card = allCards.find(c => c.id === cardId) || allCards[0];
+    if (!card) return;
+    const text = buildCardCorrespondentText(card);
+    const label = '🎙️ Crónica del lanzamiento: ' + card.sourceName.slice(0, 36);
+    const pushMsg = {
+      type: 'PREPRO_PUSH',
+      payload: {
+        customCorrespondentText: text,
+        customCorrespondentLabel: label,
+        speakCorrespondentNow: true,
+        pntMsg: '🎙️ Corresponsal al aire contando el lanzamiento de ' + card.sourceName,
+        ts: Date.now()
+      }
+    };
+    localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
+    if (preproChannel) preproChannel.postMessage(pushMsg);
+
+    const badgeEl = document.getElementById('liveSyncBadge');
+    if (badgeEl) badgeEl.textContent = '🎙️ Sonando Crónica del Lanzamiento en Cabina';
+    const msg = document.getElementById('lbStatusMsg');
+    if (msg) {
+      msg.style.display = 'block';
+      msg.textContent = '🎙️ ¡Disparada la Crónica del Lanzamiento y Reportaje en la voz de corresponsal de tu Cabina!';
+    }
+  }
 
   function projectFromLightbox(targetZone) {
     projectPhotoNow(lbCurrentCardId, lbCurrentPhotoIdx, targetZone, null);
@@ -2117,7 +2382,11 @@
       const firstCaption = checkedPhotos[0] ? checkedPhotos[0].caption : c.sourceName;
       const startSec = 15 + idx * 20;
       const endSec = startSec + 20;
-      cuesHtml += '<div style="margin-bottom:4px;">• <strong>00:' + startSec + ' – 00:' + endSec + ' (Ponchar Panel Derecho ↔ 9:16):</strong> Mostrar las ' + checkedPhotos.length + ' fotos seleccionadas de <em>' + firstCaption + '</em> mientras tu voz sigue comentando el dossier.</div>';
+      if (c.embedVimeo || c.miniGraphKicker) {
+        cuesHtml += '<div style="margin-bottom:4px; color:var(--pink);">• <strong>MODO CINE / OBRA AL AIRE (' + c.sourceName + '):</strong> En el vivo de YouTube usá <code>🍿 Modo Cine 16:9 (Solo Mosca + Graph Izq)</code> para disfrutar la obra entera con sus subtítulos sin taparla. <strong>Regla para Shorts/Reels:</strong> No recortamos toda la duración del film horizontal; para el Short de 45s activá <code>📱 Modo Smart 9:16</code> durante tu reacción + <code>🎙️ Crónica del Lanzamiento</code>.</div>';
+      } else {
+        cuesHtml += '<div style="margin-bottom:4px;">• <strong>00:' + startSec + ' – 00:' + endSec + ' (Ponchar Panel Derecho ↔ 9:16):</strong> Mostrar las ' + checkedPhotos.length + ' fotos seleccionadas de <em>' + firstCaption + '</em> mientras tu voz sigue comentando el dossier.</div>';
+      }
     });
     cuesHtml += '<div>• <strong>Últimos 15s (Split Centro + Derecha):</strong> Cierre con el Hilo Rojo y etiqueta a las arrobas para que reposteen el clip.</div>';
     document.getElementById('editingCueBox').innerHTML = cuesHtml;
@@ -2320,16 +2589,26 @@
   }
 
   function generatePostShowPack() {
+    const chosen = selectedCardIds.map(id => allCards.find(c => c.id === id)).filter(Boolean);
     const title = document.getElementById('wovenTitle').value || 'Whimsy POV · En Vivo';
     const script = document.getElementById('wovenScript').value || '';
     const handles = document.getElementById('wovenHandles').value || '@whimsypov';
     const box = document.getElementById('postShowExportBox');
     box.style.display = 'block';
 
+    const creditsLinks = chosen.map(c => {
+      let line = '• ' + c.sourceName + ': ' + c.sourceUrl;
+      if (c.embedVimeo) line += ' | Film original: https://vimeo.com/1241981102';
+      return line;
+    }).join('\n');
+
     const copy = '🎙️ ' + title.slice(0, 92) + '\n\n' +
       script.replace(/\[[^\]]+\]/g, '').trim().slice(0, 460) + '...\n\n' +
-      '🎬 Pauta de edición (Clips 9:16): Ponchado dinámico entre cámara central 9:16 y el álbum documental del panel derecho.\n\n' +
-      '📲 Menciones y archivos de hoy:\n' + handles + '\n\n' +
+      '🔗 Créditos y obras proyectadas hoy en Categoría Cine / Archivo:\n' + (creditsLinks || '• Archivo documental Whimsy POV') + '\n\n' +
+      '🎬 Pauta de edición (YouTube 16:9 vs. Shorts 9:16):\n' +
+      '• En YouTube completo queda la obra en Modo Cine 16:9 con Mosca quieta + Mini-Graph a la izquierda y subtítulos originales.\n' +
+      '• En Shorts / Reels / TikTok sale el corte de 45s en Modo Smart 9:16 + tu voz y la Crónica del Lanzamiento.\n\n' +
+      '📲 Menciones de hoy:\n' + handles + '\n\n' +
       '✍️ Leé La Minuta W completa en Substack: https://arianawajntraub.substack.com\n' +
       '▶️ Suscribite en YouTube: https://www.youtube.com/@whimsypov';
 
