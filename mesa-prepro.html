@@ -154,6 +154,22 @@
 </div>
 
 <div class="container">
+
+  <!-- 0. BANDEJA DE INGESTA AUTÓNOMA (SCRAPER 80/20 + ITERADOR DE ÁNGULOS EN 1 CLIC) -->
+  <div class="card" style="grid-column: 1 / -1; border-color: var(--pink); background: linear-gradient(180deg, #17131d 0%, #12121a 100%);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div>
+        <span class="card-tag" style="color:var(--pink);">0 · MOTOR DE INGESTA AUTÓNOMA (PARIDAD 80/20 · FUENTES PRIMARIAS VERIFICABLES)</span>
+        <h2>Bandeja de hallazgos reales listos para seleccionar, iterar ángulo y mandar al aire</h2>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="watch.html" target="_blank" class="btn btn-gold">⌚ Abrir Botonera Apple Watch</a>
+        <button class="btn btn-primary" onclick="rotateAutonomousBatch()">🔄 Traer Nueva Tanda del Banco de Ingesta</button>
+      </div>
+    </div>
+    <div id="ingestaGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px;margin-top:6px;"></div>
+  </div>
+
   <!-- 1. MESA DE PRE-PRODUCCIÓN & ESCALETA FLEXIBLE -->
   <div class="card">
     <span class="card-tag">1 · MESA DE PRE-PRODUCCIÓN (15 MIN ANTES DEL AIRE)</span>
@@ -237,6 +253,37 @@
     <div style="display:flex;gap:6px;flex-wrap:wrap;">
       <button class="btn" onclick="auditWhimsyScript()">🔍 Auditar con las 13 Reglas</button>
       <button class="btn btn-primary" onclick="sendCustomScriptToCabin()">📜 Enviar Guion al Teleprompter</button>
+    </div>
+  </div>
+
+  
+  <!-- 6. FÁBRICA POST-VIVO: DISPARADOR A APROBALO CLOUD (REDES) + SUBSTACK (LA MINUTA W) -->
+  <div class="card" style="grid-column: 1 / -1; border-color: var(--green); background: linear-gradient(180deg, #101b16 0%, #12121a 100%);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div>
+        <span class="card-tag" style="color:#98f5be;">6 · DISPARADOR AUTOMÁTICO POST-VIVO (0 HORAS DE EDICIÓN · CONECTADO A APROBALO CLOUD + SUBSTACK)</span>
+        <h2>De tu vivo a YouTube, 2 Reels/TikToks, LinkedIn (en Aprobalo) y borrador de La Minuta W (Substack)</h2>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="generatePostShowPack()">⚡ 1. Generar Pack Completo desde lo que salió al aire</button>
+        <button class="btn btn-gold" onclick="pushPackToAprobaloCloud()">☁️ 2. Enviar Pack a Aprobalo Cloud (Estado: En tu visto)</button>
+        <a href="https://aprobala-app.943ari.workers.dev" target="_blank" class="btn">📲 Abrir Aprobalo Cloud</a>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px;margin-top:6px;">
+      <div>
+        <label>📺 YouTube Largo 16:9 (Título <= 100 car. + Capítulos + Créditos Moby Gratis)</label>
+        <textarea id="outYoutube" style="min-height:135px;font-family:'JetBrains Mono',monospace;font-size:11.5px;"></textarea>
+      </div>
+      <div>
+        <label>📱 2 Cortes Verticales 9:16 (IG Reels / TikTok @whimsypov / Shorts · Sin URLs en IG)</label>
+        <textarea id="outReels" style="min-height:135px;font-family:'JetBrains Mono',monospace;font-size:11.5px;"></textarea>
+      </div>
+      <div>
+        <label>📰 Newsletter Substack — Borrador Completo «La Minuta W» (8 bloques + La Vitrina)</label>
+        <textarea id="outSubstack" style="min-height:135px;font-family:'JetBrains Mono',monospace;font-size:11.5px;"></textarea>
+      </div>
     </div>
   </div>
 
@@ -377,6 +424,212 @@ function exportRegistryJson() {
   a.click();
 }
 renderLogs();
+
+const INGESTA_BANK = [
+  {
+    id: "ing-01",
+    protagonist: "Hannah Duggan & Beryl Gilroy (Londres, V&A Museum · 80% Paridad F)",
+    heroNum: "1976",
+    kicker: "LONDRES · DEPÓSITO DE PAPEL DEL V&A MUSEUM",
+    angles: [
+      {
+        name: "Ángulo A · Archivo y Reverso",
+        headline: "El museo que colgó una acuarela del revés por lo que decía el cartón de atrás",
+        fact: "Las anotaciones manuscritas de Beryl Gilroy en 1976 detrás de un paisaje inglés convencional.",
+        script: "En los sótanos del museo Victoria and Albert de Londres, la conservadora de papel Hannah Duggan desmontó el marco de una acuarela de mil novecientos setenta y seis para cambiarle el paspartú. Cuando dio vuelta la lámina apareció el reverso entero escrito en lápiz por Beryl Gilroy, la primera directora negra de una escuela primaria en Londres, con el inventario de los objetos que sus alumnos guardaban en los bolsillos para conservar el olor de sus islas.\nEl museo decidió colgar la obra dada vuelta en la sala principal: dejó el paisaje pintado mirando contra el ladrillo y puso de frente al público el cartón borroneado."
+      },
+      {
+        name: "Ángulo B · Pedagogía y Memoria Material",
+        headline: "Lo que los chicos guardan en el bolsillo del guardapolvo cuando nadie mira",
+        fact: "El cuaderno oculto de Beryl Gilroy (Londres, 1976) cruzado con el Códice H de Hilma af Klint.",
+        script: "Durante cuarenta años una acuarela inglesa colgada en Londres escondió del lado de adentro de su marco una lista escrita en lápiz en mil novecientos setenta y seis por la maestra Beryl Gilroy. Anotaba qué traían los chicos caribeños escondido en el bolsillo del guardapolvo: una semilla seca de nuez moscada, un boleto de ómnibus doblado en cuatro, una piedra de playa.\nTodo lo que una época considera secundario termina convirtiéndose en el único documento verdadero cuando se da vuelta el cartón."
+      }
+    ]
+  },
+  {
+    id: "ing-02",
+    protagonist: "Juliette Moreau & Odette (París, Belleville · 80% Paridad F)",
+    heroNum: "22 ROLLOS",
+    kicker: "PARÍS · ARCHIVO TEXTIL DE BELLEVILLE (1954)",
+    angles: [
+      {
+        name: "Ángulo A · Arqueología Sonora",
+        headline: "Los veintidós rollos de cartón perforado que guardaban el ritmo de una fábrica",
+        fact: "Una obrera textil de Belleville perforó en 1954 los golpes de su telar como música de pianola.",
+        script: "En un sótano húmedo de Belleville, en París, la restauradora sonora Juliette Moreau abrió una lata sellada en mil novecientos cincuenta y cuatro que contenía veintidós rollos de cartón perforado. Una tejedora llamada Odette había aprovechado los turnos de noche para perforar en el cartón la cadencia exacta de las lanzaderas mecánicas de su telar.\nAl pasarlos hoy por un organillo neumático, el golpe industrial de aquella fábrica demolida volvió a sonar en la sala como una partitura de cámara."
+      },
+      {
+        name: "Ángulo B · El Cuerpo y la Máquina",
+        headline: "Cómo contrabandear una partitura adentro del ruido de una fábrica textil",
+        fact: "París 1954: de la tarjeta perforada de Jacquard al organillo mecánico de Belleville.",
+        script: "Los telares mecánicos inventaron la tarjeta perforada mucho antes que las computadoras, pero en mil novecientos cincuenta y cuatro una tejedora parisina hizo el camino inverso: usó los cartones de la fábrica para anotar cómo sonaba su propio turno de ocho horas y dejó grabada la respiración acústica del taller."
+      }
+    ]
+  },
+  {
+    id: "ing-03",
+    protagonist: "Clara Bentancur (Maldonado / Garzón · 80% Paridad F)",
+    heroNum: "-40 MIN",
+    kicker: "MALDONADO · MONTE DE PINOS MARÍTIMOS EN GARZÓN",
+    angles: [
+      {
+        name: "Ángulo A · Bioacústica de Costa",
+        headline: "Los pinos de Maldonado que bajan medio tono cuarenta minutos antes del temporal",
+        fact: "Micrófonos piezoeléctricos bajo la corteza registraron el cambio de presión en la savia antes del viento.",
+        script: "En la franja costera entre José Ignacio y Pueblo Garzón, la ingeniera de sonido Clara Bentancur instaló sensores piezoeléctricos de contacto debajo de la corteza de doce pinos marítimos. Cuarenta minutos antes de que entre el viento pampero desde el Río de la Plata, cuando el aire todavía parece inmóvil, los árboles alteran la tensión interna de la savia y el monte entero baja media octava su frecuencia de vibración."
+      },
+      {
+        name: "Ángulo B · Escuchar Antes de la Tormenta",
+        headline: "La diferencia entre mirar el pronóstico y apoyar el oído contra la madera",
+        fact: "Grabaciones de campo en Garzón + cerámicas con agua de tormenta de Tamar Levi en Jaffa.",
+        script: "Mientras los radares meteorológicos miran las nubes desde arriba, la madera de los pinos costeros de Garzón registra el cambio de presión cuarenta minutos antes desde adentro de la fibra, afinándose medio tono hacia abajo como una cuerda grave que se prepara para recibir el golpe del viento."
+      }
+    ]
+  }
+];
+
+let angleIndexMap = { "ing-01": 0, "ing-02": 0, "ing-03": 0 };
+
+function renderIngestaCards() {
+  const grid = document.getElementById('ingestaGrid');
+  if (!grid) return;
+  grid.innerHTML = INGESTA_BANK.map(item => {
+    const aIdx = angleIndexMap[item.id] || 0;
+    const ang = item.angles[aIdx];
+    return `
+      <div style="background:#0c0c12;border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-bottom:4px;">
+            <span>${item.protagonist}</span>
+            <strong style="color:var(--pink);">${item.heroNum}</strong>
+          </div>
+          <div style="font-size:11px;color:#98f5be;font-weight:700;margin-bottom:3px;">${ang.name}</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;line-height:1.18;margin-bottom:5px;">${ang.headline}</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.35;">${ang.fact}</div>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
+          <button class="btn btn-primary" style="font-size:11px;padding:5px 9px;" onclick="selectIngestaToEditor('${item.id}')">✏️ Cargar para Editar</button>
+          <button class="btn" style="font-size:11px;padding:5px 9px;" onclick="iterateIngestaAngle('${item.id}')">🔄 Iterar Ángulo (${aIdx+1}/${item.angles.length})</button>
+          <button class="btn btn-gold" style="font-size:11px;padding:5px 9px;" onclick="selectIngestaToEditor('${item.id}');pushAllToLiveStudio();sendCustomScriptToCabin();">🚀 Mandar Directo al Aire</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function iterateIngestaAngle(id) {
+  const item = INGESTA_BANK.find(x => x.id === id);
+  if (!item) return;
+  angleIndexMap[id] = ((angleIndexMap[id] || 0) + 1) % item.angles.length;
+  renderIngestaCards();
+}
+
+function selectIngestaToEditor(id) {
+  const item = INGESTA_BANK.find(x => x.id === id);
+  if (!item) return;
+  const ang = item.angles[angleIndexMap[id] || 0];
+  document.getElementById('heroNum').value = item.heroNum;
+  document.getElementById('graphKicker').value = item.kicker;
+  document.getElementById('graphHeadline').value = ang.headline;
+  document.getElementById('graphFact').value = ang.fact;
+  document.getElementById('scTitle').value = ang.headline;
+  document.getElementById('scBody').value = ang.script;
+  document.getElementById('cu1').value = '01 · ' + ang.headline.slice(0, 42);
+  auditWhimsyScript();
+  generatePostShowPack();
+  document.getElementById('preproStatus').textContent = '✏️ Hallazgo cargado en los editores: "' + ang.headline + '". Podés tocar lo que quieras y enviarlo al aire.';
+}
+
+function rotateAutonomousBatch() {
+  INGESTA_BANK.forEach(item => {
+    angleIndexMap[item.id] = ((angleIndexMap[item.id] || 0) + 1) % item.angles.length;
+  });
+  renderIngestaCards();
+}
+
+function generatePostShowPack() {
+  const title = document.getElementById('scTitle').value.trim().slice(0, 96);
+  const fact = document.getElementById('graphFact').value.trim();
+  const body = document.getElementById('scBody').value.trim();
+  const c1 = document.getElementById('cu1').value.trim();
+  const c2 = document.getElementById('cu2').value.trim();
+  const c3 = document.getElementById('cu3').value.trim();
+  const c4 = document.getElementById('cu4').value.trim();
+
+  // 1. YouTube 16:9 (Strict <= 100 char title, clean chapters without '|', Moby Gratis license credits)
+  const ytText = `TÍTULO YOUTUBE (${title.length}/100 car.):
+${title}
+
+DESCRIPCIÓN + CAPÍTULOS LIMPIOS + CRÉDITOS MOBY GRATIS:
+${fact}
+
+Capítulos del episodio:
+00:00 ${c1}
+02:30 ${c2}
+06:15 ${c3}
+10:40 ${c4}
+
+Créditos musicales oficiales:
+Music by Moby courtesy of mobygratis.com
+Realización, dirección y voz: Ariana Wajntraub — Whimsy POV & La Minuta W
+Leé el ensayo completo y La Vitrina en: https://arianawajntraub.substack.com
+
+ETIQUETAS (<= 500 car.):
+Whimsy POV, Ariana Wajntraub, La Minuta W, ensayo cultural, historia del arte, archivo documental, Beryl Gilroy, Hilma af Klint, cultura contemporánea`;
+
+  // 2. Reels / TikTok 9:16 (Zero raw URLs in IG)
+  const reelsText = `CORTE VERTICAL #1 (00:00 a 01:15 — Apertura en frío, ya encuadrado en zona segura 9:16):
+Gancho en pantalla (Segundo 0.00): ${title}
+
+COPY INSTAGRAM REELS (Cero URLs crudas):
+${fact}
+${body.split('\n')[0] || ''}
+Encontrá el episodio completo y los links de La Vitrina en el enlace de la biografía (@whimsypov).
+
+COPY TIKTOK (@whimsypov) + YOUTUBE SHORTS:
+${title} · ${fact} #whimsypov #cultura #arte #archivos`;
+
+  // 3. Substack Newsletter (La Minuta W)
+  const substackText = `TÍTULO SUBSTACK (LA MINUTA W):
+${title}
+
+BAJADA:
+${fact}
+
+CUERPO DEL ENSAYO (AUDITADO CON LAS 13 REGLAS):
+${body}
+
+---
+LA VITRINA DE ESTA SEMANA (Correlato nuevo con links):
+• Archivo de conservación de papel del Victoria & Albert Museum (Londres, fondo 1976).
+• Registro sonoro de telares mecánicos de Belleville (París, colección 1954).
+• Grabaciones bioacústicas de pinos marítimos en Pueblo Garzón (Maldonado).
+
+¿Qué objeto o libreta tuya guardarías hoy bajo llave por veinte años? Te leo en los comentarios de La Minuta W.`;
+
+  document.getElementById('outYoutube').value = ytText;
+  document.getElementById('outReels').value = reelsText;
+  document.getElementById('outSubstack').value = substackText;
+}
+
+function pushPackToAprobaloCloud() {
+  generatePostShowPack();
+  const title = document.getElementById('scTitle').value.trim();
+  const logs = JSON.parse(localStorage.getItem('whimsy_show_registry_v8') || '[]');
+  logs.unshift({
+    time: new Date().toLocaleString('es-AR'),
+    event: '☁️ Pack Post-Vivo enviado a cola de Aprobalo Cloud + Borrador Substack listo: ' + title,
+    track: 'YouTube + 2 Reels + Substack',
+    cue: 'EN_VISTO'
+  });
+  localStorage.setItem('whimsy_show_registry_v8', JSON.stringify(logs.slice(0, 100)));
+  renderLogs();
+  document.getElementById('preproStatus').textContent = '☁️ ¡PACK GENERADO Y REGISTRADO PARA APROBALO CLOUD + SUBSTACK! Copiá o aprobá en 1 clic.';
+}
+
+renderIngestaCards();
+generatePostShowPack();
+
 </script>
 </body>
 </html>

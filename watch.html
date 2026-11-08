@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Whimsy POV — Control Apple Watch</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #000000;
+    color: #F5F2EB;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Compact', sans-serif;
+    padding: 6px;
+    text-align: center;
+    user-select: none;
+  }
+  .watch-timer {
+    background: #121218;
+    border: 1.5px solid #38C172;
+    border-radius: 14px;
+    padding: 6px;
+    margin-bottom: 6px;
+  }
+  .wt-label {
+    font-size: 10px;
+    color: #E8B4B8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .wt-nums {
+    font-size: 22px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #98f5be;
+    line-height: 1.1;
+  }
+  .wt-sub {
+    font-size: 10px;
+    color: #D4AF37;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .w-btn {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 13px 8px;
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    cursor: pointer;
+    display: block;
+  }
+  .w-primary { background: #E8B4B8; color: #050508; }
+  .w-gold { background: #D4AF37; color: #050508; }
+  .w-dark { background: #1c1c28; color: #F5F2EB; border: 1px solid rgba(255,255,255,0.22); }
+</style>
+</head>
+<body>
+  <div class="watch-timer" id="watchHud">
+    <div class="wt-label" id="wStep">⌚ APPLE WATCH EN VIVO</div>
+    <div class="wt-nums" id="wCountdown">--:--</div>
+    <div class="wt-sub" id="wTrack">Conectado a Cabina + OBS</div>
+  </div>
+
+  <button class="w-btn w-primary" onclick="wAct('nextCue')">⏭ SIGUIENTE BLOQUE</button>
+  <button class="w-btn w-gold" onclick="wAct('duck')">🎙️ PISAR 18% / SUBIR (M)</button>
+  <button class="w-btn w-dark" onclick="wAct('speakCorr', 0)">🌍 CRÓNICA #1 LONDRES</button>
+  <button class="w-btn w-dark" onclick="wAct('speakCorr', 2)">🇯🇵 CRÓNICA #3 TOKIO</button>
+  <button class="w-btn w-dark" onclick="wAct('prevCue')">⬅ BLOQUE ANTERIOR</button>
+
+<script>
+const bus = new BroadcastChannel('whimsy_studio_v8');
+let conn = null;
+try {
+  if (window.Peer) {
+    const peer = new Peer();
+    peer.on('open', () => {
+      conn = peer.connect('whimsy-pov-cabina-ariana-v8');
+      conn.on('data', (d) => {
+        if (d?.type === 'STUDIO_STATE' && d.payload) updateWatch(d.payload);
+      });
+    });
+  }
+} catch(e) {}
+
+bus.onmessage = (ev) => {
+  if (ev.data?.type === 'STUDIO_STATE') updateWatch(ev.data.payload);
+};
+
+function updateWatch(s) {
+  if (!s) return;
+  document.getElementById('wStep').textContent = s.szStepBadge || 'EN AIRE';
+  const cd = (s.wingCorrCountdown && s.wingCorrCountdown !== 'LISTA')
+    ? 'CRÓN: ' + s.wingCorrCountdown
+    : 'TEMA: ' + (s.wingMusicCountdown || '--:--');
+  document.getElementById('wCountdown').textContent = cd;
+  document.getElementById('wTrack').textContent = s.wingTrackTitle || 'Whimsy POV';
+  if (navigator.vibrate && (cd.includes('-00:05') || cd.includes('-00:10'))) {
+    navigator.vibrate(120);
+  }
+}
+
+function wAct(action, idx = 0) {
+  if (navigator.vibrate) navigator.vibrate(40);
+  const msg = { type: 'REMOTE_ACTION', action, idx };
+  bus.postMessage(msg);
+  if (conn && conn.open) conn.send(msg);
+}
+</script>
+</body>
+</html>
