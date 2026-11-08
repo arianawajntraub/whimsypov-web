@@ -1423,9 +1423,7 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
         const topHit = wRes.query.search[0];
         const cleanSnippet = topHit.snippet.replace(/<[^>]+>/g, '');
         const pageUrl = `https://es.wikipedia.org/wiki/${encodeURIComponent(topHit.title.replace(/ /g, '_'))}`;
-        card.longDossier += `
-
-4. AMPLIACIÓN EN VIVO (${topHit.title}):
+        card.longDossier += `\n\n4. AMPLIACIÓN EN VIVO (${topHit.title}):
 ${cleanSnippet}... (Fuente verificada agregada automáticamente al listado de links de arriba).`;
         if (!card.extraSources.some(s => s.url === pageUrl)) {
           card.extraSources.push({ label: `📚 Contexto: ${topHit.title}`, url: pageUrl });
@@ -1519,9 +1517,7 @@ ${c.summary}`);
     scriptParts.push(`[HILO ROJO Y CIERRE]
 ${lastCard.hiloRojo} Cuando apagamos el ruido de afuera y miramos el reverso de las cosas, ¿qué es lo primero que vuelve a aparecer en foco?`);
 
-    document.getElementById('wovenScript').value = scriptParts.join('
-
-');
+    document.getElementById('wovenScript').value = scriptParts.join('\n\n');
 
     // Weave Editing Cues (Center <-> Right Wing)
     let cuesHtml = `<div style="margin-bottom:4px;">• <strong>00:00 – 00:15 (Centro 9:16):</strong> Entrás vos a cámara presentando «${chosen[0].title.slice(0, 45)}...».</div>`;
@@ -1809,8 +1805,7 @@ ${handles}
       }
       if (transcript) {
         const area = document.getElementById('wovenScript');
-        area.value = (area.value ? area.value + '
-' : '') + transcript.trim();
+        area.value = (area.value ? area.value + '\n' : '') + transcript.trim();
       }
     };
     recognition.onend = () => {
