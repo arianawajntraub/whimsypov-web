@@ -88,7 +88,8 @@
           </p>
         </div>
 
-        <div id="slide-metrics" class="my-4 space-y-2.5">
+        <div id="custom-visual-box" class="hidden my-2 rounded-xl overflow-hidden border border-[#EADDC2]/50 max-h-48 flex items-center justify-center bg-black"></div>
+        <div id="slide-metrics" class="my-3 space-y-2">
         </div>
 
         <div class="border-t border-[#876F55]/40 pt-3 text-center">
@@ -114,6 +115,60 @@
 
     <!-- TELEPROMPTER DE VOZ EN OFF -->
     <aside id="prompter-panel" class="relative z-10 w-full max-w-xl bg-[#1A1A1A]/95 border border-[#6E533A] rounded-2xl p-6 sm:p-8 shadow-2xl">
+      
+      <!-- CONSOLA DE RADIO EN VIVO: CORTINAS MUSICALES + FADER + BAJAR VOLUMEN AL HABLAR -->
+      <div class="mb-4 bg-[#26201B] border border-[#876F55]/60 rounded-xl p-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#EADDC2]">🎛️ Consola de cortinas (Mobygratis / Tus MP3)</span>
+          <label class="cursor-pointer bg-[#6E533A] hover:bg-[#876F55] text-[#F0EDE1] px-3 py-1 rounded-full text-xs font-semibold transition">
+            + Cargar tus temas MP3/WAV
+            <input id="audio-upload" type="file" accept="audio/*" multiple class="hidden">
+          </label>
+        </div>
+
+        <div id="track-buttons" class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
+          <button type="button" data-synth-mood="ambient" class="mood-btn bg-[#1A1A1A] hover:bg-[#6E533A]/60 border border-[#876F55]/50 rounded-lg py-2 px-2.5 text-left transition">
+            <div class="text-xs font-bold text-[#EADDC2]">▶ Cortina 1 · Pulso lento</div>
+            <div class="text-[10px] text-[#9C8E7E]">Ambient / Entrada (68 BPM)</div>
+          </button>
+          <button type="button" data-synth-mood="drone" class="mood-btn bg-[#1A1A1A] hover:bg-[#6E533A]/60 border border-[#876F55]/50 rounded-lg py-2 px-2.5 text-left transition">
+            <div class="text-xs font-bold text-[#EADDC2]">▶ Cortina 2 · Onda Radigue</div>
+            <div class="text-[10px] text-[#9C8E7E]">Cama cálida continua</div>
+          </button>
+          <button type="button" data-synth-mood="stop" class="mood-btn bg-[#1A1A1A] hover:bg-[#CC7B67]/40 border border-[#CC7B67]/50 rounded-lg py-2 px-2.5 text-left transition">
+            <div class="text-xs font-bold text-[#CC7B67]">■ Silencio total</div>
+            <div class="text-[10px] text-[#9C8E7E]">Cortar música</div>
+          </button>
+        </div>
+
+        <audio id="custom-audio-player" loop class="hidden"></audio>
+
+        <!-- Fader de volumen + Botón Pisar música para hablar -->
+        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-[#6E533A]/40">
+          <span class="text-xs font-semibold text-[#EADDC2]">Volumen música:</span>
+          <input id="music-fader" type="range" min="0" max="100" value="70" class="flex-grow accent-[#EADDC2] cursor-pointer">
+          <span id="fader-val" class="text-xs font-mono text-[#EADDC2] w-9">70%</span>
+          <button id="btn-duck" type="button" class="bg-[#EADDC2] text-[#1A1A1A] hover:bg-white px-3 py-1 rounded-full text-xs font-extrabold transition">
+            🎙️ Hablar (Bajar a 15% · Tecla M)
+          </button>
+          <button id="btn-swell" type="button" class="bg-[#6E533A] text-[#F0EDE1] hover:bg-[#876F55] px-3 py-1 rounded-full text-xs font-bold transition">
+            🔊 Subir cortina (80%)
+          </button>
+        </div>
+      </div>
+
+      <!-- CARGADOR DE FOTOS / VIDEOS / COSAS TRASH DIRECTO ADENTRO DE LAS BARRITAS 9:16 -->
+      <div class="mb-4 bg-[#26201B]/70 border border-[#6E533A]/50 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2">
+        <span class="text-xs text-[#EADDC2] font-semibold">🖼️ Disparar imagen o video adentro de las barritas 9:16:</span>
+        <div class="flex items-center gap-2">
+          <label class="cursor-pointer bg-[#1A1A1A] hover:bg-[#6E533A] border border-[#876F55] text-[#EADDC2] px-3 py-1 rounded-full text-xs font-semibold transition">
+            + Tirar foto o video a la lámina
+            <input id="visual-upload" type="file" accept="image/*,video/*" class="hidden">
+          </label>
+          <button id="clear-visual" type="button" class="text-xs text-[#CC7B67] hover:underline font-semibold">Limpiar visual</button>
+        </div>
+      </div>
+
       <div class="flex items-center justify-between border-b border-[#6E533A]/50 pb-3 mb-4">
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-[#CC7B67]">Guion de lectura en vivo (Voz en off)</span>
@@ -248,6 +303,117 @@
       if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goSlide(currentIdx + 1); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); goSlide(currentIdx - 1); }
       if (e.key === 't' || e.key === 'T') { prompterPanel.classList.toggle('hidden'); }
+    });
+
+    
+    // === CONSOLA DE SONIDO + FADER SUAVE + DUCKING AUTOMÁTICO ===
+    let audioCtx = null;
+    let masterGain = null;
+    let activeOscs = [];
+    const customAudio = document.getElementById('custom-audio-player');
+    const fader = document.getElementById('music-fader');
+    const faderVal = document.getElementById('fader-val');
+
+    function setMusicVolumeSmooth(targetPct) {
+      const clamped = Math.max(0, Math.min(100, targetPct));
+      fader.value = clamped;
+      faderVal.textContent = Math.round(clamped) + '%';
+      const vol = clamped / 100;
+      if (customAudio) customAudio.volume = vol;
+      if (masterGain && audioCtx) {
+        masterGain.gain.setTargetAtTime(vol * 0.25, audioCtx.currentTime, 0.25);
+      }
+    }
+
+    if (fader) {
+      fader.addEventListener('input', (e) => setMusicVolumeSmooth(Number(e.target.value)));
+    }
+    document.getElementById('btn-duck')?.addEventListener('click', () => setMusicVolumeSmooth(15));
+    document.getElementById('btn-swell')?.addEventListener('click', () => setMusicVolumeSmooth(80));
+
+    function stopSynth() {
+      activeOscs.forEach(o => { try { o.stop(); } catch(e){} });
+      activeOscs = [];
+    }
+
+    function startMoodPad(mood) {
+      stopSynth();
+      if (customAudio && !customAudio.paused) customAudio.pause();
+      if (mood === 'stop') return;
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        masterGain = audioCtx.createGain();
+        masterGain.gain.value = (Number(fader.value) / 100) * 0.25;
+        masterGain.connect(audioCtx.destination);
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const freqs = mood === 'ambient' ? [110, 164.81, 220, 277.18] : [98, 146.83, 196, 293.66];
+      freqs.forEach((f, idx) => {
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+        osc.frequency.value = f;
+        g.gain.value = 0.22 / freqs.length;
+        osc.connect(g);
+        g.connect(masterGain);
+        osc.start();
+        activeOscs.push(osc);
+      });
+    }
+
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        startMoodPad(this.getAttribute('data-synth-mood'));
+      });
+    });
+
+    document.getElementById('audio-upload')?.addEventListener('change', function(e) {
+      const files = Array.from(e.target.files || []);
+      const container = document.getElementById('track-buttons');
+      files.forEach((file) => {
+        const url = URL.createObjectURL(file);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bg-[#1A1A1A] hover:bg-[#6E533A]/60 border border-[#EADDC2]/60 rounded-lg py-2 px-2.5 text-left transition';
+        btn.innerHTML = '<div class="text-xs font-bold text-[#EADDC2] truncate">▶ ' + file.name + '</div><div class="text-[10px] text-[#9C8E7E]">Tu cortina cargada</div>';
+        btn.addEventListener('click', () => {
+          stopSynth();
+          customAudio.src = url;
+          customAudio.volume = Number(fader.value) / 100;
+          customAudio.play();
+        });
+        container.prepend(btn);
+      });
+    });
+
+    const visualBox = document.getElementById('custom-visual-box');
+    document.getElementById('visual-upload')?.addEventListener('change', function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      visualBox.innerHTML = '';
+      if (file.type.startsWith('video/')) {
+        const v = document.createElement('video');
+        v.src = url; v.autoplay = true; v.loop = true; v.muted = true; v.playsInline = true;
+        v.className = 'w-full max-h-48 object-cover';
+        visualBox.appendChild(v);
+      } else {
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = 'w-full max-h-48 object-cover';
+        visualBox.appendChild(img);
+      }
+      visualBox.classList.remove('hidden');
+    });
+    document.getElementById('clear-visual')?.addEventListener('click', () => {
+      if (visualBox) { visualBox.innerHTML = ''; visualBox.classList.add('hidden'); }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'm' || e.key === 'M') {
+        const current = Number(fader.value);
+        setMusicVolumeSmooth(current > 25 ? 15 : 75);
+      }
     });
 
     renderSlide(0);
