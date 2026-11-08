@@ -1534,13 +1534,13 @@
               <div class="quick-strip" id="stickyQuickMoby"></div>
             </div>
             <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--pink);font-weight:700;">🎚️ VOL MÚSICA:</span>
-              <input type="range" id="stickyVolSlider" min="0" max="100" value="68" oninput="setLiveMusicVolume(this.value)" style="accent-color:var(--pink);width:74px;cursor:pointer;" title="Regulá el volumen de la música en tiempo real mientras suena una crónica o un video">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--pink);font-weight:700;" title="Este deslizador actúa únicamente sobre los reproductores de música Moby (deckA/deckB). Tu micrófono Shure MV51 va por un canal separado al 100% y jamás baja de volumen.">🎚️ SOLO MÚSICA (Tu Mic Shure sigue al 100%):</span>
+              <input type="range" id="stickyVolSlider" min="0" max="100" value="68" oninput="setLiveMusicVolume(this.value)" style="accent-color:var(--pink);width:74px;cursor:pointer;" title="Baja o sube únicamente la música de fondo. Tu micrófono Shure MV51 queda intacto al 100%.">
               <strong id="stickyVolLabel" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink);min-width:26px;">68%</strong>
-              <button class="q-btn" onclick="setLiveMusicVolume(0)" title="Mute música inmediato">0%</button>
-              <button class="q-btn" onclick="setLiveMusicVolume(12)" title="Colchón bajito para hablar o escuchar corresponsal">12% Colchón</button>
-              <button class="q-btn" onclick="setLiveMusicVolume(18)" title="Nivel Pisar estándar">18% Pisar</button>
-              <button class="q-btn" onclick="setLiveMusicVolume(68)" title="Nivel Música arriba">68% Aire</button>
+              <button class="q-btn" onclick="setLiveMusicVolume(0)" title="Mute solo música (tu Mic sigue al 100%)">0%</button>
+              <button class="q-btn" onclick="setLiveMusicVolume(12)" title="Colchón bajito de música (tu Mic sigue al 100%)">12% Colchón</button>
+              <button class="q-btn" onclick="setLiveMusicVolume(18)" title="Nivel Pisar música (tu Mic sigue al 100%)">18% Pisar</button>
+              <button class="q-btn" onclick="setLiveMusicVolume(68)" title="Nivel Música arriba (tu Mic sigue al 100%)">68% Aire</button>
             </div>
           </div>
         </div>
@@ -1851,7 +1851,8 @@
         </div>
         <div class="corr-dispatch">
           <p><strong>La Regla de Oro de Selección:</strong> Ninguna noticia entra por ser "tendencia del día". Solo entran historias reales y actuales donde <strong>una persona concreta en algún rincón del mundo hizo o descubrió algo materialmente extraordinario contra la corriente</strong> (como la restauradora de Londres que dio vuelta el cuadro de Beryl Gilroy, la lutier de París que hizo sonar el cartón perforado de una obrera textil de 1954, o el ingeniero de Tokio que cultiva musgo dentro de arcades apagados).</p>
-          <p><strong>Tu Ritual Semanal de 15 Minutos (Espacio de Pensamiento):</strong> Una vez por semana entrás a este chat y tirás una chispa suelta (un audio de 1 minuto, una foto de tu iPad o una frase que te quedó dando vueltas). El equipo barre las fuentes primarias reales, redacta las <strong>5 Crónicas en Tercera Persona con la voz de Jaffa</strong> y te deja cargados el <strong>Guion Titular + 2 Backups Completos</strong> + las placas listas en esta Cabina.</p>
+          <p><strong>El Dispositivo «Página en blanco» (1 Palabra / Concepto Rector por Programa × las 18 Lentes de la Mesa Polifónica):</strong> Inspirado en el formato televisivo de Silvia Hopenhayn (donde una palabra como <em>Animal</em>, <em>Árbol</em> o <em>Papel</em> reunía en una mesa a un arquitecto, un economista, un ex político y un poeta), en Whimsy POV no necesitás invitados en el estudio: <strong>tu Hilo Rojo conduce la conversación alrededor de una Palabra o Concepto rector</strong> cruzando siempre nuestras <strong>18 lentes indisociables</strong>: 1) Arte, 2) Ciencia y buenas noticias chequeadas, 3) Espiritualidad (cero boludez / cero autoayuda), 4) La Biblia y textos ancestrales, 5) Innovación abierta (<em>Open Innovation</em>), 6) Innovación en la educación, 7) Inteligencia artificial y tecnología, 8) Grandes ideas del mundo, 9) Cine, 10) Poesía, 11) Libros, 12) Física, 13) Botánica, 14) Moda, textil y cultura textil, 15) Transmisión de conocimiento aborigen, 16) Movimientos sociales actuales, 17) Filosofía y los colores, y 18) La percepción del idioma en diferentes culturas.</p>
+          <p><strong>Tu Ritual Semanal de 15 Minutos (Espacio de Pensamiento):</strong> Una vez por semana entrás a este chat o a tu <code>mesa-prepro.html</code>, elegís la Palabra/Concepto o una chispa suelta, y el equipo teje las lentes con fuentes primarias reales, las <strong>Crónicas en Tercera Persona</strong> y el <strong>Guion Titular + 2 Backups Completos</strong> listos en esta Cabina.</p>
         </div>
       </div>
 

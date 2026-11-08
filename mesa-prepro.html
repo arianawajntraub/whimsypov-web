@@ -814,6 +814,30 @@
     </div>
   </div>
 
+  <!-- DISPOSITIVO "PÁGINA EN BLANCO" (1 PALABRA / CONCEPTO RECTOR × LAS 18 LENTES DE LA MESA POLIFÓNICA) -->
+  <div style="margin: 12px 20px 4px; padding: 14px 16px; border-radius: 12px; background: linear-gradient(135deg, rgba(232,160,191,0.09), rgba(212,175,55,0.07)); border: 1px solid rgba(232,160,191,0.38);">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--gold); font-weight:700; letter-spacing:0.04em;">
+          📖 DISPOSITIVO «PÁGINA EN BLANCO» (INSPIRACIÓN SILVIA HOPHENAYN) · MESA REDONDA POLIFÓNICA SIN INVITADOS EN ESTUDIO
+        </div>
+        <div style="font-size:0.82rem; color:var(--cream); margin-top:2px;">
+          Elegí <strong>1 Palabra / Concepto rector del programa</strong> y tu Hilo Rojo conduce el cruce entre las <strong>18 lentes indisociables</strong> (Arte · Ciencia · Espiritualidad cero boludez · Biblia · Open Innovation · Educación · IA/Tech · Cine · Poesía · Libros · Física · Botánica · Moda y Cultura Textil · Conocimiento Aborigen · Movimientos Sociales · Filosofía · Colores · Percepción del Idioma).
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+        <button class="btn gold" onclick="selectPolyphonicWord('PAPEL')">📄 PAPEL</button>
+        <button class="btn gold" onclick="selectPolyphonicWord('ÁRBOL')">🌳 ÁRBOL</button>
+        <button class="btn gold" onclick="selectPolyphonicWord('ANIMAL')">🐾 ANIMAL</button>
+        <button class="btn gold" onclick="selectPolyphonicWord('HILO')">🧶 HILO / TEXTIL</button>
+        <button class="btn gold" onclick="selectPolyphonicWord('SOMBRA')">🕯️ SOMBRA / COLOR</button>
+        <input type="text" id="customWordInput" placeholder="Otra palabra (ej: Sal, Umbral)..." style="background:#08080c; border:1px solid var(--border); color:var(--cream); padding:6px 10px; border-radius:7px; font-size:0.75rem; width:175px;" onkeydown="if(event.key==='Enter') selectPolyphonicWord(this.value)">
+        <button class="btn primary" onclick="selectPolyphonicWord(document.getElementById('customWordInput').value || 'PAPEL')">⚡ Desplegar Mesa de la Palabra</button>
+      </div>
+    </div>
+    <div id="polyphonicWordPanel" style="display:none; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.1);"></div>
+  </div>
+
   <!-- MAIN WORKSPACE -->
   <div class="workspace">
 
@@ -2495,6 +2519,163 @@
     } catch (err) {
       status.textContent = 'Error de red al consultar archivo externo.';
     }
+  }
+
+  const POLYPHONIC_WORDS_DB = {
+    'PAPEL': {
+      word: 'PAPEL',
+      heroNum: '105 d.C.',
+      subtitle: 'De la corteza de morera de Cai Lun y los fragmentos de la Genizá de El Cairo al cartón perforado de los telares y el origami espacial de la NASA',
+      lenses: [
+        { group: '1. 🎨 Arte · Cine · Poesía · Libros', text: 'El pliego como resistencia material: de los recortes en papel pintado con gouache de Henri Matisse y el cine hecho celda por celda en planillas hasta tus subrayados en lápiz en ARIS2.' },
+        { group: '2. 🔬 Ciencia · Física · Botánica · Buenas Noticias', text: 'Física del plegado Miura-ori: cómo el ingeniero Koryo Miura tomó la fibra vegetal de celulosa para plegar paneles solares espaciales que se abren con un solo tirón sin motores.' },
+        { group: '3. 🕯️ Espiritualidad (Cero Boludez) · Biblia · Filosofía', text: 'La Genizá de El Cairo (más de 300.000 hojas guardadas durante nueve siglos en la sinagoga Ben Ezra porque en la tradición hebrea ningún papel que contenga el Nombre o sabiduría escrita puede tirarse a la basura: se entierra como un cuerpo).' },
+        { group: '4. 🧶 Moda · Textil · Cultura Textil · Conocimiento Aborigen', text: 'El papel amate mesoamericano (fibra de corteza de jonote golpeada con piedra volcánica por comunidades otomíes) y las tarjetas de cartón perforado de las obreras textiles de Lyon que dieron origen al código binario.' },
+        { group: '5. 🗣️ Percepción del Idioma · Los Colores · Movimientos Sociales', text: 'De «papiro» y «pergamino» (la piel de Pérgamo) al blanco hueso sin cloro vs. el azul de trapo antiguo: cómo cada cultura nombró la superficie donde una promesa deja de ser viento y pasa a ser documento colectivo.' },
+        { group: '6. 🌐 Open Innovation · Educación · IA & Tecnología · Grandes Ideas', text: 'El Foldscope de Manu Prakash (Universidad de Stanford): un microscopio óptico real de papel plegado de menos de un dólar en código abierto que ya usan dos millones de estudiantes y médicos rurales en todo el mundo.' }
+      ]
+    },
+    'ÁRBOL': {
+      word: 'ÁRBOL',
+      heroNum: '4.853',
+      subtitle: 'Del pino longevo Matusalén y la red subterránea de micorrizas de Suzanne Simard al Árbol de la Vida cabalístico y los tintes de quebracho',
+      lenses: [
+        { group: '1. 🎨 Arte · Cine · Poesía · Libros', text: 'La serie de los árboles de Piet Mondrian (1908–1912): cómo observando las ramas de un manzano llegó a la abstracción pura, en diálogo con los versos de Alejandra Pizarnik y los bosques de Miyazaki.' },
+        { group: '2. 🔬 Ciencia · Física · Botánica · Buenas Noticias', text: 'La ecóloga forestal Suzanne Simard y la «Wood Wide Web»: pruebas con isótopos de carbono de cómo los árboles madre transfieren nutrientes y señales eléctricas de alerta a través de redes de hongos micorrícicos.' },
+        { group: '3. 🕯️ Espiritualidad (Cero Boludez) · Biblia · Filosofía', text: 'En la Torá (Deuteronomio 20:19), la prohibición de talar árboles frutales incluso durante un asedio («¿Acaso el árbol del campo es un hombre para que lo sitiaras?») y el Etz Jaim (Árbol de la Vida) como mapa de la conciencia.' },
+        { group: '4. 🧶 Moda · Textil · Cultura Textil · Conocimiento Aborigen', text: 'La corteza batida (tapa / barkcloth) del Pacífico Sur y la farmacopea y tintes naturales guaraníes y mapuches donde cada corteza tiñe un tono exacto de ocre, lacre o ceniza sin matar al árbol.' },
+        { group: '5. 🗣️ Percepción del Idioma · Los Colores · Movimientos Sociales', text: 'El término japonés «Komorebi» (la luz del sol que se filtra específicamente entre las hojas de los árboles) y los colores verdes que en galés antiguo y en lenguas amazónicas distinguen veinte estados de humedad de la hoja.' },
+        { group: '6. 🌐 Open Innovation · Educación · IA & Tecnología · Grandes Ideas', text: 'Estructuras de datos en árbol (Decision Trees) nacidas de la botánica taxonómica, y sensores bioacústicos abiertos que hoy escuchan la cavitación del agua dentro del tronco para anticipar sequías.' }
+      ]
+    },
+    'ANIMAL': {
+      word: 'ANIMAL',
+      heroNum: '52 Hz',
+      subtitle: 'Del canto solitario de la ballena de 52 hercios y el Umwelt de Jakob von Uexküll a la memoria del enjambre y las fibras de vicuña andina',
+      lenses: [
+        { group: '1. 🎨 Arte · Cine · Poesía · Libros', text: 'Leonora Carrington y sus bestiarios surrealistas frente a «El caballo de Turín» y tu propia Minuta W #17 («Lo que el enjambre sabe de memoria»): mirar al animal sin humanizarlo ni domesticarlo.' },
+        { group: '2. 🔬 Ciencia · Física · Botánica · Buenas Noticias', text: 'Física de la magnetorrecepción cuántica en el petirrojo europeo: pares de radicales libres de criptocromo en su retina que le permiten literalmente ver como una sombra luminosa el campo magnético de la Tierra.' },
+        { group: '3. 🕯️ Espiritualidad (Cero Boludez) · Biblia · Filosofía', text: 'El génesis del lenguaje en Bereshit (el ser humano descubre quién es recién cuando nombra a cada criatura viviente, Nefesh Jayá) y el ensayo de Jacques Derrida «El animal que luego estoy si(gui)endo».' },
+        { group: '4. 🧶 Moda · Textil · Cultura Textil · Conocimiento Aborigen', text: 'El Chaccu ancestral andino de la vicuña: la esquila comunitaria en libertad heredada de los pueblos quechuas donde se teje la fibra más fina del planeta devolviendo al animal vivo a la puna.' },
+        { group: '5. 🗣️ Percepción del Idioma · Los Colores · Movimientos Sociales', text: 'El concepto de «Umwelt» (mundo circundante perceptivo): cómo una abeja ve patrones ultravioletas invisibles para nosotros en las flores y cómo distintas culturas nombran el vínculo entre especie y territorio.' },
+        { group: '6. 🌐 Open Innovation · Educación · IA & Tecnología · Grandes Ideas', text: 'El Earth Species Project y CETI (ciencia abierta + IA bioacústica para decodificar los clics de los cachalotes sin invadir su hábitat) y el reconocimiento jurídico de los derechos de la naturaleza.' }
+      ]
+    },
+    'HILO': {
+      word: 'HILO',
+      heroNum: '1804',
+      subtitle: 'De Anni Albers y los quipus andinos de nudos contables a la teoría de cuerdas en física, el telar de Jacquard y el Hilo Rojo de Whimsy',
+      lenses: [
+        { group: '1. 🎨 Arte · Cine · Poesía · Libros', text: 'Anni Albers en la Bauhaus («Tratado sobre el tejido»), las esculturas suspendidas de Gego (Gertrud Goldschmidt) y las instalaciones de Chiharu Shiota donde miles de hilos rojos hacen visible el espacio vacío.' },
+        { group: '2. 🔬 Ciencia · Física · Botánica · Buenas Noticias', text: 'Física de la seda de araña y filamentos de micelio fúngico: fibras biológicas más resistentes a la tracción que el acero de igual espesor y 100% biodegradables.' },
+        { group: '3. 🕯️ Espiritualidad (Cero Boludez) · Biblia · Filosofía', text: 'El hilo de grana (Jut haShani) y el pigmento azul Tekhelet en el Tzitzit bíblico: un hilo material atado al borde de la ropa como recordatorio físico para la mirada cuando la mente se dispersa.' },
+        { group: '4. 🧶 Moda · Textil · Cultura Textil · Conocimiento Aborigen', text: 'Los Quipus andinos (escritura tridimensional en nudos de algodón y lana de camélido donde el color, la torsión hacia la derecha o izquierda y la altura del nudo guardaban censos, astronomía e historia).' },
+        { group: '5. 🗣️ Percepción del Idioma · Los Colores · Movimientos Sociales', text: 'Por qué en casi todos los idiomas «texto» y «textil» comparten la misma raíz indoeuropea (*teks-, tejer): hablamos con la metáfora del telar («perder el hilo», «trama», «desenlace», «urdir»).' },
+        { group: '6. 🌐 Open Innovation · Educación · IA & Tecnología · Grandes Ideas', text: 'De las tarjetas perforadas del telar mecánico de Joseph Marie Jacquard (1804) a la memoria de núcleos magnéticos tejida a mano por mujeres para el Apolo 11 (la llamada memoria LOL: Little Old Ladies).' }
+      ]
+    },
+    'SOMBRA': {
+      word: 'SOMBRA',
+      heroNum: '1842',
+      subtitle: 'De las cianotipias botánicas de Anna Atkins y el elogio de la sombra de Tanizaki al eclipse físico, los colores ocultos y el reverso del lienzo',
+      lenses: [
+        { group: '1. 🎨 Arte · Cine · Poesía · Libros', text: '«El elogio de la sombra» de Junichiro Tanizaki junto al cine expresionista, los teatros de sombras de Kara Walker y el reverso en penumbra de los cuadros del Victoria & Albert Museum.' },
+        { group: '2. 🔬 Ciencia · Física · Botánica · Buenas Noticias', text: 'Anna Atkins (1842): la botánica inglesa que creó el primer libro fotográfico de la historia apoyando algas reales al sol sobre papel sensibilizado con sales de hierro (cianotipia, fotografía de sombra pura sin cámara).' },
+        { group: '3. 🕯️ Espiritualidad (Cero Boludez) · Biblia · Filosofía', text: 'BeTzelEl («A la sombra de Dios»), el nombre del primer artesano y arquitecto del Tabernáculo en el Éxodo, y el mito de la caverna leído como crítica al hipnotismo de las pantallas.' },
+        { group: '4. 🧶 Moda · Textil · Cultura Textil · Conocimiento Aborigen', text: 'El tejido Ikat y el Shibori japonés: la técnica textil de reservar y atar partes del hilo en la sombra antes de sumergirlo en índigo para que el dibujo nazca de lo que el tinte no tocó.' },
+        { group: '5. 🗣️ Percepción del Idioma · Los Colores · Movimientos Sociales', text: 'El azul de Prusia de las cianotipias y las palabras intraducibles para la penumbra: cómo distintas lenguas nombran la diferencia entre la sombra que da alivio en el desierto y la oscuridad que oculta.' },
+        { group: '6. 🌐 Open Innovation · Educación · IA & Tecnología · Grandes Ideas', text: 'El método de tránsito en astronomía abierta (descubrir exoplanetas lejanos midiendo apenas la diminuta sombra que proyectan al cruzar frente a su estrella) y arquitectura bioclimática pasiva.' }
+      ]
+    }
+  };
+
+  let currentPolyphonicWordObj = null;
+
+  function buildDynamicPolyphonicWord(rawWord) {
+    const clean = (rawWord || 'PAPEL').trim().toUpperCase();
+    if (POLYPHONIC_WORDS_DB[clean]) return POLYPHONIC_WORDS_DB[clean];
+    return {
+      word: clean,
+      heroNum: '18 LENTES',
+      subtitle: 'Mesa redonda polifónica de Whimsy POV alrededor de la palabra «' + clean + '» conducida por tu Hilo Rojo',
+      lenses: [
+        { group: '1. 🎨 Arte · Cine · Poesía · Libros', text: 'Cómo el arte material, el cine de autor, un poema exacto y los libros subrayados de tu biblioteca en ARIS2 miran de frente «' + clean + '» desde su reverso menos obvio.' },
+        { group: '2. 🔬 Ciencia · Física · Botánica · Buenas Noticias', text: 'La física de la materia, el comportamiento botánico y los hallazgos científicos recientes con DOI verificado que transforman lo que creíamos saber sobre «' + clean + '».' },
+        { group: '3. 🕯️ Espiritualidad (Cero Boludez) · Biblia · Filosofía', text: 'La raíz hebrea y bíblica, el pensamiento filosófico riguroso y la espiritualidad sin autoayuda alrededor de «' + clean + '».' },
+        { group: '4. 🧶 Moda · Textil · Cultura Textil · Conocimiento Aborigen', text: 'Cómo la trama textil, el oficio del vestido y la transmisión de conocimiento aborigen y ancestral encarnan materialmente «' + clean + '».' },
+        { group: '5. 🗣️ Percepción del Idioma · Los Colores · Movimientos Sociales', text: 'Cómo nombran «' + clean + '» distintas culturas e idiomas, qué pigmento o color lo acompaña en la historia y qué dice de los movimientos sociales actuales.' },
+        { group: '6. 🌐 Open Innovation · Educación · IA & Tecnología · Grandes Ideas', text: 'Proyectos de innovación abierta (Open Innovation), educación viva e inteligencia artificial usada con sentido humano alrededor de «' + clean + '».' }
+      ]
+    };
+  }
+
+  function selectPolyphonicWord(wordRaw) {
+    const obj = buildDynamicPolyphonicWord(wordRaw);
+    currentPolyphonicWordObj = obj;
+    const panel = document.getElementById('polyphonicWordPanel');
+    if (!panel) return;
+    panel.style.display = 'block';
+    panel.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+        <div>
+          <span style="background:var(--pink); color:#09090c; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:0.72rem; padding:3px 8px; border-radius:5px; margin-right:8px;">PALABRA DEL PROGRAMA: ${obj.word}</span>
+          <strong style="color:var(--cream); font-size:0.86rem;">${obj.subtitle}</strong>
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="btn green" onclick="pushPolyphonicWordToBasketAndCabin()">🧺 Volcar esta Palabra y sus 18 Lentes a mi Canasta + Teleprompter de Cabina</button>
+          <button class="btn gold" onclick="document.getElementById('topicSearchInput').value='${obj.word}'; searchLiveTopic();">🔎 Traer además Álbum CC0 de Wikipedia para «${obj.word}»</button>
+          <button class="btn" onclick="document.getElementById('polyphonicWordPanel').style.display='none'">✕ Ocultar</button>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:8px;">
+        ${obj.lenses.map(l => `
+          <div style="background:rgba(10,10,15,0.85); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold); font-weight:700; margin-bottom:4px;">${l.group}</div>
+            <div style="font-size:0.76rem; color:var(--cream); line-height:1.45;">${l.text}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function pushPolyphonicWordToBasketAndCabin() {
+    const obj = currentPolyphonicWordObj || buildDynamicPolyphonicWord('PAPEL');
+    const cardId = 'polyphonic-word-' + obj.word.toLowerCase();
+    const longText = obj.lenses.map(l => l.group + ':\n' + l.text).join('\n\n');
+    const polyCard = {
+      id: cardId,
+      cat: 'hilo',
+      catLabel: '📖 Dispositivo «Página en blanco» · Palabra Rectora (' + obj.word + ')',
+      sourceName: 'Mesa Polifónica Whimsy POV · Palabra: ' + obj.word,
+      sourceUrl: 'https://arianawajntraub.substack.com',
+      extraSources: [
+        { label: '📰 Substack La Minuta W', url: 'https://arianawajntraub.substack.com' },
+        { label: '📺 YouTube @whimsyPOV', url: 'https://www.youtube.com/@whimsyPOV' }
+      ],
+      title: 'Palabra del Programa: «' + obj.word + '» — ' + obj.subtitle,
+      summary: obj.lenses[0].text + ' ' + obj.lenses[2].text,
+      longDossier: longText,
+      dossiersTips: '💡 Esta tarjeta reúne las 18 lentes indisociables de la mesa alrededor de la palabra «' + obj.word + '» sin necesitar invitados en estudio.',
+      album: [
+        { url: 'evidencias/prepro/vna_leonardo_notebook.jpg', caption: 'Lente Arte, Escritura y Materia · Palabra: ' + obj.word, checked: true },
+        { url: 'evidencias/prepro/colossal_3_kintsugi.jpg', caption: 'Lente Textil, Color y Oficio · Palabra: ' + obj.word, checked: true },
+        { url: 'evidencias/aris_libro_subrayado.jpg', caption: 'Lente Libros y Archivo ARIS2 · Palabra: ' + obj.word, checked: true }
+      ],
+      handles: ['@whimsypov', '@arianawajntraub', '@vamuseum', '@thisiscolossal'],
+      hiloRojo: 'Hilo Rojo Polifónico («' + obj.word + '»): Cuando cruzamos el arte, la física, la botánica, la Biblia, la cultura textil, el conocimiento aborigen, el idioma y la tecnología alrededor de una sola palabra, ¿qué empieza a hacerse visible?'
+    };
+
+    const existingIdx = allCards.findIndex(c => c.id === cardId);
+    if (existingIdx >= 0) allCards[existingIdx] = polyCard;
+    else allCards.unshift(polyCard);
+
+    openDossierIds[cardId] = true;
+    if (!selectedBasketIds.includes(cardId)) {
+      selectedBasketIds.unshift(cardId);
+    }
+    renderFeedGrid();
+    renderBasketAndWeave();
+    pushBlockToCabin();
   }
 
   async function pullLiveCommonsAndWiki() {
