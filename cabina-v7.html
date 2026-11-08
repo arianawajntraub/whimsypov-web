@@ -1440,6 +1440,11 @@ function applyIncomingCommand(msg) {
       rightPlaylistIdx = -1;
       nextRightPlaylistItem();
     }
+    if (d.newCenterImage) {
+      const szImg = document.getElementById('szImage');
+      if (szImg) szImg.src = d.newCenterImage;
+      if (typeof setScreenMode === 'function') setScreenMode('split');
+    }
     saveShowRegistryLog('Actualización recibida desde Mesa de Prepro: ' + (d.headline || 'Escaleta actualizada'));
     broadcastStudioState();
   } else if (msg.type === 'REMOTE_ACTION') {
@@ -1783,6 +1788,8 @@ function saveShowRegistryLog(entryText) {
             <button class="btn" id="btnCc0Parallax" onclick="toggleCc0CabinetMode('parallax')" title="Mueve suavemente el grabado antiguo como bajo una lupa de gabinete">✨ CC0 Lámina Viva 2.5D</button>
             <button class="btn" id="btnCc0Dark" onclick="toggleCc0CabinetMode('darkplate')" title="Invierte grabados blancos a fondo carbón #1A1A1A con trazos hueso">🌑 CC0 Placa Oscura</button>
             <button class="btn btn-gold" id="btnPoncharDer" onclick="togglePoncharDerecha()" title="Trae lo que está en el panel derecho al centro 9:16 con paneo suave para que quede unido al audio en los Shorts/Reels">🎬 Ponchar Panel Derecho en 9:16 (Clips)</button>
+            <button class="btn" onclick="startExternalWindowCapture('right')" style="border-color:rgba(74,222,128,0.6); color:#4ADE80;" title="Proyecta otra ventana (ej. Colossal o museo) en el panel derecho sin mostrar jamás la cabina">🖥️ Proyectar Ventana Web en Derecha</button>
+            <button class="btn" onclick="startExternalWindowCapture('center')" style="border-color:rgba(232,160,191,0.6); color:#E8A0BF;" title="Proyecta otra ventana (ej. Colossal o museo) directo en el centro 9:16">📱 Proyectar Ventana Web en Centro 9:16</button>
             <label class="btn" style="cursor:pointer;">
               📁 Subir Foto/Placa
               <input type="file" accept="image/*" style="display:none;" onchange="uploadCustomEvidence(event)">
@@ -3638,6 +3645,11 @@ function applyIncomingCommand(msg) {
       });
       rightPlaylistIdx = -1;
       nextRightPlaylistItem();
+    }
+    if (d.newCenterImage) {
+      const szImg = document.getElementById('szImage');
+      if (szImg) szImg.src = d.newCenterImage;
+      if (typeof setScreenMode === 'function') setScreenMode('split');
     }
     saveShowRegistryLog('Actualización recibida desde Mesa de Prepro: ' + (d.headline || 'Escaleta actualizada'));
     broadcastStudioState();

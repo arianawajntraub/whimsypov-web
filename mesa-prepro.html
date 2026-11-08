@@ -782,7 +782,7 @@
   </div>
 
 <script>
-  const preproChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('whimsy_live_sync_v1') : null;
+  const preproChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('whimsy_studio_v8') : null;
 
   // BASE DE TARJETAS CON 100% URLS VERIFICADAS HTTP 200 + DOSSIERS LARGOS + ÁLBUM DE FOTOS REALES DE CADA NOTA
   const DEFAULT_CARDS = [
@@ -1293,15 +1293,26 @@ Cuando elegís 1 o 2 noticias del mundo (de Colossal, V&A, CONICET o Quanta Maga
     }
 
     // 2. Broadcast to cabina-v8.html and obs-salida.html
-    const payload = {
-      img: photo.url,
-      title: photo.caption,
-      badge: card.catLabel,
-      target: targetZone
+    const pushMsg = {
+      type: 'PREPRO_PUSH',
+      payload: targetZone === 'center' ? {
+        headline: card.title,
+        kicker: card.catLabel,
+        fact: photo.caption,
+        newCenterImage: photo.url,
+        pntMsg: 'Proyectando en Centro 9:16: ' + photo.caption,
+        ts: Date.now()
+      } : {
+        newRightImage: photo.url,
+        newRightTag: card.catLabel,
+        newRightLabel: photo.caption,
+        pntMsg: 'Proyectando en Panel Derecho: ' + photo.caption,
+        ts: Date.now()
+      }
     };
-    localStorage.setItem('whimsy_right_wing_override', JSON.stringify(payload));
+    localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
     if (preproChannel) {
-      preproChannel.postMessage({ type: 'right_wing_override', payload });
+      preproChannel.postMessage(pushMsg);
     }
   }
 
@@ -1720,13 +1731,23 @@ Seleccioná abajo cuáles de las ${albumPhotos.length} fotos de dominio público
       updatedAt: new Date().toISOString()
     };
 
-    localStorage.setItem('whimsy_prepro_live_override', JSON.stringify(payload));
+    const pushMsg = {
+      type: 'PREPRO_PUSH',
+      payload: {
+        headline: title,
+        kicker: 'BLOQUE ARMADO EN PRE-PRO (' + chosen.length + ' FUENTES)',
+        fact: primaryCaption + ' · ' + handles,
+        newRightImage: primaryImg,
+        newRightTag: '[ÁLBUM PRE-PRO · ' + checkedAlbum.length + ' FOTOS]',
+        newRightLabel: primaryCaption,
+        comingUpItems: chosen.map(c => c.title.slice(0, 58)),
+        pntMsg: 'Bloque cargado desde Pre-Pro con ' + checkedAlbum.length + ' fotos listas',
+        ts: Date.now()
+      }
+    };
+    localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
     if (preproChannel) {
-      preproChannel.postMessage({ type: 'prepro_block_update', payload });
-      preproChannel.postMessage({
-        type: 'right_wing_override',
-        payload: { img: primaryImg, title: primaryCaption, badge: '📺 ÁLBUM PRE-PRO (' + checkedAlbum.length + ' FOTOS)' }
-      });
+      preproChannel.postMessage(pushMsg);
     }
 
     // Also update local mini-monitor
