@@ -938,13 +938,25 @@
       <div class="edit-cue-box" id="editingCueBox"></div>
 
       <label class="field-label">5. 📣 @Arrobas listas para copiar en el posteo</label>
-      <input type="text" id="wovenHandles" style="width:100%; background:#08080b; border:1px solid var(--border); color:var(--pink); font-family:'JetBrains Mono',monospace; padding:7px 10px; border-radius:8px; font-size:0.76rem; margin-bottom:12px;">
+      <input type="text" id="wovenHandles" style="width:100%; background:#08080b; border:1px solid var(--border); color:var(--pink); font-family:'JetBrains Mono',monospace; padding:7px 10px; border-radius:8px; font-size:0.76rem; margin-bottom:10px;">
+
+      <label class="field-label">6. 🎯 ¿A qué pestaña del Teleprompter de Cabina querés mandarlo?</label>
+      <select id="targetCabinScriptSlot" style="width:100%; background:#08080b; border:1px solid rgba(212,168,83,0.45); color:var(--gold); font-family:'JetBrains Mono',monospace; padding:7px 10px; border-radius:8px; font-size:0.74rem; margin-bottom:10px;">
+        <option value="0">📜 Pestaña 1 de Cabina: GUION TITULAR DE AIRE (Se abre directo en tu Teleprompter)</option>
+        <option value="1">📜 Pestaña 2 de Cabina: BACKUP COMPLETO #1 (Queda guardado en la segunda pestaña)</option>
+        <option value="2">📜 Pestaña 3 de Cabina: BACKUP COMPLETO #2 (Queda guardado en la tercera pestaña)</option>
+      </select>
 
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn primary" onclick="sendWovenBlockToCabin()" style="flex:1; justify-content:center; padding:11px;">🚀 Enviar bloque y álbum a la Cabina en vivo</button>
+        <button class="btn primary" onclick="sendWovenBlockToCabin()" style="flex:1; justify-content:center; padding:11px;">🚀 Enviar texto largo + álbum al Teleprompter de Cabina</button>
         <button class="btn green" onclick="generatePostShowPack()">📦 Pack Aprobalo + Substack</button>
       </div>
       <div id="pushConfirmation" style="display:none; margin-top:10px; padding:9px 12px; border-radius:8px; background:rgba(74,222,128,0.14); border:1px solid var(--green); color:var(--green); font-size:0.78rem;"></div>
+
+      <div style="margin-top:10px; padding:9px 11px; border-radius:8px; background:rgba(255,255,255,0.03); border:1px solid var(--border);">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold); font-weight:700; margin-bottom:6px;">📚 HISTORIAL DE TEXTOS LARGOS ENVIADOS A CABINA (NADA SE PIERDE — RECUPERAR EN 1 CLIC):</div>
+        <div id="sentBlocksHistoryBox" style="font-size:0.74rem; color:var(--muted); display:flex; flex-direction:column; gap:5px;"> Todavía no enviaste bloques en esta sesión.</div>
+      </div>
 
       <div id="postShowExportBox" style="display:none; margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
         <span class="field-label">📲 Copy con @arrobas y capítulos (YouTube / IG / TikTok / Substack)</span>
@@ -3059,11 +3071,82 @@
     renderBasketAndWeave();
   }
 
+  function buildCuesFromWovenScript(title, scriptText, chosenCards, checkedAlbum, handles) {
+    const rawBlocks = (scriptText || '').split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
+    if (!rawBlocks.length) {
+      rawBlocks.push(title);
+    }
+    return rawBlocks.map((paragraph, idx) => {
+      const cardMatch = chosenCards[idx] || chosenCards[0] || {};
+      const imgMatch = checkedAlbum[idx % Math.max(1, checkedAlbum.length)];
+      const wordCount = paragraph.split(/\s+/).length;
+      const secEst = Math.max(15, Math.round(wordCount / 2.3));
+      const mm = String(Math.floor(secEst / 60)).padStart(2, '0');
+      const ss = String(secEst % 60).padStart(2, '0');
+      return {
+        time: `BLOQUE ${String(idx + 1).padStart(2, '0')} (~${mm}:${ss})`,
+        action: idx === 0 ? '📥 TEXTO ENVIADO DESDE PRE-PRO · AIRE' : `PASO ${idx + 1} · LÁMINA Y LECTURA`,
+        text: paragraph.replace(/\n/g, '<br>'),
+        note: `📌 Fuente: ${cardMatch.sourceName || 'Mesa de Pre-Pro'} · Rótulo: ${(cardMetaMap[cardMatch.id]?.rotulo) || 'Va HOY'} · ${handles}`,
+        badge: `PRE-PRO ${String(idx + 1).padStart(2, '0')} / ${String(rawBlocks.length).padStart(2, '0')}`,
+        kicker: (cardMatch.catLabel || 'WHIMSY POV · EN VIVO').toUpperCase(),
+        headline: (cardMatch.title || title).slice(0, 88),
+        fact: (imgMatch ? imgMatch.caption : (cardMatch.summary || title)).slice(0, 120),
+        refLabel: (imgMatch ? imgMatch.caption : title).slice(0, 52),
+        heroNum: cardMatch.heroNum || String(new Date().getFullYear()),
+        wingTitle: (cardMatch.title || title).slice(0, 65),
+        bumperKicker: `WHIMSY POV · SECCIÓN ${String(idx + 1).padStart(2, '0')}`,
+        bumperTitle: (cardMatch.title || title).slice(0, 64)
+      };
+    });
+  }
+
+  function renderSentBlocksHistory() {
+    const box = document.getElementById('sentBlocksHistoryBox');
+    if (!box) return;
+    let hist = [];
+    try { hist = JSON.parse(localStorage.getItem('whimsy_sent_blocks_history_v15') || '[]'); } catch(e) {}
+    if (!hist.length) {
+      box.innerHTML = 'Todavía no enviaste bloques en esta sesión.';
+      return;
+    }
+    box.innerHTML = hist.slice(0, 8).map((item, idx) => `
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; background:#09090d; border:1px solid rgba(255,255,255,0.08); padding:6px 8px; border-radius:6px;">
+        <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+          <strong style="color:var(--green);">[${item.timeStr}]</strong>
+          <span style="color:var(--cream);">${item.title}</span>
+          <span style="color:var(--gold); font-size:0.68rem;">(${item.cuesCount} párrafos · Pestaña #${(item.slot || 0) + 1})</span>
+        </div>
+        <button class="btn" style="padding:3px 8px; font-size:0.68rem;" onclick="restoreSentBlockFromHistory(${idx})">🔄 Volver a abrir / Reenviar</button>
+      </div>
+    `).join('');
+  }
+
+  function restoreSentBlockFromHistory(idx) {
+    let hist = [];
+    try { hist = JSON.parse(localStorage.getItem('whimsy_sent_blocks_history_v15') || '[]'); } catch(e) {}
+    const item = hist[idx];
+    if (!item) return;
+    document.getElementById('wovenTitle').value = item.title || '';
+    document.getElementById('wovenScript').value = item.rawScript || '';
+    document.getElementById('wovenHandles').value = item.handles || '@whimsypov';
+    if (item.pushPayload) {
+      const pushMsg = { type: 'PREPRO_PUSH', payload: item.pushPayload };
+      localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
+      if (preproChannel) preproChannel.postMessage(pushMsg);
+      const conf = document.getElementById('pushConfirmation');
+      conf.style.display = 'block';
+      conf.innerHTML = '✅ <strong>Texto recuperado y reenviado al Teleprompter de tu Cabina (Pestaña #' + ((item.slot || 0) + 1) + ').</strong>';
+    }
+  }
+
   function sendWovenBlockToCabin() {
     const chosen = selectedCardIds.map(id => allCards.find(c => c.id === id)).filter(Boolean);
     const title = document.getElementById('wovenTitle').value || 'Bloque Whimsy POV';
     const script = document.getElementById('wovenScript').value || '';
     const handles = document.getElementById('wovenHandles').value || '@whimsypov';
+    const slotEl = document.getElementById('targetCabinScriptSlot');
+    const targetSlot = slotEl ? Number(slotEl.value || 0) : 0;
 
     const checkedAlbum = [];
     chosen.forEach(c => {
@@ -3073,25 +3156,48 @@
     });
     const primaryImg = checkedAlbum[0] ? checkedAlbum[0].url : 'evidencias/prepro/excel_film_1.gif';
     const primaryCaption = checkedAlbum[0] ? checkedAlbum[0].caption : title;
+    const customCues = buildCuesFromWovenScript(title, script, chosen, checkedAlbum, handles);
+
+    const pushPayload = {
+      targetSlot,
+      scriptTitle: title,
+      customScriptCues: customCues,
+      fullAlbum: checkedAlbum,
+      headline: title,
+      kicker: 'BLOQUE ARMADO EN PRE-PRO (' + chosen.length + ' FUENTES)',
+      fact: primaryCaption + ' · ' + handles,
+      newRightImage: primaryImg,
+      newRightTag: '[ÁLBUM PRE-PRO · ' + checkedAlbum.length + ' FOTOS]',
+      newRightLabel: primaryCaption,
+      comingUpItems: chosen.map(c => c.title.slice(0, 58)),
+      pntMsg: 'Texto largo («' + title.slice(0, 42) + '») cargado en tu Teleprompter de Cabina (Pestaña #' + (targetSlot + 1) + ')',
+      ts: Date.now()
+    };
 
     const pushMsg = {
       type: 'PREPRO_PUSH',
-      payload: {
-        headline: title,
-        kicker: 'BLOQUE ARMADO EN PRE-PRO (' + chosen.length + ' FUENTES)',
-        fact: primaryCaption + ' · ' + handles,
-        newRightImage: primaryImg,
-        newRightTag: '[ÁLBUM PRE-PRO · ' + checkedAlbum.length + ' FOTOS]',
-        newRightLabel: primaryCaption,
-        comingUpItems: chosen.map(c => c.title.slice(0, 58)),
-        pntMsg: 'Bloque cargado desde Pre-Pro con ' + checkedAlbum.length + ' fotos listas',
-        ts: Date.now()
-      }
+      payload: pushPayload
     };
     localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
     if (preproChannel) {
       preproChannel.postMessage(pushMsg);
     }
+
+    let hist = [];
+    try { hist = JSON.parse(localStorage.getItem('whimsy_sent_blocks_history_v15') || '[]'); } catch(e) {}
+    const now = new Date();
+    const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    hist.unshift({
+      timeStr,
+      title,
+      rawScript: script,
+      handles,
+      slot: targetSlot,
+      cuesCount: customCues.length,
+      pushPayload
+    });
+    localStorage.setItem('whimsy_sent_blocks_history_v15', JSON.stringify(hist.slice(0, 20)));
+    renderSentBlocksHistory();
 
     document.getElementById('miniRightImg').src = primaryImg;
     document.getElementById('miniRightCaption').textContent = '➡️ DERECHA: ' + primaryCaption.slice(0, 42);
@@ -3099,7 +3205,7 @@
 
     const conf = document.getElementById('pushConfirmation');
     conf.style.display = 'block';
-    conf.innerHTML = '✅ <strong>¡Enviado a tu Cabina en vivo y al Monitor!</strong> Se cargaron el guion largo y las ' + checkedAlbum.length + ' fotos seleccionadas del álbum.';
+    conf.innerHTML = '✅ <strong>¡Enviado! ¿Dónde está tu texto largo?</strong> Ya apareció cargado en la <strong>columna derecha de tu Cabina (abajo, en «📜 GUION DE AIRE PALABRA POR PALABRA · Pestaña #' + (targetSlot + 1) + '»)</strong> con sus ' + customCues.length + ' bloques completos y las ' + checkedAlbum.length + ' fotos en la playlist derecha.';
   }
 
   function generatePostShowPack() {
@@ -3169,6 +3275,7 @@
 
   renderFeedGrid();
   renderBasketAndWeave();
+  renderSentBlocksHistory();
 </script>
 </body>
 </html>

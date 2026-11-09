@@ -143,13 +143,40 @@
   .safe-zone-9x16 {
     position: relative;
     z-index: 3;
+    flex: 0 0 608px;
     width: 608px;
+    min-width: 608px;
+    max-width: 608px;
     height: 1080px;
     border-left: 2px solid rgba(232, 180, 184, 0.85);
     border-right: 2px solid rgba(232, 180, 184, 0.85);
     background: #0b0b10;
     overflow: hidden;
   }
+  .live-cam-feed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 2;
+    display: none;
+    background: #08080c;
+    transform: scaleX(-1);
+  }
+  .live-cam-feed.is-unmirrored {
+    transform: scaleX(1);
+  }
+  .obs-canvas-16x9.cam-pos-center #corridorLiveCam { display: block; }
+  .obs-canvas-16x9.cam-pos-left #leftWingLiveCamWrap { display: block !important; }
+  .obs-canvas-16x9.cam-pos-left #leftWingLiveCam {
+    display: block;
+    position: relative;
+    height: 240px;
+    border-radius: 12px;
+    border: 1.5px solid var(--pink);
+  }
+  .obs-canvas-16x9.cam-pos-right #rightWingLiveCam { display: block; z-index: 4; }
   .corridor-bg-video {
     position: absolute;
     inset: 0;
@@ -394,6 +421,9 @@
 
   <div class="wing-16x9">
     <div class="numbers-wing-grid">
+      <div id="leftWingLiveCamWrap" style="display:none;position:relative;border-radius:12px;overflow:hidden;">
+        <video id="leftWingLiveCam" class="live-cam-feed" autoplay muted playsinline></video>
+      </div>
       <div class="num-card">
         <div class="num-label">01 · HORA OFICIAL CABINA (PDE / BUE)</div>
         <div class="num-big-clock" id="wing-clock-main">08:09:07</div>
@@ -434,6 +464,7 @@
 
   <div class="safe-zone-9x16" id="safeZone9x16">
     <video id="corridorBgVideo" class="corridor-bg-video" src="loops/micro_fibra_lente.mp4" autoplay loop muted playsinline></video>
+    <video id="corridorLiveCam" class="live-cam-feed" autoplay muted playsinline></video>
     <div class="corridor-overlay"></div>
 
     <div class="section-bumper-overlay" id="sectionBumper">
@@ -472,7 +503,8 @@
       </div>
     </div>
 
-    <div class="wing-evidence-frame">
+    <div class="wing-evidence-frame" style="position:relative;">
+      <video id="rightWingLiveCam" class="live-cam-feed" autoplay muted playsinline></video>
       <img id="wingRightImg" src="" alt="Visor Lateral">
       <div class="wing-evidence-caption">
         <span id="wingRightTopTag" style="color:var(--gold);margin-right:4px;">[EVIDENCIA EN AIRE]</span>
@@ -527,6 +559,42 @@ function updateClocks() {
 setInterval(updateClocks, 1000);
 updateClocks();
 
+let obsLocalCamStream = null;
+let obsCamOpening = false;
+async function ensureObsLiveCam(active) {
+  const vids = ['corridorLiveCam', 'leftWingLiveCam', 'rightWingLiveCam'].map(id => document.getElementById(id)).filter(Boolean);
+  if (!active) {
+    if (obsLocalCamStream) {
+      obsLocalCamStream.getTracks().forEach(t => t.stop());
+      obsLocalCamStream = null;
+    }
+    vids.forEach(v => { v.srcObject = null; });
+    return;
+  }
+  if (obsLocalCamStream && obsLocalCamStream.active) {
+    vids.forEach(v => {
+      if (v.srcObject !== obsLocalCamStream) {
+        v.srcObject = obsLocalCamStream;
+        v.play().catch(()=>{});
+      }
+    });
+    return;
+  }
+  if (obsCamOpening || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  obsCamOpening = true;
+  try {
+    obsLocalCamStream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    vids.forEach(v => {
+      v.srcObject = obsLocalCamStream;
+      v.play().catch(()=>{});
+    });
+  } catch (e) {}
+  obsCamOpening = false;
+}
+
 function applyState(s) {
   if (!s) return;
   const setTxt = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.textContent = val; };
@@ -570,10 +638,21 @@ function applyState(s) {
   const mKick = document.getElementById('moscaMiniGraphKicker');
   const mTxt = document.getElementById('moscaMiniGraphText');
   if (stage) {
-    stage.classList.remove('cinema-mode-16x9', 'cinema-mode-9x16');
+    stage.classList.remove('cinema-mode-16x9', 'cinema-mode-9x16', 'cam-pos-center', 'cam-pos-left', 'cam-pos-right');
     if (s.cinemaMode === '16x9') stage.classList.add('cinema-mode-16x9');
     else if (s.cinemaMode === '9x16') stage.classList.add('cinema-mode-9x16');
+    if (s.camPlacement && s.camPlacement !== 'off') {
+      stage.classList.add('cam-pos-' + s.camPlacement);
+      ensureObsLiveCam(true);
+    } else {
+      ensureObsLiveCam(false);
+    }
   }
+  const mirrored = s.camMirrored !== false;
+  ['corridorLiveCam', 'leftWingLiveCam', 'rightWingLiveCam'].forEach(id => {
+    const v = document.getElementById(id);
+    if (v) v.classList.toggle('is-unmirrored', !mirrored);
+  });
   if (s.moscaMiniGraphKicker && mKick) mKick.textContent = s.moscaMiniGraphKicker;
   if (s.moscaMiniGraphText && mTxt) mTxt.textContent = s.moscaMiniGraphText;
   if (s.cinemaMode === '16x9' || s.cinemaMode === '9x16') {

@@ -293,6 +293,10 @@
   .safe-zone-9x16 {
     position: relative;
     z-index: 3;
+    flex: 0 0 31.64%;
+    width: 31.64%;
+    min-width: 31.64%;
+    max-width: 31.64%;
     height: 100%;
     aspect-ratio: 9 / 16;
     border-left: 2px solid rgba(232, 180, 184, 0.85);
@@ -1215,6 +1219,10 @@
     height: 100%;
     object-fit: cover;
     border-radius: 7px;
+    transform: scaleX(-1);
+  }
+  .live-cam-feed.is-unmirrored {
+    transform: scaleX(1);
   }
   .obs-canvas-16x9.cam-pos-center #corridorLiveCam {
     display: block !important;
@@ -1578,10 +1586,13 @@
         <!-- FILA 3: MICRÓFONO SHURE MV51 USB-C + CÁMARA EN VIVO (MACBOOK O CELU DE UN LADO O DEL OTRO) + GRABACIÓN AL REGISTRO -->
         <div class="hud-deck-row" style="border-color:rgba(56,193,114,0.4);">
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#98f5be;font-weight:700;">🎙️ MIC SHURE MV51 USB-C:</span>
-            <button class="btn btn-primary" id="btnInitMv51" onclick="initShureMv51()">🔌 Activar Shure MV51 / Mic</button>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#98f5be;font-weight:700;">🎙️ MIC SHURE MV51 USB-C + AURIS RETORNO:</span>
+            <button class="btn btn-primary" id="btnInitMv51" onclick="initShureMv51()">🔌 Activar Shure MV51 + Salida a Auris Shure</button>
             <div class="mv51-meter-bar" title="Nivel de entrada Shure MV51 en vivo"><div class="mv51-meter-fill" id="mv51MeterFill"></div></div>
             <span id="mv51DeviceLabel" style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--muted);">Listo (USB-C directo)</span>
+            <select id="audioOutputSelect" onchange="changeAudioOutputSink(this.value)" style="background:#14141d;color:#98f5be;border:1px solid rgba(152,245,190,0.45);border-radius:5px;padding:3px 6px;font-family:'JetBrains Mono',monospace;font-size:8.5px;" title="Manda Moby y los Corresponsales directo al enchufe de auriculares de tu Shure MV51 para que NADA salga por el parlante de la MacBook">
+              <option value="">🎧 Salida Música/Voces → Auriculares Shure MV51 (Cero Parlante Mac)</option>
+            </select>
             <button class="q-btn active" id="btnMv51BeachEq" onclick="toggleMv51BeachFilter()" title="Corta el soplido del viento debajo de 85Hz cuando estás en la playa">🌊 Filtro Playa Anti-Viento: ON</button>
           </div>
           <div class="quick-strip">
@@ -1590,6 +1601,7 @@
             <button class="q-btn" id="camBtnCenter" onclick="setLiveCameraPlacement('center')">📱 En 9:16 Centro</button>
             <button class="q-btn" id="camBtnLeft" onclick="setLiveCameraPlacement('left')">⬅️ En Ala Izq</button>
             <button class="q-btn" id="camBtnRight" onclick="setLiveCameraPlacement('right')">➡️ En Ala Der</button>
+            <button class="q-btn active" id="btnCamMirror" onclick="toggleCameraMirror()" title="Gira horizontalmente la cámara para que no te veas al revés">🪞 Espejar / Girar Horizontal: ON</button>
             <button class="q-btn" id="btnSwitchCamFacing" onclick="switchCameraSource()" title="Alternar entre cámara de MacBook y cámara de Celular">🔄 Cambiar Cámara</button>
           </div>
         </div>
@@ -1811,10 +1823,24 @@
       </div>
     </div>
 
+    <!-- CARTEL VERDE Y RECUPERADOR DE TEXTOS LARGOS ENVIADOS DESDE LA MESA DE PRE-PRO -->
+    <div id="preproReceivedBanner" style="display:none;background:rgba(74,222,128,0.14);border:1.5px solid rgba(74,222,128,0.65);border-radius:9px;padding:9px 12px;margin-bottom:8px;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+      <div style="font-size:11.5px;color:#F5F0EB;">
+        <strong style="color:#4ADE80;font-family:'JetBrains Mono',monospace;">📥 TEXTO LARGO RECIBIDO DESDE MESA DE PRE-PRO (YA ESTÁ CARGADO ACÁ ABAJO EN TU TELEPROMPTER):</strong>
+        <span id="preproReceivedTitle" style="color:#ffe484;font-weight:700;margin-left:6px;"></span>
+      </div>
+      <button class="btn" onclick="document.getElementById('preproReceivedBanner').style.display='none'">✓ Entendido</button>
+    </div>
+
     <div class="prompter-nav-bar" id="prompterNavBar">
       <div>
-        <div class="box-title" id="prompterHeaderTitle">📜 GUION DE AIRE PALABRA POR PALABRA (CON PLACA AUTOMÁTICA AL PASAR DE BLOQUE)</div>
-        <div style="font-size:11px;color:var(--muted);">Al pasar de bloque se dispara sola la Placa Separadora con el Logo Whimsy en transparencia</div>
+        <div class="box-title" id="prompterHeaderTitle">📜 GUION DE AIRE PALABRA POR PALABRA (ACÁ CAEN TODOS LOS TEXTOS LARGOS QUE MANDÁS DESDE PRE-PRO)</div>
+        <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:3px;">
+          <span>Al pasar de bloque se dispara sola la Placa Separadora con el Logo Whimsy en transparencia</span>
+          <select id="savedPreproBlocksSelect" onchange="loadSavedPreproBlockFromHistory(this.value)" style="background:#14141d;color:#ffe484;border:1px solid rgba(212,175,55,0.45);border-radius:5px;padding:3px 7px;font-family:'JetBrains Mono',monospace;font-size:10px;">
+            <option value="">📚 Recuperar textos largos enviados desde Pre-Pro...</option>
+          </select>
+        </div>
       </div>
       <div class="btn-row">
         <button class="btn" id="btnToggleFullRead" onclick="toggleFullReadMode()">📜 Ver como texto corrido único</button>
@@ -3408,9 +3434,62 @@ let mv51Highpass = null;
 let mv51BeachMode = true;
 let liveCamStream = null;
 let currentCamPlacement = 'off';
+window.camMirrored = true;
 let videoDevicesList = [];
 let currentVideoDeviceIdx = 0;
 let peerHost = null;
+
+async function refreshAudioOutputDevices(preferShure = true) {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const outputs = devices.filter(d => d.kind === 'audiooutput');
+    const sel = document.getElementById('audioOutputSelect');
+    if (!sel) return;
+    const currentVal = sel.value;
+    sel.innerHTML = `<option value="">🎧 Salida de Música/Voces (Por defecto del sistema)</option>` +
+      outputs.map(o => `<option value="${o.deviceId}">🎧 Enviar Música a: ${o.label || 'Salida de Audio / Auriculares'}</option>`).join('');
+    const shureOut = outputs.find(d => /shure|mv51|motiv|usb|headphone|auricular|external/i.test(d.label));
+    if (preferShure && shureOut) {
+      sel.value = shureOut.deviceId;
+      await changeAudioOutputSink(shureOut.deviceId);
+    } else if (currentVal) {
+      sel.value = currentVal;
+    }
+  } catch (e) {}
+}
+
+async function changeAudioOutputSink(deviceId) {
+  try {
+    const targets = [deckA, deckB, corrAudio].filter(Boolean);
+    for (const el of targets) {
+      if (typeof el.setSinkId === 'function') {
+        await el.setSinkId(deviceId || '');
+      }
+    }
+    if (mv51AudioCtx && typeof mv51AudioCtx.setSinkId === 'function') {
+      await mv51AudioCtx.setSinkId(deviceId || '');
+    }
+    const sel = document.getElementById('audioOutputSelect');
+    const chosenLabel = sel && sel.selectedOptions[0] ? sel.selectedOptions[0].textContent : 'Auriculares Shure MV51';
+    const cuc = document.getElementById('cucarachaMainMsg');
+    if (cuc) cuc.textContent = '🎧 CERO ACOPLE ACTIVO → Música Moby y Corresponsales saliendo por: ' + chosenLabel + ' (Parlante MacBook aislado).';
+  } catch (e) {}
+}
+
+function toggleCameraMirror() {
+  window.camMirrored = !window.camMirrored;
+  ['corridorLiveCam', 'leftWingLiveCam', 'rightWingLiveCam'].forEach(id => {
+    const v = document.getElementById(id);
+    if (v) v.classList.toggle('is-unmirrored', !window.camMirrored);
+  });
+  const btn = document.getElementById('btnCamMirror');
+  if (btn) {
+    btn.classList.toggle('active', window.camMirrored);
+    btn.textContent = window.camMirrored ? '🪞 Espejar / Girar Horizontal: ON' : '🪞 Espejar / Girar Horizontal: OFF';
+  }
+  broadcastStudioState();
+}
 
 async function initShureMv51() {
   try {
@@ -3427,8 +3506,9 @@ async function initShureMv51() {
     };
     mv51Stream = await navigator.mediaDevices.getUserMedia(constraints);
     const trackLabel = mv51Stream.getAudioTracks()[0]?.label || 'Shure MV51 USB-C';
-    document.getElementById('mv51DeviceLabel').textContent = '🟢 ' + trackLabel;
-    document.getElementById('btnInitMv51').textContent = '🎙️ MV51 Activo';
+    document.getElementById('mv51DeviceLabel').textContent = '🟢 ' + trackLabel + ' (Auris Retorno listos)';
+    document.getElementById('btnInitMv51').textContent = '🎙️ MV51 + Salida Auris Activos';
+    await refreshAudioOutputDevices(true);
 
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     mv51AudioCtx = new AudioCtx();
@@ -3522,9 +3602,9 @@ async function switchCameraSource() {
         audio: false
       });
       attachCameraStreamToStage(liveCamStream);
-      if (currentCamPlacement === 'off') setLiveCameraPlacement('left');
+      if (currentCamPlacement === 'off') setLiveCameraPlacement('center');
     } else if (currentCamPlacement === 'off') {
-      setLiveCameraPlacement('left');
+      setLiveCameraPlacement('center');
     }
   } catch (e) {}
 }
@@ -3718,6 +3798,7 @@ function getStudioSnapshot() {
     bgVideoSrc: document.getElementById('corridorBgVideo')?.getAttribute('src') || 'loops/micro_fibra_lente.mp4',
     screenMode: currentScreenMode,
     camPlacement: currentCamPlacement,
+    camMirrored: window.camMirrored !== false,
     cinemaMode: currentCinemaMode,
     cinemaMediaType: currentCinemaMediaType,
     cinemaMediaSrc: currentCinemaMediaSrc,
@@ -3786,11 +3867,31 @@ function applyIncomingCommand(msg) {
       }
     }
     if (d.customScriptCues && Array.isArray(d.customScriptCues) && d.customScriptCues.length) {
-      SCRIPTS[0].title = d.scriptTitle || SCRIPTS[0].title;
-      SCRIPTS[0].cues = d.customScriptCues;
-      switchScript(0);
+      const slot = typeof d.targetSlot === 'number' && SCRIPTS[d.targetSlot] ? d.targetSlot : 0;
+      SCRIPTS[slot].title = d.scriptTitle || d.headline || SCRIPTS[slot].title;
+      SCRIPTS[slot].cues = d.customScriptCues;
+      const tabBtn = document.getElementById('stab-' + slot);
+      if (tabBtn) tabBtn.textContent = '📥 PRE-PRO: ' + (d.scriptTitle || d.headline || 'Bloque Armado').slice(0, 34);
+      switchScript(slot);
+      const banner = document.getElementById('preproReceivedBanner');
+      const bTitle = document.getElementById('preproReceivedTitle');
+      if (banner && bTitle) {
+        bTitle.textContent = '«' + (d.scriptTitle || d.headline || 'Guion de Pre-Pro') + '» (' + d.customScriptCues.length + ' bloques listos para leer)';
+        banner.style.display = 'flex';
+      }
+      refreshSavedPreproHistoryDropdown();
     }
-    if (d.newRightImage) {
+    if (d.fullAlbum && Array.isArray(d.fullAlbum) && d.fullAlbum.length) {
+      d.fullAlbum.slice().reverse().forEach(p => {
+        rightPlaylistItems.unshift({
+          tag: d.newRightTag || '[ÁLBUM PRE-PRO]',
+          label: p.caption || d.newRightLabel || 'LÁMINA EN VIVO',
+          img: p.url
+        });
+      });
+      rightPlaylistIdx = -1;
+      nextRightPlaylistItem();
+    } else if (d.newRightImage) {
       rightPlaylistItems.unshift({
         tag: d.newRightTag || '[MESA DE ARTE]',
         label: d.newRightLabel || 'LÁMINA EN VIVO',
@@ -3829,6 +3930,39 @@ function applyIncomingCommand(msg) {
     else if (act === 'speakCorr') speakCorrespondent(msg.idx || 0);
   }
 }
+
+function refreshSavedPreproHistoryDropdown() {
+  const sel = document.getElementById('savedPreproBlocksSelect');
+  if (!sel) return;
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem('whimsy_sent_blocks_history_v15') || '[]'); } catch(e) {}
+  sel.innerHTML = `<option value="">📚 Recuperar textos largos enviados desde Pre-Pro (${hist.length} guardados)...</option>` +
+    hist.map((item, idx) => `<option value="${idx}">📥 [${item.timeStr || 'Hoy'}] ${item.title.slice(0, 48)}</option>`).join('');
+}
+
+function loadSavedPreproBlockFromHistory(idxStr) {
+  if (idxStr === '' || idxStr === null) return;
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem('whimsy_sent_blocks_history_v15') || '[]'); } catch(e) {}
+  const item = hist[Number(idxStr)];
+  if (item && item.pushPayload) {
+    applyIncomingCommand({ type: 'PREPRO_PUSH', payload: item.pushPayload });
+  }
+}
+
+setTimeout(() => {
+  refreshAudioOutputDevices(false);
+  refreshSavedPreproHistoryDropdown();
+  try {
+    const lastPush = localStorage.getItem('whimsy_prepro_push_v8');
+    if (lastPush) {
+      const parsed = JSON.parse(lastPush);
+      if (parsed && parsed.payload && parsed.payload.customScriptCues) {
+        applyIncomingCommand(parsed);
+      }
+    }
+  } catch (e) {}
+}, 300);
 
 studioBus.onmessage = (ev) => {
   if (ev.data?.type === 'GATERAS_SYNC') renderCabinGaterasStrip(ev.data.payload);
