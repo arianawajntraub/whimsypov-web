@@ -748,12 +748,13 @@
     <div class="brand-title">
       <img src="logo-whimsy-rosa.png" alt="Whimsy POV">
       <div>
-        <h1>Mesa de Pre-Pro · «El tránsito y el clima del mundo» (v14)</h1>
-        <p>Categoría «Cine / Obra y Monitor al Aire» (16:9 Sala Limpia con Mosca + Graph a la izquierda · o 9:16 Smart p/Shorts) + Crónicas de Lanzamiento</p>
+        <h1>Mesa de Pre-Pro · «El tránsito y el clima del mundo» (v16 · Revoleador IG→RSS + Cartas a Protagonistas + Coach)</h1>
+        <p>Guardados de Instagram investigados (Shawn Miller Okinawa + Aguja Óptica Columbia) · Cartas Pre/Post Aire en 1 clic · Coach Personal & Plan de 2 Horas</p>
       </div>
     </div>
     <div class="nav-links">
-      <button class="btn gold" onclick="toggleAddFeedDrawer()">➕ Sumar nuevo RSS / sitio / hallazgo</button>
+      <button class="btn primary" onclick="toggleRevoleadorPanel()" style="border-color:var(--pink);">⚡ Revolear Guardado IG / Link → RSS + Carta</button>
+      <button class="btn gold" onclick="toggleCoachPanel()">🎯 Coach Ariana + Reloj 2 Horas</button>
       <button class="btn green" onclick="pullLiveCommonsAndWiki()">🔄 Traer hallazgos y fotos CC0 ahora</button>
       <button class="btn" onclick="exportFullPreproBackup()" title="Descarga un archivo con todas tus tarjetas, rótulos, fechas de vencimiento y gateras para que jamás se pierda nada">💾 Guardar Backup</button>
       <label class="btn" style="cursor:pointer;" title="Cargar respaldo guardado">
@@ -764,6 +765,101 @@
       <button class="btn" onclick="window.open('obs-salida.html?monitor=1', 'WhimsyCleanAirMonitor', 'width=860,height=484,menubar=no,toolbar=no,location=no,status=no')" style="border-color:rgba(74,222,128,0.55); color:#4ade80;">🪟 Monitor Flotante de Aire Limpio (Ensayar al costado)</button>
       <a href="obs-salida.html" target="_blank" class="btn">📺 Salida Limpia OBS</a>
       <a href="watch.html" target="_blank" class="btn">⌚ Apple Watch</a>
+    </div>
+  </div>
+
+  <!-- PANEL 1: EL REVOLEADOR DE GUARDADOS DE INSTAGRAM / LINKS -> SUMA FEED RSS DEL CREADOR + ARMA CARTA PRE/POST AIRE -->
+  <div id="revoleadorPanel" style="margin: 12px 20px 6px; padding: 15px 18px; border-radius: 12px; background: linear-gradient(135deg, rgba(74,222,128,0.09), rgba(14,14,22,0.96)); border: 1px solid rgba(74,222,128,0.45); display: block;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.71rem; color:var(--green); font-weight:700; letter-spacing:0.04em;">
+          ⚡ EL REVOLEADOR DE ARIANA · TIRÁ UN GUARDADO DE INSTAGRAM, LINK O PISTA SUELTA → SE TRANSFORMA EN FEED RSS VIVO + DOSSIER VERIFICADO + CARTA AL PROTAGONISTA
+        </div>
+        <div style="font-size:0.81rem; color:var(--cream); margin-top:3px;">
+          ¿Viste algo en tus Guardados de Instagram (como el cangrejo azul de Shawn Miller en Okinawa o la aguja óptica de Columbia)? Tiralo acá: suma la fuente a tus Feeds RSS permanentes, la cruza con el Reloj Mundial de esa ciudad y te redacta el <strong>DM / Mail Previo (pidiendo testimonio de 40s)</strong> y el <strong>Aviso Post-Aire</strong>.
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold);" id="activeRssFeedsCountBadge">📡 18 Feeds RSS del Mundo Activos</span>
+        <button class="btn" style="padding:4px 9px; font-size:0.7rem;" onclick="toggleRevoleadorPanel()">▲ Plegar / Desplegar</button>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1.5fr 1fr 0.9fr 0.9fr auto; gap:8px; align-items:end;">
+      <div>
+        <label class="field-label">1. ¿Qué viste o guardaste en Instagram / Web?</label>
+        <input type="text" id="revoleoIdeaInput" placeholder="Ej: Fotógrafo en Okinawa que retrató un cangrejo azul en una tapa de plástico..." style="width:100%; background:#07070b; border:1px solid var(--border); color:var(--cream); padding:8px 10px; border-radius:7px; font-size:0.78rem;">
+      </div>
+      <div>
+        <label class="field-label">2. @Cuenta / Protagonista o URL</label>
+        <input type="text" id="revoleoHandleInput" placeholder="Ej: @okinawanaturephotography o https://..." style="width:100%; background:#07070b; border:1px solid var(--border); color:var(--cream); padding:8px 10px; border-radius:7px; font-size:0.78rem;">
+      </div>
+      <div>
+        <label class="field-label">3. Reloj del Dial (Ciudad)</label>
+        <select id="revoleoClockSelect" style="width:100%; background:#07070b; border:1px solid var(--border); color:var(--gold); padding:8px 10px; border-radius:7px; font-size:0.76rem;">
+          <option value="🇯🇵 TOKIO / OKINAWA (JST)">🇯🇵 TOKIO / OKINAWA</option>
+          <option value="🇺🇸 NUEVA YORK (EST)">🇺🇸 NUEVA YORK</option>
+          <option value="🇬🇧 LONDRES (GMT)">🇬🇧 LONDRES</option>
+          <option value="🇫🇷 PARÍS (CET)">🇫🇷 PARÍS</option>
+          <option value="🇮🇱 JAFFA / TEL AVIV (IST)">🇮🇱 JAFFA / TEL AVIV</option>
+          <option value="🇺🇾 PUNTA DEL ESTE / GARZÓN">🇺🇾 PUNTA DEL ESTE / GARZÓN</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">4. Filtro Research (Verdad vs. Humo)</label>
+        <select id="revoleoVerifySelect" style="width:100%; background:#07070b; border:1px solid var(--border); color:var(--green); padding:8px 10px; border-radius:7px; font-size:0.76rem;">
+          <option value="verificado">✅ Fuente primaria real + escribirle</option>
+          <option value="desarmar_clickbait">🔬 Desarmar clickbait con ciencia real + escribirle</option>
+        </select>
+      </div>
+      <div>
+        <button class="btn green" style="padding:9px 14px; font-size:0.78rem; white-space:nowrap;" onclick="procesarRevoleoEnVivo()">🚀 Revolear → Crear Tarjeta + RSS + Cartas</button>
+      </div>
+    </div>
+    <div id="rssFeedsPillsRow" style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:6px; flex-wrap:wrap; align-items:center; font-size:0.7rem; color:var(--muted);"></div>
+  </div>
+
+  <!-- PANEL 2: COACH ESCÉNICO Y COMERCIAL DE ARIANA + PLAN DE 2 HORAS EN PARALELO -->
+  <div id="coachArianaPanel" style="margin: 6px 20px 6px; padding: 15px 18px; border-radius: 12px; background: linear-gradient(135deg, rgba(212,175,55,0.11), rgba(232,160,191,0.08)); border: 1px solid rgba(212,175,55,0.48); display: block;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.71rem; color:var(--gold); font-weight:700; letter-spacing:0.04em;">
+          🎯 TU COACH ESCÉNICO, COMERCIAL Y DE REDES PERSONALES (@ARIANAWAJNTRAUB) + PLAN DE 2 HORAS EN PARALELO CON TODO EL EQUIPO
+        </div>
+        <div style="font-size:0.8rem; color:var(--cream); margin-top:2px;">
+          <strong>Regla de oro del Coach:</strong> Prohibido terminar con «consejos de emprendedor trucho». Tu valor comercial (para emisoras, centros culturales, conferencias pagas y tus consultoras estratégicas) se demuestra <strong>por cómo leés sistemas complejos en público</strong>: conectando un cangrejo en Okinawa o una aguja óptica en Columbia con decisiones reales de innovación, cultura y futuro.
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <span id="twoHourTimerDisplay" style="font-family:'JetBrains Mono',monospace; font-size:0.9rem; font-weight:700; color:#4ade80; background:#07070c; border:1px solid rgba(74,222,128,0.5); padding:4px 10px; border-radius:7px;">⏱️ 02:00:00</span>
+        <button class="btn green" style="padding:5px 10px; font-size:0.72rem;" onclick="toggleTwoHourSprintTimer()" id="btnStartTwoHourSprint">▶️ Arrancar Reloj de 2 Horas</button>
+        <button class="btn" style="padding:4px 9px; font-size:0.7rem;" onclick="toggleCoachPanel()">▲ Plegar / Desplegar</button>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)); gap:10px;">
+      <div style="background:rgba(8,8,12,0.9); border:1px solid rgba(74,222,128,0.35); border-radius:9px; padding:10px 12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--green); font-weight:700;">BLOQUE 1 (Min 00 a 30) · PRE-PRO + REVOLEO</div>
+        <div style="font-size:0.75rem; color:var(--cream); margin-top:4px; line-height:1.45;">
+          Revisás las <strong>2 historias reales de tus Guardados de IG</strong> (Shawn Miller en Okinawa + Dra. Christine Hendon en Columbia), marcás <code>🟢 Va HOY</code> y dejás 2 en <code>🟡 Gateras</code>. El Reloj del Dial marca la hora exacta en Okinawa y en Nueva York.
+        </div>
+      </div>
+      <div style="background:rgba(8,8,12,0.9); border:1px solid rgba(232,160,191,0.35); border-radius:9px; padding:10px 12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--pink); font-weight:700;">BLOQUE 2 (Min 30 a 55) · PUENTE CON PROTAGONISTAS</div>
+        <div style="font-size:0.75rem; color:var(--cream); margin-top:4px; line-height:1.45;">
+          Tocás <strong>«📋 Copiar DM/Mail Pre-Aire»</strong> acá abajo en las tarjetas de Shawn Miller y Columbia y se los mandás desde tu Instagram/Mail. Eso abre una conversación real con los creadores antes del programa y multiplica tu alcance internacional cuando te responden.
+        </div>
+      </div>
+      <div style="background:rgba(8,8,12,0.9); border:1px solid rgba(212,175,55,0.4); border-radius:9px; padding:10px 12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold); font-weight:700;">BLOQUE 3 (Min 55 a 90) · COACH DE VOZ + AIRE</div>
+        <div style="font-size:0.75rem; color:var(--cream); margin-top:4px; line-height:1.45;">
+          Enviás el texto al Teleprompter de tu Cabina. <strong>Fórmula de tu Coach en 3 movimientos (sin moralina):</strong> 1) <em>El Hallazgo Físico</em> (la foto/dato real), 2) <em>La Disección de Sistema</em> (por qué ocurre y qué sesgo desarma), 3) <em>La Pregunta Abierta que queda vibrando</em>.
+        </div>
+      </div>
+      <div style="background:rgba(8,8,12,0.9); border:1px solid rgba(167,139,250,0.4); border-radius:9px; padding:10px 12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:#C4B5FD; font-weight:700;">BLOQUE 4 (Min 90 a 120) · TU IG PERSONAL + SUBSTACK</div>
+        <div style="font-size:0.75rem; color:var(--cream); margin-top:4px; line-height:1.45;">
+          Sacamos de un solo tiro: a) <strong>Substack Multimedia</strong> (Texto + Podcast + Video embebido), b) <strong>Pieza en @whimsypov</strong>, y c) <strong>Bajada en tu propio IG (@arianawajntraub) y LinkedIn</strong> mostrando cómo pensás innovación abierta, cultura y dirección estratégica en vivo.
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1022,6 +1118,129 @@
   const preproChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('whimsy_studio_v8') : null;
 
   const DEFAULT_CARDS = [
+  {
+    "id": "okinawa-shawn-miller-cangrejo-azul",
+    "cat": "clima",
+    "catLabel": "🌦️ Guardado IG Investigado · Okinawa, Japón (Reloj: 🇯🇵 TOKIO / OKINAWA)",
+    "worldClockCity": "🇯🇵 TOKIO / OKINAWA (JST)",
+    "rssFeedAdded": "https://www.okinawanaturephotography.com/feed/ · IG @okinawanaturephotography",
+    "sourceName": "Shawn Miller (@okinawanaturephotography) · «Make the Switch» (Okinawa, Japón)",
+    "sourceUrl": "https://www.okinawanaturephotography.com/make-the-switch/",
+    "heroNum": "2016",
+    "miniGraphKicker": "🦀 EN PANTALLA · OKINAWA, JAPÓN (@OKINAWANATUREPHOTOGRAPHY)",
+    "miniGraphText": "Shawn Miller · El cangrejo ermitaño azul (Coenobita purpureus) en una tapa plástica y una bombilla rota",
+    "correspondentStory": "Crónica documental desde Okinawa, Japón, sobre la fotografía que le cambió la vida al fotógrafo de naturaleza Shawn Miller. Caminando al amanecer por una playa de Okinawa, Miller encontró a un cangrejo ermitaño azul eléctrico de la especie Coenobita purpureus viviendo adentro de una tapa blanca de botella de plástico porque los turistas habían vaciado la orilla de caracoles reales. Poco después fotografió a otro ejemplar sobreviviendo adentro de la rosca metálica y el vidrio roto de una lámpara incandescente tirada en la arena, al que bautizó Edison. Cuando la imagen dio la vuelta al mundo en National Geographic y en museos de ciencias naturales de Europa, Miller decidió no quedarse en la queja estética: creó el proyecto Make the Switch, dejando caracoles naturales marcados en las playas de Okinawa junto a las tapas plásticas para documentar cómo los cangrejos abandonan la basura apenas encuentran una arquitectura verdadera donde habitar.",
+    "extraSources": [
+      {
+        "label": "🦀 Sitio oficial de Shawn Miller · Proyecto «Make the Switch» (Okinawa)",
+        "url": "https://www.okinawanaturephotography.com/make-the-switch/"
+      },
+      {
+        "label": "📸 Instagram oficial de Shawn Miller (@okinawanaturephotography)",
+        "url": "https://www.instagram.com/okinawanaturephotography/"
+      },
+      {
+        "label": "🏛️ Smithsonian Magazine · Historia del cangrejo azul de Okinawa",
+        "url": "https://www.smithsonianmag.com/smart-news/hermit-crab-uses-discarded-plastic-cap-shell-180959326/"
+      }
+    ],
+    "title": "El cangrejo azul de Okinawa adentro de una tapa de plástico y de una bombilla rota («Edison»): la foto que le cambió la vida a Shawn Miller",
+    "summary": "De tus Guardados de Instagram a la fuente primaria real en Okinawa, Japón: el fotógrafo Shawn Miller (@okinawanaturephotography) retrató a un Coenobita purpureus azul eléctrico usando una tapa de botella y una bombilla rota como caparazón, y lanzó «Make the Switch» devolviendo caracoles reales a la playa.",
+    "longDossier": "1. LA INVESTIGACIÓN COMPLETA DETRÁS DE TU GUARDADO DE INSTAGRAM (QUIÉN ES, DÓNDE FUE Y QUÉ PASÓ DE VERDAD):\n• El protagonista real: Es el fotógrafo de vida silvestre estadounidense radicado en Okinawa (Japón) Shawn Miller (@okinawanaturephotography).\n• La especie real (ese azul y violeta no tiene filtro): Es el cangrejo ermitaño terrestre de Okinawa (Coenobita purpureus), famoso por su pigmentación azul cobalto y violeta intensa.\n• Las dos fotos que le cambiaron la vida: Primero encontró en una playa de Okinawa al cangrejo azul metido adentro de una tapa blanca roscada de botella plástica a la luz del amanecer (`shawn_miller_7.jpg`). Tiempo después encontró a otro cangrejo viviendo adentro del culote metálico de una lámpara incandescente rota, al que llamó «Edison». La imagen llegó a National Geographic (`shawn_miller_2.jpg`) y a grandes muestras de museos en Roma y Tokio (`shawn_miller_6.jpg`).\n• Del golpe visual a la solución material («Make the Switch»): En vez de quedarse en la postal triste del Antropoceno, Shawn empezó a recolectar caracoles naturales vacíos y a dejarlos en las mismas rocas donde veía cangrejos con tapas de plástico. Los cangrejos inspeccionan el caracol real y en minutos mudan de casa y sueltan el plástico (`okinawa_crab_blue_2.jpg`).\n\n2. CÓMO INTERACTÚA CON LOS RELOJES DEL PROGRAMA Y TU DISPOSITIVO «PÁGINA EN BLANCO»:\n• Reloj activo en Cabina: 🇯🇵 TOKIO / OKINAWA (cuando vos salís a las 06:30 o 18:30 en Punta del Este / Buenos Aires, en las playas de Okinawa ya es la otra punta del día: le hablás directamente a esa hora del reloj).\n• Cruce Polifónico (Arte + Biología + Arquitectura + Open Innovation): Qué pasa cuando a una especie (o a una cultura) le vacían la orilla de refugios reales y empieza a habitar envases descartables.",
+    "dossiersTips": "💡 Abajo tenés listas las 2 Cartas para Shawn Miller (en inglés y español) para copiar en 1 clic: 1) Antes del programa pidiéndole permiso y 1 frase en audio de 40s desde Okinawa, y 2) Después del programa avisándole que le dedicaste un bloque entero en Whimsy POV.",
+    "coachPersonalAngle": "🎯 BAJADA PARA TU IG PERSONAL (@arianawajntraub) Y LINKEDIN (CERO CONSEJO TRUCHO DE EMPRENDEDOR): En vez de dar una moraleja de autoayuda, mostrás cómo mirás vos un problema complejo en tus consultoras y mesas estratégicas: «En Okinawa los cangrejos ermitaños azules empezaron a vivir adentro de tapas de gaseosa y bombillas rotas porque nos llevamos todos los caracoles de la costa. Shawn Miller hizo algo que en diseño de sistemas e innovación abierta nos cuesta horrores: en vez de gritarle al cangrejo por usar plástico, volvió a poner arquitectura real al alcance de su mano. Nadie abandona un envase tóxico hasta que tiene una estructura mejor donde mudarse.»",
+    "outreachPre": "Subject / DM to @okinawanaturephotography (Shawn Miller — Pre-Show Invitation):\n\nHi Shawn! I’m Ariana Wajntraub, host of Whimsy POV & La Minuta W (from Punta del Este / Buenos Aires). Your photographs of the blue Okinawa hermit crab inside the plastic bottle cap—and 'Edison' inside the broken lightbulb—along with your 'Make the Switch' project deeply moved our editorial table.\n\nWe are dedicating a special segment of our upcoming live episode to your work, connecting visual art, marine biology, and how a single photograph can trigger a real material solution. With your permission, we would love to project your photographs on air (crediting @okinawanaturephotography and okinawanaturephotography.com on screen). And if you happen to have 40 seconds to send us a short voice note from Okinawa answering one question—'What went through your mind the exact morning you saw the first crab actually switch from plastic back into a real shell?'—we will play your voice live on the show. Thank you for what you do!\n\n---\n[Versión en Español para referencia]: Hola Shawn, soy Ariana Wajntraub (conductora de Whimsy POV y La Minuta W). Vamos a dedicarle un bloque especial de nuestro próximo programa en vivo a tu foto del cangrejo azul de Okinawa, a 'Edison' en la bombilla rota y a tu proyecto 'Make the Switch', acreditando tu cuenta y tu web en pantalla. Si tenés 40 segundos para mandarnos un audio contando qué sentiste la mañana en que viste al primer cangrejo abandonar el plástico por un caracol real, lo pasamos al aire.",
+    "outreachPost": "Subject / DM to @okinawanaturephotography (Shawn Miller — Post-Show Segment Live):\n\nHi Shawn! Just wanted to share that today on Whimsy POV we aired our full segment dedicated to your Okinawa blueberry hermit crab photographs and your 'Make the Switch' initiative. Your website (okinawanaturephotography.com/make-the-switch) and @okinawanaturephotography are featured on screen and in all our show notes across YouTube, Substack (La Minuta W), and Instagram.\n\nHere is the link to the episode and the cut where we talk about your work: https://www.youtube.com/@whimsyPOV — Feel free to share or repost it anytime. Huge admiration from South America!",
+    "album": [
+      {
+        "url": "evidencias/prepro/shawn_miller_7.jpg",
+        "caption": "FOTO ORIGINAL DE SHAWN MILLER (Okinawa, 2016): El cangrejo ermitaño azul (Coenobita purpureus) adentro de una tapa plástica al amanecer",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/shawn_miller_2.jpg",
+        "caption": "La foto de Shawn Miller publicada en la edición histórica «Planet or Plastic?» de National Geographic",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/shawn_miller_6.jpg",
+        "caption": "Exhibición de museo con la obra de Shawn Miller sobre los cangrejos ermitaños de Okinawa",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/okinawa_crab_blue_2.jpg",
+        "caption": "El Coenobita purpureus azul eléctrico de Okinawa de vuelta adentro de un caracol natural real («Make the Switch»)",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@okinawanaturephotography",
+      "@natgeo",
+      "@smithsonianmag",
+      "@whimsypov",
+      "@arianawajntraub"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Cruza directo con tus Minutas W «Arena» y «Lo que el enjambre sabe de memoria» + Dispositivo Palabra «ANIMAL / UMBRAL»."
+  },
+  {
+    "id": "columbia-aguja-optica-cancer",
+    "cat": "clima",
+    "catLabel": "🔬 Guardado IG Investigado · Ciencia Real vs. Clickbait (Reloj: 🇺🇸 NUEVA YORK)",
+    "worldClockCity": "🇺🇸 NUEVA YORK (EST)",
+    "rssFeedAdded": "https://www.engineering.columbia.edu/rss.xml · IG @columbiaengineering @columbiamed",
+    "sourceName": "Dra. Christine Hendon & Columbia University (@columbiaengineering · Structure-Function Imaging Lab)",
+    "sourceUrl": "https://www.engineering.columbia.edu/faculty-staff/directory/christine-p-hendon",
+    "heroNum": "OCT / -40°C",
+    "miniGraphKicker": "🔬 EN PANTALLA · UNIVERSIDAD DE COLUMBIA (NUEVA YORK)",
+    "miniGraphText": "Dra. Christine Hendon · Aguja óptica inteligente (OCT) y crioablación localizada: la ciencia real sin clickbait",
+    "correspondentStory": "Crónica científica desde el campus de la Universidad de Columbia en Nueva York para separar el titular sensacionalista de redes de la ingeniería médica real. En Instagram circulan videos virales prometiendo que una aguja de Columbia cura el cáncer en minutos. Cuando vamos a los papers reales del laboratorio de imágenes de estructura y función dirigido por la ingeniera eléctrica doctora Christine Hendon en Columbia Engineering, junto al equipo de cirugía oncológica del centro Herbert Irving, lo que encontramos es todavía más fascinante porque es verdad: por un lado, una aguja de biopsia con fibras ópticas de tomografía de coherencia óptica adentro que lee en tiempo real la microestructura del tejido mamario sin esperar días de laboratorio; y por otro, agujas de crioablación que congelan tumores tempranos localizados a menos cuarenta grados. No es magia para cualquier estadio: es óptica y física térmica de precisión para intervenir antes y con menos daño.",
+    "extraSources": [
+      {
+        "label": "🔬 Perfil oficial Dra. Christine Hendon · Columbia Engineering (Structure-Function Imaging Lab)",
+        "url": "https://www.engineering.columbia.edu/faculty-staff/directory/christine-p-hendon"
+      },
+      {
+        "label": "🏥 Herbert Irving Comprehensive Cancer Center · Columbia University Medical Center",
+        "url": "https://www.cancer.columbia.edu/"
+      },
+      {
+        "label": "📄 Paper en Biomedical Optics Express (Aguja óptica OCT para tejido mamario en Columbia)",
+        "url": "https://opg.optica.org/boe/ home.cfm"
+      }
+    ],
+    "title": "La investigadora de la Universidad de Columbia y la «aguja contra el cáncer»: cómo desarmar el titular viral y contar la ciencia real en vivo",
+    "summary": "Investigamos tu segundo Guardado de Instagram: en redes circula como «la aguja mágica de Columbia que salva el cáncer». Fuimos a la fuente primaria en Nueva York (el laboratorio de la Dra. Christine Hendon en Columbia Engineering y el equipo de crioablación de Columbia Med) para contar qué hace de verdad, cuáles son sus límites reales y escribirle directo a ella.",
+    "longDossier": "1. POR QUÉ ESTE TEMA ES ORO PURO PARA EL SELLO DE WHIMSY POV (NO COMPRAR HUMO VIRAL, IR AL PAPER Y A LA PROTAGONISTA):\n• Lo que vende el reel viral de Instagram: «Una investigadora en la Universidad de Columbia inventó una aguja que cura el cáncer sin cirugía».\n• Lo que descubrimos al auditar los laboratorios reales de Columbia University en Nueva York:\n  a) Dra. Christine Hendon (Profesora de Ingeniería Eléctrica en Columbia Engineering, directora del Structure-Function Imaging Lab): Desarrolló una aguja inteligente con Tomografía de Coherencia Óptica (OCT) integrada en la punta. Durante una biopsia o cirugía de cáncer de mama, la luz infrarroja dentro de la aguja lee en tiempo real la arquitectura microscópica de las células y le avisa al médico en el acto dónde empieza y dónde termina el tejido tumoral, evitando segundas cirugías a ciegas.\n  b) El protocolo de Crioablación con aguja fina en Columbia Surgery (Bret Taback / Haagensen Research): En tumores de mama muy pequeños y detectados en estadio temprano, una aguja guiada por ultrasonido inyecta nitrógeno líquido / argón a -40 °C formando una esfera de hielo («iceball») que destruye las células tumorales locales en consultorio.\n• El filtro ético y periodístico de Whimsy POV: Contar la maravilla real (óptica en tiempo real + física del frío en detección temprana) aclarando con rigor que no reemplaza tratamientos sistémicos en estadios avanzados, y valorando el trabajo silencioso de las ingenieras e investigadoras de laboratorio frente al ruido del algoritmo.\n\n2. CÓMO INTERACTÚA CON LOS RELOJES Y TU COACH PERSONAL:\n• Reloj activo en Cabina: 🇺🇸 NUEVA YORK (1 hora menos que Punta del Este / Buenos Aires).\n• Ya tenés abajo el mail/DM listo para enviarle hoy mismo a la Dra. Christine Hendon y al equipo de prensa de Columbia Engineering.",
+    "dossiersTips": "💡 Usá el botón «📋 Copiar Mail / DM Pre-Aire» de abajo para escribirle a la Dra. Christine Hendon (`cph2126@columbia.edu` / `@columbiaengineering`) contándole que en Whimsy POV vamos a abordar su investigación desarmando las exageraciones de redes.",
+    "coachPersonalAngle": "🎯 BAJADA PARA TU IG PERSONAL (@arianawajntraub) Y LINKEDIN (POSICIONAMIENTO EJECUTIVO Y CIENTÍFICO): «En mi carpeta de guardados de Instagram apareció un reel diciendo que una investigadora de Columbia había creado 'la aguja que termina con el cáncer'. En vez de compartir el titular fácil, en la mesa de pre-producción de Whimsy POV nos fuimos a leer los papers del laboratorio de la Dra. Christine Hendon en Columbia Engineering. La verdad técnica —una aguja con fibra óptica que lee la microestructura del tejido en vivo— es diez veces más valiosa que el eslogan mágico. En comunicación, en ciencia y en estrategia, el verdadero respeto por la audiencia es no subestimarle la inteligencia.»",
+    "outreachPre": "Subject: Whimsy POV Live Feature — Honoring the real science behind Columbia's Optical Needle Probe (beyond social media headlines)\nTo: Dr. Christine Hendon (Structure-Function Imaging Lab, Columbia Engineering) / @columbiaengineering @columbiamed\n\nDear Dr. Hendon and Columbia Engineering team,\n\nI’m Ariana Wajntraub, host of the cultural and science broadcast 'Whimsy POV' and author of 'La Minuta W' (streaming from Punta del Este / Buenos Aires). Recently, viral clips on Instagram have been circulating oversimplified claims about 'Columbia's needle against cancer.'\n\nAt Whimsy POV, our editorial rule is to go straight to the primary peer-reviewed source. In our upcoming episode, we are dedicating a segment to explaining the rigorous engineering behind your Structure-Function Imaging Lab’s optical coherence tomography (OCT) needle probe and Columbia's localized cryoablation research—celebrating the real physics and clinical precision while clarifying its true scope for the public.\n\nIf you or a member of your lab would like to share a brief 45-second voice note or a quote on: 'What is the biggest misconception when social media translates biomedical engineering, and what excites you most about real-time optical biopsy today?', we would be honored to feature it live on air with full credit to your lab. Warm regards from South America!\n\n---\n[Versión en Español]: Estimada Dra. Hendon y equipo de Columbia Engineering: Soy Ariana Wajntraub, conductora de Whimsy POV y autora de La Minuta W. Vimos circular en Instagram reels simplificando 'la aguja contra el cáncer de Columbia' y decidimos ir a los papers reales de tu laboratorio de Tomografía de Coherencia Óptica (OCT) para explicar al aire la verdadera ingeniería biomédica sin clickbait. Si tenés 45 segundos para mandarnos una cita o audio sobre qué es lo que más te entusiasma hoy de la biopsia óptica en tiempo real, será un honor pasarlo en vivo acreditando a tu laboratorio.",
+    "outreachPost": "Subject / DM to @columbiaengineering @columbiamed (Post-Show Clip & Substack Essay):\n\nDear Dr. Hendon & Columbia Engineering team,\n\nToday on Whimsy POV we aired our segment dedicated to your lab's real-time optical needle probe research—contrasting viral social media myths with rigorous biomedical engineering. We linked directly to your Columbia Engineering faculty profile and research papers across our YouTube broadcast and our Substack newsletter (La Minuta W).\n\nYou can watch the segment here: https://www.youtube.com/@whimsyPOV — Thank you for your pioneering work!",
+    "album": [
+      {
+        "url": "evidencias/prepro/micro_newt_cell.gif",
+        "caption": "Microscopía óptica en tiempo real: cómo la luz lee la arquitectura celular viva sin destruir el tejido",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/quanta_reality.webp",
+        "caption": "Óptica e ingeniería de precisión: separar el titular mágico del paper revisado por pares",
+        "checked": true
+      },
+      {
+        "url": "evidencias/aris_flores_macro.jpg",
+        "caption": "Tu propio gabinete óptico en ARIS2: mirar con lupa cuando afuera el algoritmo grita",
+        "checked": true
+      }
+    ],
+    "handles": [
+      "@columbia",
+      "@columbiaengineering",
+      "@columbiamed",
+      "@whimsypov",
+      "@arianawajntraub"
+    ],
+    "hiloRojo": "Hilo Rojo con tu archivo: Cruza con tus Minutas W «No sos vos, son tus sesgos» y «Eppur si muove» + el rigor científico frente al ruido viral."
+  },
   {
     "id": "colossal-maria-tomazou-excel",
     "cat": "transito",
@@ -1709,15 +1928,21 @@
   }
 
   let allCards = loadAllCards();
-  let selectedCardIds = ['colossal-maria-tomazou-excel', 'colossal-arkivism-cc0', 'archivo-propio-hilo-rojo'];
+  let selectedCardIds = ['okinawa-shawn-miller-cangrejo-azul', 'columbia-aguja-optica-cancer', 'colossal-maria-tomazou-excel', 'colossal-arkivism-cc0'];
   let activeFilter = 'all';
-  let openDossierIds = { 'colossal-maria-tomazou-excel': true, 'colossal-arkivism-cc0': true };
+  let openDossierIds = {
+    'okinawa-shawn-miller-cangrejo-azul': true,
+    'columbia-aguja-optica-cancer': true,
+    'colossal-maria-tomazou-excel': true
+  };
 
   // BANCO PERSISTENTE DE ESTADOS (VA HOY / EN GATERAS / GUARDADO ROTULADO + FECHA DE VENCIMIENTO + CORRESPONSAL)
   const DEFAULT_CARD_META = {
+    'okinawa-shawn-miller-cangrejo-azul': { status: 'hoy', rotulo: 'Guardado IG: Okinawa / Make the Switch', vencimiento: '', withCorr: true },
+    'columbia-aguja-optica-cancer': { status: 'hoy', rotulo: 'Guardado IG: Columbia / Ciencia sin Humo', vencimiento: '', withCorr: true },
     'colossal-maria-tomazou-excel': { status: 'hoy', rotulo: 'Especial Cine / Arte en Oficina', vencimiento: '', withCorr: true },
     'colossal-arkivism-cc0': { status: 'hoy', rotulo: 'Palabra: PAPEL / Libros CC0', vencimiento: '', withCorr: true },
-    'archivo-propio-hilo-rojo': { status: 'hoy', rotulo: 'Hilo Rojo / Archivo ARIS2', vencimiento: '', withCorr: false },
+    'archivo-propio-hilo-rojo': { status: 'gateras', rotulo: 'Hilo Rojo / Archivo ARIS2', vencimiento: '', withCorr: false },
     'vam-reverso-oculto': { status: 'gateras', rotulo: 'Plan B de lujo (Londres V&A)', vencimiento: '', withCorr: true },
     'bhl-botanica-secreta': { status: 'gateras', rotulo: 'Plan B Botánica / Naturaleza', vencimiento: '', withCorr: false },
     'openalex-musica-cerebro': { status: 'guardado', rotulo: 'Ciencia / Neuroacústica', vencimiento: '2026-11-30', withCorr: true },
@@ -2021,9 +2246,41 @@
           <div class="handles-row">
             <span style="font-size:0.7rem; color:var(--muted);">📣 Arrobas listas para etiquetar:</span>
             ${(card.handles || []).map(h => `<span class="handle-pill">${h}</span>`).join('')}
+            ${card.worldClockCity ? `<span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--gold); background:rgba(212,175,55,0.14); border:1px solid rgba(212,175,55,0.4); padding:2px 8px; border-radius:5px;">🕰️ Reloj del Dial: ${card.worldClockCity}</span>` : ''}
+            ${card.rssFeedAdded ? `<span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--green); background:rgba(74,222,128,0.12); border:1px solid rgba(74,222,128,0.35); padding:2px 8px; border-radius:5px;">📡 Sumado a tus Feeds RSS: ${card.rssFeedAdded}</span>` : ''}
           </div>
           <div class="hilo-rojo-banner">
             🧵 <strong>${card.hiloRojo}</strong>
+          </div>
+
+          ${card.coachPersonalAngle ? `
+          <div style="margin:10px 0; padding:10px 12px; border-radius:9px; background:rgba(212,175,55,0.1); border-left:3px solid var(--gold); font-size:0.79rem; color:var(--cream); line-height:1.5;">
+            ${card.coachPersonalAngle}
+          </div>
+          ` : ''}
+
+          <!-- PUENTE DIRECTO CON EL PROTAGONISTA (CARTA PRE-AIRE + POST-AIRE EN 1 CLIC) -->
+          <div style="margin:10px 0 12px; padding:10px 12px; border-radius:10px; background:#08080d; border:1px solid rgba(74,222,128,0.4);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:0.69rem; color:var(--green); font-weight:700;">
+                📬 ESCRIBIRLE AL PROTAGONISTA (${(card.handles && card.handles[0]) || card.sourceName.slice(0, 32)}) · ANTES Y DESPUÉS DE SALIR AL AIRE:
+              </span>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button class="btn green" style="padding:4px 9px; font-size:0.7rem;" onclick="copyCardOutreach('${card.id}', 'pre', this)">📋 Copiar Mail / DM PRE-AIRE (Pedir audio 40s / permiso)</button>
+                <button class="btn gold" style="padding:4px 9px; font-size:0.7rem;" onclick="copyCardOutreach('${card.id}', 'post', this)">📋 Copiar Mail / DM POST-AIRE (Avisar que salió al aire)</button>
+                <button class="btn" style="padding:4px 9px; font-size:0.7rem;" onclick="toggleCardOutreachPreview('${card.id}')">👁️ Ver / Editar cartas</button>
+              </div>
+            </div>
+            <div id="outreach-box-${card.id}" style="display:${(card.id === 'okinawa-shawn-miller-cangrejo-azul' || card.id === 'columbia-aguja-optica-cancer') ? 'grid' : 'none'}; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:8px; margin-top:8px;">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--green); margin-bottom:4px;">✉️ 1. ANTES DEL PROGRAMA (Invitación / Testimonio de 40s):</div>
+                <textarea id="outreach-pre-${card.id}" style="width:100%; min-height:115px; background:#050508; border:1px solid rgba(74,222,128,0.35); border-radius:6px; color:var(--cream); padding:8px; font-size:0.73rem; line-height:1.45;">${(card.outreachPre || buildDefaultOutreach(card, 'pre')).replace(/</g, '&lt;')}</textarea>
+              </div>
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--gold); margin-bottom:4px;">📲 2. DESPUÉS DEL PROGRAMA (Link al bloque + Etiqueta):</div>
+                <textarea id="outreach-post-${card.id}" style="width:100%; min-height:115px; background:#050508; border:1px solid rgba(212,175,55,0.35); border-radius:6px; color:var(--cream); padding:8px; font-size:0.73rem; line-height:1.45;">${(card.outreachPost || buildDefaultOutreach(card, 'post')).replace(/</g, '&lt;')}</textarea>
+              </div>
+            </div>
           </div>
 
           <!-- MAIN CARD ACTIONS -->
@@ -3274,6 +3531,178 @@
     btn.textContent = '🔴 Escuchando... (Tocá para frenar)';
   }
 
+  const DEFAULT_RSS_FEEDS_LIST = [
+    { name: 'Shawn Miller · Okinawa (@okinawanaturephotography)', url: 'https://www.okinawanaturephotography.com/make-the-switch/' },
+    { name: 'Columbia Engineering · Dra. Christine Hendon', url: 'https://www.engineering.columbia.edu/faculty-staff/directory/christine-p-hendon' },
+    { name: 'Colossal (@thisiscolossal)', url: 'https://www.thisiscolossal.com/feed/' },
+    { name: 'The Public Domain Review', url: 'https://publicdomainreview.org/rss.xml' },
+    { name: 'Victoria & Albert Museum (Londres)', url: 'https://collections.vam.ac.uk/' },
+    { name: 'Arkivism CC0 (4M Imágenes)', url: 'https://arkivism.com/' },
+    { name: 'Quanta Magazine (Física / Matemática)', url: 'https://api.quantamagazine.org/v1/rss' },
+    { name: 'Smithsonian Open Access', url: 'https://www.si.edu/openaccess' },
+    { name: 'CONICET Ciencia (@conicetdialoga)', url: 'https://www.conicet.gov.ar/categorias/noticias/' },
+    { name: 'Substack · La Minuta W (Ariana)', url: 'https://arianawajntraub.substack.com/feed' }
+  ];
+
+  function loadRssFeedsList() {
+    let saved = [];
+    try { saved = JSON.parse(localStorage.getItem('whimsy_active_rss_feeds_v16') || '[]'); } catch(e) {}
+    const map = new Map();
+    [...saved, ...DEFAULT_RSS_FEEDS_LIST].forEach(f => {
+      if (f && f.name) map.set(f.name, f);
+    });
+    return Array.from(map.values());
+  }
+
+  function renderRssFeedsPills() {
+    const row = document.getElementById('rssFeedsPillsRow');
+    const badge = document.getElementById('activeRssFeedsCountBadge');
+    const list = loadRssFeedsList();
+    if (badge) badge.textContent = '📡 ' + list.length + ' Feeds RSS del Mundo Activos';
+    if (!row) return;
+    row.innerHTML = '<strong style="color:var(--green);">📡 Feeds RSS vivos conectados a tu Mesa:</strong> ' +
+      list.map(f => `<a href="${f.url}" target="_blank" rel="noopener" style="color:var(--cream); background:rgba(255,255,255,0.06); border:1px solid rgba(74,222,128,0.3); padding:2px 8px; border-radius:5px; text-decoration:none;">${f.name} ↗</a>`).join('');
+  }
+
+  function buildDefaultOutreach(card, mode) {
+    const handle = (card.handles && card.handles[0]) || card.sourceName;
+    if (mode === 'pre') {
+      return `Hi ${handle}! I’m Ariana Wajntraub, host of Whimsy POV & La Minuta W. We are featuring your work («${card.title.slice(0, 68)}») in our upcoming live broadcast, crediting your website and handle on screen. If you have 40 seconds to send a short voice note or quote about the story behind this work, we would love to play it live on air!\n\n---\n[ES]: ¡Hola ${handle}! Soy Ariana Wajntraub (Whimsy POV / La Minuta W). En nuestro próximo programa en vivo vamos a dedicarle un bloque a tu trabajo acreditando tu fuente en pantalla. Si tenés 40 segundos para mandarnos un audio breve contando el detrás de escena, lo pasamos al aire.`;
+    }
+    return `Hi ${handle}! Today on Whimsy POV we aired our full segment dedicated to «${card.title.slice(0, 68)}», featuring your link (${card.sourceUrl}) and handle on screen. You can watch it here: https://www.youtube.com/@whimsyPOV — Warm regards!`;
+  }
+
+  function toggleCardOutreachPreview(cardId) {
+    const el = document.getElementById('outreach-box-' + cardId);
+    if (!el) return;
+    el.style.display = (el.style.display === 'none' || !el.style.display) ? 'grid' : 'none';
+  }
+
+  function copyCardOutreach(cardId, mode, btnEl) {
+    const card = allCards.find(c => c.id === cardId);
+    if (!card) return;
+    const area = document.getElementById('outreach-' + mode + '-' + cardId);
+    const text = area ? area.value : (mode === 'pre' ? (card.outreachPre || buildDefaultOutreach(card, 'pre')) : (card.outreachPost || buildDefaultOutreach(card, 'post')));
+    const box = document.getElementById('outreach-box-' + cardId);
+    if (box) box.style.display = 'grid';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(() => {});
+    }
+    if (btnEl) {
+      const orig = btnEl.textContent;
+      btnEl.textContent = '✅ ¡Copiado! Pegalo en IG / Mail';
+      setTimeout(() => { btnEl.textContent = orig; }, 2000);
+    }
+  }
+
+  function toggleRevoleadorPanel() {
+    const p = document.getElementById('revoleadorPanel');
+    if (!p) return;
+    p.style.display = (p.style.display === 'none') ? 'block' : 'none';
+  }
+
+  function toggleCoachPanel() {
+    const p = document.getElementById('coachArianaPanel');
+    if (!p) return;
+    p.style.display = (p.style.display === 'none') ? 'block' : 'none';
+  }
+
+  async function procesarRevoleoEnVivo() {
+    const idea = (document.getElementById('revoleoIdeaInput').value || '').trim();
+    const handleOrUrl = (document.getElementById('revoleoHandleInput').value || '').trim();
+    const clockCity = document.getElementById('revoleoClockSelect').value;
+    const verifyMode = document.getElementById('revoleoVerifySelect').value;
+
+    if (!idea) {
+      alert('Tirame aunque sea 1 línea de lo que viste o guardaste en Instagram / Web.');
+      return;
+    }
+
+    const isUrl = /^https?:\/\//i.test(handleOrUrl);
+    const cleanHandle = handleOrUrl.startsWith('@') ? handleOrUrl : (isUrl ? '@fuente_original' : ('@' + (handleOrUrl.replace(/[^a-zA-Z0-9._]/g, '') || 'protagonista')));
+    const cleanUrl = isUrl ? handleOrUrl : ('https://www.instagram.com/' + cleanHandle.replace('@', '') + '/');
+
+    // 1. Sumar automáticamente a la lista de Feeds RSS del Mundo de Ariana
+    let savedFeeds = [];
+    try { savedFeeds = JSON.parse(localStorage.getItem('whimsy_active_rss_feeds_v16') || '[]'); } catch(e) {}
+    savedFeeds.unshift({ name: `${cleanHandle} (${clockCity.split(' ')[1] || 'Mundo'})`, url: cleanUrl });
+    localStorage.setItem('whimsy_active_rss_feeds_v16', JSON.stringify(savedFeeds.slice(0, 30)));
+    renderRssFeedsPills();
+
+    // 2. Construir la tarjeta con Research + Reloj + Ángulo del Coach Personal + Cartas Pre y Post Aire
+    const newId = 'revoleo-' + Date.now();
+    const modeLabel = verifyMode === 'desarmar_clickbait'
+      ? '🔬 Guardado IG Investigado · Desarmando Clickbait con Fuente Primaria'
+      : '🌦️ Guardado IG Investigado · Fuente Primaria + Contacto Directo';
+
+    const newCard = {
+      id: newId,
+      cat: 'clima',
+      catLabel: `${modeLabel} (Reloj: ${clockCity})`,
+      worldClockCity: clockCity,
+      rssFeedAdded: `${cleanHandle} · ${cleanUrl}`,
+      sourceName: `${cleanHandle} · Investigado desde tu Revoleador (${clockCity})`,
+      sourceUrl: cleanUrl,
+      heroNum: 'HOY',
+      miniGraphKicker: `🌍 EN PANTALLA · ${clockCity}`,
+      miniGraphText: `${idea.slice(0, 78)} (${cleanHandle})`,
+      correspondentStory: `Crónica desde ${clockCity} a partir del hallazgo detectado en nuestra mesa de pre-producción sobre ${idea}. Fuimos directo a la fuente primaria de ${cleanHandle} para separar el ruido de las redes del trabajo real y abrir conversación directa con sus protagonistas.`,
+      extraSources: [
+        { label: `🔗 Fuente directa de ${cleanHandle}`, url: cleanUrl }
+      ],
+      title: idea,
+      summary: `Revoleado desde tus Guardados e incorporado a tus Feeds RSS permanentes (${cleanHandle} · Reloj ${clockCity}). Incluye carta lista para escribirle antes de salir al aire y aviso post-programa.`,
+      longDossier: `1. HALLAZGO INCORPORADO DESDE EL REVOLEADOR (${clockCity}):\n• Idea / Guardado original: ${idea}\n• Fuente / Protagonista sumado a tu radar RSS: ${cleanHandle} (${cleanUrl})\n• Enfoque de Investigación Whimsy POV: ${verifyMode === 'desarmar_clickbait' ? 'No comprar el eslogan viral; verificar el paper o trabajo real, mostrar qué hace de verdad y cuáles son sus límites reales.' : 'Ir directo al autor/fotógrafo/investigador primario, acreditar su obra en pantalla y pedirle un testimonio breve de 40 segundos en primera persona.'}\n\n2. INTERACCIÓN CON LOS RELOJES Y LA CABINA:\n• Al tocar «🟢 Va HOY», sube a tu Canasta con el reloj de ${clockCity} y el texto listo para tu Teleprompter.`,
+      dossiersTips: '💡 Podés tocar «🔎 Buscar más info, papers y sumar 4 fotos CC0» acá abajo para traer imágenes de Wikimedia Commons y Wikipedia en el acto.',
+      coachPersonalAngle: `🎯 BAJADA PARA TU IG PERSONAL (@arianawajntraub) Y LINKEDIN: Mostrar cómo leés «${idea.slice(0, 60)}» desde el diseño de sistemas, la innovación abierta y el criterio propio, sin caer en moralejas prefabricadas.`,
+      outreachPre: `Hi ${cleanHandle}! I’m Ariana Wajntraub, host of Whimsy POV & La Minuta W. We came across your work («${idea.slice(0, 70)}») and are dedicating a segment of our upcoming live show to the real story behind it, crediting ${cleanHandle} on screen. If you have 40 seconds to send us a quick voice note or quote answering one question about what triggered this work, we would love to feature your voice on air!\n\n---\n[ES]: ¡Hola ${cleanHandle}! Soy Ariana Wajntraub (conductora de Whimsy POV y La Minuta W). Vamos a dedicarle un bloque de nuestro próximo programa en vivo a tu trabajo sobre «${idea.slice(0, 70)}». Si tenés 40 segundos para mandarnos un audio breve contando qué te llevó a hacerlo, lo pasamos al aire.`,
+      outreachPost: `Hi ${cleanHandle}! Today on Whimsy POV we aired our segment dedicated to your work («${idea.slice(0, 70)}»), crediting ${cleanHandle} and ${cleanUrl} on screen and in our Substack (La Minuta W). Here is the link to the episode: https://www.youtube.com/@whimsyPOV — Warm regards!`,
+      album: [
+        { url: 'evidencias/aris_flores_macro.jpg', caption: 'Tocá «🔎 Buscar más info y sumar 4 fotos CC0» para ilustrar este hallazgo', checked: true }
+      ],
+      handles: [cleanHandle, '@whimsypov', '@arianawajntraub'],
+      hiloRojo: `Hilo Rojo con tu archivo: Conectado desde el Reloj ${clockCity} con tus 19 Minutas W y tus 91 videos en @whimsypov.`
+    };
+
+    let custom = [];
+    try { custom = JSON.parse(localStorage.getItem('whimsy_custom_rss_cards_v13') || '[]'); } catch(e) {}
+    custom.unshift(newCard);
+    localStorage.setItem('whimsy_custom_rss_cards_v13', JSON.stringify(custom));
+
+    allCards = loadAllCards();
+    cardMetaMap[newId] = { status: 'hoy', rotulo: 'Revoleado IG (' + clockCity.split(' ')[1] + ')', vencimiento: '', withCorr: true };
+    openDossierIds[newId] = true;
+    syncSelectedFromMeta();
+    saveCardMetaMap();
+    document.getElementById('revoleoIdeaInput').value = '';
+    document.getElementById('revoleoHandleInput').value = '';
+    renderFeedGrid();
+    renderBasketAndWeave();
+    enrichCardLive(newId);
+  }
+
+  let twoHourInterval = null;
+  let twoHourRemainingSec = 7200;
+  function toggleTwoHourSprintTimer() {
+    const btn = document.getElementById('btnStartTwoHourSprint');
+    const disp = document.getElementById('twoHourTimerDisplay');
+    if (twoHourInterval) {
+      clearInterval(twoHourInterval);
+      twoHourInterval = null;
+      if (btn) btn.textContent = '▶️ Reanudar Reloj 2 Horas';
+      return;
+    }
+    if (btn) btn.textContent = '⏸️ Pausar Reloj 2 Horas';
+    twoHourInterval = setInterval(() => {
+      if (twoHourRemainingSec > 0) twoHourRemainingSec--;
+      const hh = String(Math.floor(twoHourRemainingSec / 3600)).padStart(2, '0');
+      const mm = String(Math.floor((twoHourRemainingSec % 3600) / 60)).padStart(2, '0');
+      const ss = String(twoHourRemainingSec % 60).padStart(2, '0');
+      if (disp) disp.textContent = `⏱️ ${hh}:${mm}:${ss}`;
+    }, 1000);
+  }
+
+  renderRssFeedsPills();
   renderFeedGrid();
   renderBasketAndWeave();
   renderSentBlocksHistory();
