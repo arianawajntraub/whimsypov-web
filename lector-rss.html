@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Whimsy POV · Lector RSS & Radar Semanal (3 → 2 → 1)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1A1A1A;
+      --panel: rgba(255, 255, 255, 0.04);
+      --panel-strong: rgba(234, 221, 194, 0.08);
+      --cream: #EADDC2;
+      --paper: #F0EDE1;
+      --sand: #EAD7B7;
+      --muted: #9C8E7E;
+      --bronze: #876F55;
+      --earth: #6E533A;
+      --coral: #CC7B67;
+      --sage: #6FA397;
+      --white: #FFFFFF;
+      --border: rgba(234, 221, 194, 0.18);
+      --border-strong: rgba(234, 221, 194, 0.34);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--coral); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* TOP BAR */
+    .topbar {
+      background: rgba(26, 26, 26, 0.96);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-left img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--coral);
+      object-fit: contain;
+      padding: 2px;
+      background: var(--bg);
+    }
+
+    .brand-title h1 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--cream);
+      letter-spacing: -0.01em;
+    }
+
+    .brand-title p {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .stage-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: rgba(234, 221, 194, 0.08);
+      color: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 11px;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      border-color: var(--coral);
+      background: rgba(204, 123, 103, 0.16);
+      text-decoration: none;
+    }
+
+    .btn.active-tab {
+      background: var(--coral);
+      color: #1A1A1A;
+      border-color: var(--coral);
+    }
+
+    .btn.sage {
+      background: rgba(111, 163, 151, 0.18);
+      border-color: var(--sage);
+      color: var(--paper);
+    }
+
+    .btn.sage:hover {
+      background: var(--sage);
+      color: #1A1A1A;
+    }
+
+    .btn.sand {
+      background: rgba(234, 215, 183, 0.16);
+      border-color: var(--sand);
+      color: var(--sand);
+    }
+
+    .btn.coral {
+      background: var(--coral);
+      border-color: var(--coral);
+      color: #1A1A1A;
+    }
+
+    /* STATUS TOAST */
+    .toast-banner {
+      display: none;
+      background: rgba(111, 163, 151, 0.22);
+      border-bottom: 1px solid var(--sage);
+      color: var(--paper);
+      padding: 9px 16px;
+      font-size: 0.78rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .toast-banner.open { display: flex; }
+
+    /* STEP 1: GOOGLE READER + GMAIL 3-PANE WORKSPACE */
+    .reader-layout {
+      display: grid;
+      grid-template-columns: 248px 430px 1fr;
+      flex: 1;
+      min-height: calc(100vh - 60px);
+    }
+
+    @media (max-width: 1220px) {
+      .reader-layout {
+        grid-template-columns: 220px 360px 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .reader-layout {
+        grid-template-columns: 1fr;
+      }
+      .pane-sidebar, .pane-inbox {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: none;
+      }
+    }
+
+    /* PANE 1: SIDEBAR */
+    .pane-sidebar {
+      border-right: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      max-height: calc(100vh - 60px);
+    }
+
+    .sidebar-section-title {
+      font-size: 0.67rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 4px 8px;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-item {
+      width: 100%;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--cream);
+      border-radius: 7px;
+      padding: 7px 9px;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.12s ease;
+    }
+
+    .nav-item:hover {
+      background: rgba(234, 221, 194, 0.08);
+    }
+
+    .nav-item.active {
+      background: rgba(204, 123, 103, 0.2);
+      border-color: rgba(204, 123, 103, 0.55);
+      color: var(--white);
+      font-weight: 800;
+    }
+
+    .nav-item .label-wrap {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .count-pill {
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: var(--sand);
+      background: rgba(234, 215, 183, 0.14);
+      padding: 1px 6px;
+      border-radius: 99px;
+    }
+
+    /* PANE 2: GMAIL-STYLE INBOX LIST */
+    .pane-inbox {
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 60px);
+      background: var(--bg);
+    }
+
+    .inbox-controls {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .search-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--cream);
+      padding: 7px 10px;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      font-size: 0.76rem;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: var(--coral);
+    }
+
+    .select-field {
+      background: #1A1A1A;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--sand);
+      padding: 6px 8px;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .inbox-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.69rem;
+      color: var(--muted);
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .inbox-list {
+      flex: 1;
+      overflow-y: auto;
+      divide-y: 1px solid var(--border);
+    }
+
+    .gmail-row {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: background 0.12s ease;
+    }
+
+    .gmail-row:hover {
+      background: rgba(234, 221, 194, 0.06);
+    }
+
+    .gmail-row.selected {
+      background: rgba(204, 123, 103, 0.16);
+      border-left: 3px solid var(--coral);
+    }
+
+    .gmail-row.is-read .row-title {
+      font-weight: 500;
+      color: var(--sand);
+    }
+
+    .gmail-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .row-left-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .star-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.95rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px;
+    }
+
+    .star-btn.starred {
+      color: var(--coral);
+    }
+
+    .source-tag {
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: var(--sage);
+      background: rgba(111, 163, 151, 0.15);
+      border: 1px solid rgba(111, 163, 151, 0.35);
+      padding: 1px 6px;
+      border-radius: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 145px;
+    }
+
+    .row-date {
+      font-size: 0.66rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .row-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.32;
+    }
+
+    .row-snippet {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .row-badges {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .mini-pills {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .pill {
+      font-size: 0.64rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .pill.img-count {
+      border-color: rgba(234, 215, 183, 0.45);
+      color: var(--sand);
+    }
+
+    .pill.sent-hoy {
+      background: rgba(111, 163, 151, 0.25);
+      border-color: var(--sage);
+      color: var(--white);
+    }
+
+    .pill.sent-gateras {
+      background: rgba(204, 123, 103, 0.22);
+      border-color: var(--coral);
+      color: var(--white);
+    }
+
+    .row-quick-send {
+      background: rgba(111, 163, 151, 0.16);
+      border: 1px solid rgba(111, 163, 151, 0.45);
+      color: var(--cream);
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .row-quick-send:hover {
+      background: var(--sage);
+      color: #1A1A1A;
+    }
+
+    /* PANE 3: CLEAN AIR READER + EXTRACTED IMAGES */
+    .pane-reader {
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 60px);
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .reader-action-bar {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(26, 26, 26, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .reader-actions-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .reader-inner {
+      padding: 18px 22px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 920px;
+    }
+
+    .whimsy-match-box {
+      background: rgba(234, 221, 194, 0.06);
+      border: 1px solid var(--border-strong);
+      border-left: 4px solid var(--coral);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .whimsy-match-box h3 {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--coral);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .whimsy-match-box p {
+      font-size: 0.79rem;
+      color: var(--cream);
+      line-height: 1.45;
+    }
+
+    /* EXTRACTED IMAGES GALLERY */
+    .gallery-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .gallery-header h3 {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--sand);
+    }
+
+    .gallery-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 10px;
+    }
+
+    .img-card {
+      background: #1A1A1A;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .img-card.checked {
+      border-color: var(--sage);
+    }
+
+    .img-thumb {
+      position: relative;
+      height: 125px;
+      background: rgba(255, 255, 255, 0.03);
+      cursor: zoom-in;
+      overflow: hidden;
+    }
+
+    .img-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .img-check-tag {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(26, 26, 26, 0.88);
+      color: var(--cream);
+      border: 1px solid var(--sage);
+      border-radius: 5px;
+      padding: 2px 6px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .img-card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      padding: 6px;
+      border-top: 1px solid var(--border);
+    }
+
+    .img-mini-btn {
+      background: rgba(234, 221, 194, 0.07);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      border-radius: 5px;
+      padding: 4px 5px;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      font-size: 0.64rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .img-mini-btn:hover {
+      border-color: var(--coral);
+      color: var(--white);
+    }
+
+    /* CLEAN RENDERED ARTICLE FOR AIR */
+    .air-paper {
+      background: var(--paper);
+      color: #1A1A1A;
+      border-radius: 14px;
+      padding: 26px 28px;
+      border: 1px solid var(--sand);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    .air-paper.studio-dark {
+      background: #1A1A1A;
+      color: var(--cream);
+      border: 1px solid var(--border-strong);
+    }
+
+    .air-paper-kicker {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--earth);
+      margin-bottom: 8px;
+    }
+
+    .air-paper.studio-dark .air-paper-kicker {
+      color: var(--coral);
+    }
+
+    .air-paper h2 {
+      font-size: 1.52rem;
+      font-weight: 800;
+      line-height: 1.24;
+      margin-bottom: 10px;
+      color: #1A1A1A;
+    }
+
+    .air-paper.studio-dark h2 {
+      color: var(--white);
+    }
+
+    .air-paper-meta {
+      font-size: 0.76rem;
+      color: var(--bronze);
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(110, 83, 58, 0.25);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .air-paper.studio-dark .air-paper-meta {
+      color: var(--muted);
+      border-bottom-color: var(--border);
+    }
+
+    .air-article-body {
+      font-size: 0.98rem;
+      line-height: 1.72;
+      overflow-wrap: anywhere;
+    }
+
+    .air-article-body * {
+      max-width: 100%;
+    }
+
+    .inline-form-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1.2fr auto;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 760px) {
+      .inline-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .air-paper {
+        padding: 18px 14px;
+      }
+      .reader-inner {
+        padding: 12px 12px 36px;
+      }
+    }
+
+    .air-article-body p,
+    .air-article-body li,
+    .air-article-body blockquote {
+      margin-bottom: 14px;
+    }
+
+    .air-article-body h2,
+    .air-article-body h3,
+    .air-article-body h4 {
+      margin: 18px 0 8px;
+      font-size: 1.14rem;
+      font-weight: 800;
+    }
+
+    .air-article-body ul,
+    .air-article-body ol {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+
+    .air-article-body blockquote {
+      border-left: 3px solid var(--coral);
+      padding-left: 14px;
+      font-style: italic;
+    }
+
+    .air-article-body figure {
+      margin: 18px 0;
+    }
+
+    .air-article-body img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      margin: 10px 0;
+    }
+
+    .air-article-body figcaption {
+      font-size: 0.75rem;
+      color: var(--bronze);
+      margin-top: 6px;
+    }
+
+    .air-article-body a {
+      color: var(--earth);
+      text-decoration: underline;
+    }
+
+    .air-paper.studio-dark .air-article-body a {
+      color: var(--coral);
+    }
+
+    /* STEP 2 & STEP 3 FULL VIEWS */
+    .stage-page {
+      display: none;
+      padding: 20px 24px 60px;
+      max-width: 1260px;
+      width: 100%;
+      margin: 0 auto;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .stage-page.active {
+      display: flex;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+    }
+
+    .panel-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel-box h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--sand);
+    }
+
+    .panel-box p.desc {
+      font-size: 0.81rem;
+      color: var(--cream);
+      line-height: 1.5;
+    }
+
+    .code-copy {
+      background: #1A1A1A;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: monospace;
+      font-size: 0.76rem;
+      color: var(--paper);
+      overflow-x: auto;
+    }
+
+    /* FULLSCREEN AIR PRESENTATION + LIGHTBOX */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(26, 26, 26, 0.94);
+      padding: 20px;
+      overflow-y: auto;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-inner {
+      width: 100%;
+      max-width: 960px;
+      margin: 12px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #1A1A1A;
+      border: 1px solid var(--border-strong);
+      padding: 10px 14px;
+      border-radius: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA SUPERIOR -->
+  <header class="topbar">
+    <div class="brand-left">
+      <img src="logo-whimsy-rosa.png" alt="Whimsy POV">
+      <div class="brand-title">
+        <h1>Whimsy POV · Lector RSS & Pre-Selección (3 → 2 → 1)</h1>
+        <p id="feedMetaStatus">Cargando fuentes reales en vivo...</p>
+      </div>
+    </div>
+    <nav class="stage-nav">
+      <button class="btn active-tab" id="navStep1" onclick="switchStage('step1')">📥 1. Bandeja RSS (Google Reader)</button>
+      <button class="btn" id="navStep2" onclick="switchStage('step2')">⭐ 2. Temas Potenciales (<span id="topPotCount">0</span>)</button>
+      <button class="btn" id="navStep3" onclick="switchStage('step3')">🔥 3. Radar Semanal</button>
+      <a href="mesa-prepro.html" target="_blank" class="btn sage">🗂️ Abrir Mesa de Pre-Pro ↗</a>
+      <a href="cabina-v8.html" target="_blank" class="btn sand">🎛️ Cabina en Vivo ↗</a>
+    </nav>
+  </header>
+
+  <!-- BANNER DE CONFIRMACIÓN PUENTE -->
+  <div class="toast-banner" id="toastBanner">
+    <span id="toastText">✅ Listo.</span>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <a href="mesa-prepro.html" target="_blank" class="btn coral" style="padding:5px 10px; font-size:0.72rem;">👉 Ver ahora en Mesa de Pre-Pro ↗</a>
+      <button class="btn" style="padding:4px 8px; font-size:0.7rem;" onclick="closeToast()">✕</button>
+    </div>
+  </div>
+
+  <!-- VISTA PASO 1: BANDEJA ESTILO GOOGLE READER / GMAIL -->
+  <main class="reader-layout" id="stageStep1">
+
+    <!-- COLUMNA IZQUIERDA: SUSCRIPCIONES POR NOMBRE -->
+    <aside class="pane-sidebar">
+      <button class="btn coral" style="width:100%; justify-content:center;" onclick="refreshFeedsInBrowser()">🔄 Buscar nuevos RSS ahora</button>
+
+      <div>
+        <div class="sidebar-section-title">Vistas Ordenadas</div>
+        <div class="nav-list">
+          <button class="nav-item active" id="filter-all" onclick="setSidebarFilter('all', this)">
+            <span class="label-wrap">📥 Todos los RSS (Por fecha)</span>
+            <span class="count-pill" id="cntAll">0</span>
+          </button>
+          <button class="nav-item" id="filter-starred" onclick="setSidebarFilter('starred', this)">
+            <span class="label-wrap">⭐ Temas Potenciales</span>
+            <span class="count-pill" id="cntStarred">0</span>
+          </button>
+          <button class="nav-item" id="filter-sent" onclick="setSidebarFilter('sent', this)">
+            <span class="label-wrap">🟢 Enviados a Pre-Pro</span>
+            <span class="count-pill" id="cntSent">0</span>
+          </button>
+          <button class="nav-item" id="filter-week" onclick="setSidebarFilter('week', this)">
+            <span class="label-wrap">🕒 Últimos 7 días</span>
+            <span class="count-pill" id="cntWeek">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">Filtrar por Lente (18 Lentes)</div>
+        <select class="select-field" id="lensFilterSelect" style="width:100%;" onchange="renderInboxList()">
+          <option value="">Todas las lentes</option>
+        </select>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">Fuentes RSS (Por nombre)</div>
+        <div class="nav-list" id="feedsSidebarList"></div>
+      </div>
+    </aside>
+
+    <!-- COLUMNA CENTRAL: LISTADO ESTILO GMAIL -->
+    <section class="pane-inbox">
+      <div class="inbox-controls">
+        <div class="search-row">
+          <input type="text" class="input-field" id="inboxSearch" placeholder="Buscar titular, fuente o palabra..." oninput="renderInboxList()">
+          <select class="select-field" id="inboxSort" onchange="renderInboxList()">
+            <option value="date">Orden: Aparición</option>
+            <option value="images">Orden: Más fotos</option>
+            <option value="source">Orden: Fuente</option>
+          </select>
+        </div>
+        <div class="inbox-meta-bar">
+          <span id="inboxVisibleLabel">Mostrando 0 artículos</span>
+          <span>Teclas: J/K mover · S estrella · P Pre-Pro</span>
+        </div>
+      </div>
+      <div class="inbox-list" id="inboxList"></div>
+    </section>
+
+    <!-- COLUMNA DERECHA: VISOR LIMPIO DE AIRE + IMÁGENES EXTRAÍDAS -->
+    <section class="pane-reader" id="readerPane">
+      <div class="reader-action-bar" id="readerActionBar" style="display:none;">
+        <div class="reader-actions-group">
+          <button class="btn sage" onclick="sendActiveToPrepro('hoy')">🟢 Mandar a Pre-Pro (Va HOY)</button>
+          <button class="btn sand" onclick="sendActiveToPrepro('gateras')">🟡 En Gateras</button>
+          <button class="btn" id="readerStarBtn" onclick="toggleStarActive()">⭐ Tema Potencial</button>
+        </div>
+        <div class="reader-actions-group">
+          <button class="btn coral" onclick="openAirPresentationMode()">📺 Pantalla Limpia para Aire</button>
+          <button class="btn" onclick="togglePaperTheme()">🌓 Claro / Oscuro</button>
+          <a id="readerOrigLink" href="#" target="_blank" rel="noopener" class="btn">🔗 Fuente ↗</a>
+        </div>
+      </div>
+      <div class="reader-inner" id="readerContent">
+        <div class="panel-box">
+          <h2>Elegí cualquier artículo de la bandeja</h2>
+          <p class="desc">Acá vas a ver todas las imágenes reales extraídas del sitio, el cruce automático con tus 19 Minutas W y 91 videos de YouTube, y el artículo completo renderizado limpio para recorrerlo al aire.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- VISTA PASO 2: LISTA DE TEMAS POTENCIALES & EXTRACTOR VISUAL -->
+  <section class="stage-page" id="stageStep2">
+    <div class="panel-box">
+      <h2>⭐ Paso 2 · Lista de Temas Potenciales para el Aire & Extractor de Enlaces</h2>
+      <p class="desc">Todo lo que marcás con estrella (★) en tu Bandeja RSS se acumula acá como banco de temas curados. Anotá por qué te vibra, revisá las fotos extraídas y pasalo a tu Mesa de Pre-Pro cuando quieras.</p>
+      <div class="inline-form-grid">
+        <input type="text" class="input-field" id="manualTopicTitle" placeholder="Sumar una idea o enlace suelto a Temas Potenciales (título)...">
+        <input type="text" class="input-field" id="manualTopicUrl" placeholder="https://... (opcional)">
+        <button class="btn coral" onclick="addManualPotentialTopic()">➕ Agregar a Lista</button>
+      </div>
+    </div>
+    <div class="card-grid" id="potentialTopicsGrid"></div>
+  </section>
+
+  <!-- VISTA PASO 3: RADAR SEMANAL DE NUEVAS FUENTES RSS -->
+  <section class="stage-page" id="stageStep3">
+    <div class="panel-box">
+      <h2>🔥 Paso 3 · Radar Semanal: Qué alimentar según lo más visto de Whimsy POV y La Minuta W</h2>
+      <p class="desc">Cada semana el motorcito cruza tus piezas con mayor audiencia en YouTube (@whimsyPOV) y Substack (La Minuta W) para sugerir nuevas fuentes RSS vivas y mantener la bandeja fresca.</p>
+      <div class="card-grid" id="topSignalsGrid"></div>
+    </div>
+
+    <div class="panel-box">
+      <h2>📡 Fuentes RSS Sugeridas Esta Semana (Activar en 1 clic)</h2>
+      <p class="desc">Activá cualquier medio sugerido o pegá el RSS de un museo, revista o blog nuevo para sumarlo a tu Bandeja estilo Google Reader.</p>
+      <div class="inline-form-grid" style="margin-bottom:8px;">
+        <input type="text" class="input-field" id="customFeedName" placeholder="Nombre de la fuente (ej: Museo del Prado)">
+        <input type="text" class="input-field" id="customFeedUrl" placeholder="URL del feed RSS / Atom (https://...)">
+        <button class="btn sage" onclick="addCustomFeedFromInput()">➕ Sumar RSS</button>
+      </div>
+      <div class="card-grid" id="weeklySuggestionsGrid"></div>
+    </div>
+
+    <div class="panel-box">
+      <h2>🤖 Cómo pedirle a Antigravity o a Claude Code que actualice el motorcito fuera del navegador</h2>
+      <p class="desc">Este archivo corre de forma independiente leyendo tus feeds RSS y limpiando imágenes HTML en tu Mac sin tocar la Cabina ni la Mesa de Pre-Pro. Para correr una recolección semanal profunda desde la terminal o desde Claude Code:</p>
+      <div class="code-copy">node "02_RADAR_SCRAPING_DIARIO/motor_rss_whimsy.mjs"</div>
+    </div>
+  </section>
+
+  <!-- MODAL PANTALLA LIMPIA DE AIRE / ZOOM IMAGEN -->
+  <div class="modal-overlay" id="airModal" onclick="if(event.target===this) closeAirModal()">
+    <div class="modal-inner">
+      <div class="modal-top-bar">
+        <span style="font-size:0.8rem; font-weight:800; color:var(--sand);" id="modalTopTitle">Modo Navegación Limpia al Aire</span>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn sage" onclick="sendActiveToPrepro('hoy')">🟢 Mandar a Pre-Pro (Va HOY)</button>
+          <button class="btn" onclick="togglePaperTheme()">🌓 Cambiar Papel Claro / Oscuro</button>
+          <button class="btn coral" onclick="closeAirModal()">✕ Cerrar</button>
+        </div>
+      </div>
+      <div id="airModalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const studioBus = ('BroadcastChannel' in window) ? new BroadcastChannel('whimsy_studio_v8') : null;
+    const LS_STARRED = 'whimsy_lector_starred_v1';
+    const LS_NOTES = 'whimsy_lector_notes_v1';
+    const LS_READ = 'whimsy_lector_read_v1';
+    const LS_SENT = 'whimsy_lector_sent_v1';
+    const LS_UNCHECKED_IMGS = 'whimsy_lector_unchecked_imgs_v1';
+    const LS_CUSTOM_FEEDS = 'whimsy_lector_custom_feeds_v1';
+    const LS_MANUAL_TOPICS = 'whimsy_lector_manual_topics_v1';
+
+    let inboxData = { totalItems: 0, topWhimsySignals: [], weeklySuggestedFeeds: [], feeds: [], items: [] };
+    let allItems = [];
+    let currentSidebarFilter = 'all';
+    let activeItemId = null;
+    let isStudioDarkPaper = false;
+
+    function loadJsonMap(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveJsonMap(key, val) {
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+    }
+
+    let starredMap = loadJsonMap(LS_STARRED, {});
+    let notesMap = loadJsonMap(LS_NOTES, {});
+    let readMap = loadJsonMap(LS_READ, {});
+    let sentMap = loadJsonMap(LS_SENT, {});
+    let uncheckedImgsMap = loadJsonMap(LS_UNCHECKED_IMGS, {});
+    let customFeedsList = loadJsonMap(LS_CUSTOM_FEEDS, []);
+    let manualTopicsList = loadJsonMap(LS_MANUAL_TOPICS, []);
+
+    function showToast(htmlMsg) {
+      const el = document.getElementById('toastBanner');
+      document.getElementById('toastText').innerHTML = htmlMsg;
+      el.classList.add('open');
+    }
+
+    function closeToast() {
+      document.getElementById('toastBanner').classList.remove('open');
+    }
+
+    function switchStage(stage) {
+      document.getElementById('stageStep1').style.display = stage === 'step1' ? 'grid' : 'none';
+      document.getElementById('stageStep2').classList.toggle('active', stage === 'step2');
+      document.getElementById('stageStep3').classList.toggle('active', stage === 'step3');
+
+      document.getElementById('navStep1').classList.toggle('active-tab', stage === 'step1');
+      document.getElementById('navStep2').classList.toggle('active-tab', stage === 'step2');
+      document.getElementById('navStep3').classList.toggle('active-tab', stage === 'step3');
+
+      if (stage === 'step2') renderPotentialTopicsView();
+      if (stage === 'step3') renderWeeklyRadarView();
+    }
+
+    function formatShortDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return '';
+      return d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short' });
+    }
+
+    function isWithinDays(iso, days) {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return false;
+      return (Date.now() - d.getTime()) <= days * 86400000;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function loadInitialInbox() {
+      try {
+        const res = await fetch('rss-inbox-live.json?t=' + Date.now());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        inboxData = await res.json();
+        allItems = [...manualTopicsList, ...(inboxData.items || [])];
+        allItems.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+
+        const genDate = inboxData.generatedAt ? new Date(inboxData.generatedAt).toLocaleString('es-AR') : 'hoy';
+        document.getElementById('feedMetaStatus').textContent =
+          `${allItems.length} artículos reales · ${(inboxData.feeds || []).length} feeds conectados · Última recolección: ${genDate}`;
+
+        populateLensesSelect();
+        renderSidebar();
+        renderInboxList();
+        if (allItems.length && !activeItemId) {
+          selectInboxItem(allItems[0].id);
+        }
+      } catch (err) {
+        document.getElementById('feedMetaStatus').textContent = 'No se pudo cargar rss-inbox-live.json (' + err.message + ')';
+      }
+    }
+
+    function populateLensesSelect() {
+      const sel = document.getElementById('lensFilterSelect');
+      const set = new Set();
+      allItems.forEach(it => (it.lenses || []).forEach(l => set.add(l)));
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">Todas las 18 lentes</option>' +
+        Array.from(set).sort().map(l => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
+      sel.value = prev;
+    }
+
+    function setSidebarFilter(filterId, btnEl) {
+      currentSidebarFilter = filterId;
+      document.querySelectorAll('.pane-sidebar .nav-item').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      renderInboxList();
+    }
+
+    function renderSidebar() {
+      const starredCount = allItems.filter(it => starredMap[it.id]).length;
+      const sentCount = allItems.filter(it => sentMap[it.id]).length;
+      const weekCount = allItems.filter(it => isWithinDays(it.publishedAt, 7)).length;
+
+      document.getElementById('cntAll').textContent = allItems.length;
+      document.getElementById('cntStarred').textContent = starredCount;
+      document.getElementById('cntSent').textContent = sentCount;
+      document.getElementById('cntWeek').textContent = weekCount;
+      document.getElementById('topPotCount').textContent = starredCount;
+
+      const countsByFeed = {};
+      allItems.forEach(it => {
+        const name = it.feedName || 'Otro';
+        countsByFeed[name] = (countsByFeed[name] || 0) + 1;
+      });
+
+      const feedsListEl = document.getElementById('feedsSidebarList');
+      feedsListEl.innerHTML = Object.entries(countsByFeed)
+        .sort((a, b) => b[1] - a[1])
+        .map(([name, cnt]) => `
+          <button class="nav-item ${currentSidebarFilter === 'feed:' + name ? 'active' : ''}" data-feed="${escapeHtml(name)}" onclick="setSidebarFilter('feed:' + this.dataset.feed, this)">
+            <span class="label-wrap">📡 ${escapeHtml(name)}</span>
+            <span class="count-pill">${cnt}</span>
+          </button>
+        `).join('');
+    }
+
+    function getFilteredItems() {
+      const q = (document.getElementById('inboxSearch').value || '').trim().toLowerCase();
+      const lensFilter = document.getElementById('lensFilterSelect').value;
+      const sortMode = document.getElementById('inboxSort').value;
+
+      let list = allItems.filter(it => {
+        if (currentSidebarFilter === 'starred' && !starredMap[it.id]) return false;
+        if (currentSidebarFilter === 'sent' && !sentMap[it.id]) return false;
+        if (currentSidebarFilter === 'week' && !isWithinDays(it.publishedAt, 7)) return false;
+        if (currentSidebarFilter.startsWith('feed:') && it.feedName !== currentSidebarFilter.slice(5)) return false;
+        if (lensFilter && !(it.lenses || []).includes(lensFilter)) return false;
+        if (q) {
+          const hay = `${it.title} ${it.summary} ${it.feedName} ${it.author}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (sortMode === 'images') {
+        list.sort((a, b) => (b.images?.length || 0) - (a.images?.length || 0));
+      } else if (sortMode === 'source') {
+        list.sort((a, b) => (a.feedName || '').localeCompare(b.feedName || ''));
+      } else {
+        list.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+      }
+      return list;
+    }
+
+    function renderInboxList() {
+      const list = getFilteredItems();
+      document.getElementById('inboxVisibleLabel').textContent = `Mostrando ${list.length} artículos`;
+
+      const container = document.getElementById('inboxList');
+      if (!list.length) {
+        container.innerHTML = `<div style="padding:20px; font-size:0.8rem; color:var(--muted);">No hay artículos con este filtro. Probá limpiar la búsqueda o elegir «Todos los RSS».</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(it => {
+        const isSel = it.id === activeItemId;
+        const isStar = !!starredMap[it.id];
+        const isRead = !!readMap[it.id];
+        const sentStatus = sentMap[it.id];
+        const imgLen = (it.images || []).length;
+        const primaryLens = (it.lenses && it.lenses[0]) || 'Arte';
+
+        return `
+          <div class="gmail-row ${isSel ? 'selected' : ''} ${isRead ? 'is-read' : ''}" onclick="selectInboxItem('${it.id}')">
+            <div class="gmail-row-top">
+              <div class="row-left-meta">
+                <button class="star-btn ${isStar ? 'starred' : ''}" title="Guardar en Temas Potenciales" onclick="event.stopPropagation(); toggleStarItem('${it.id}')">${isStar ? '★' : '☆'}</button>
+                <span class="source-tag">${escapeHtml(it.feedName)}</span>
+              </div>
+              <span class="row-date">${formatShortDate(it.publishedAt)}</span>
+            </div>
+            <div class="row-title">${escapeHtml(it.title)}</div>
+            <div class="row-snippet">${escapeHtml(it.summary)}</div>
+            <div class="row-badges">
+              <div class="mini-pills">
+                <span class="pill img-count">🖼️ ${imgLen} ${imgLen === 1 ? 'foto' : 'fotos'}</span>
+                <span class="pill">${escapeHtml(primaryLens)}</span>
+                ${sentStatus === 'hoy' ? '<span class="pill sent-hoy">🟢 En Pre-Pro (HOY)</span>' : ''}
+                ${sentStatus === 'gateras' ? '<span class="pill sent-gateras">🟡 En Gateras</span>' : ''}
+              </div>
+              <button class="row-quick-send" onclick="event.stopPropagation(); sendItemToPrepro('${it.id}', 'hoy')">🟢 A Pre-Pro</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectInboxItem(id) {
+      activeItemId = id;
+      readMap[id] = true;
+      saveJsonMap(LS_READ, readMap);
+      renderInboxList();
+      renderActiveReader();
+    }
+
+    function toggleStarItem(id) {
+      starredMap[id] = !starredMap[id];
+      if (!starredMap[id]) delete starredMap[id];
+      saveJsonMap(LS_STARRED, starredMap);
+      renderSidebar();
+      renderInboxList();
+      if (id === activeItemId) renderActiveReader();
+    }
+
+    function toggleStarActive() {
+      if (activeItemId) toggleStarItem(activeItemId);
+    }
+
+    function isImgChecked(itemId, idx) {
+      const skipped = uncheckedImgsMap[itemId] || [];
+      return !skipped.includes(idx);
+    }
+
+    function toggleImgCheck(itemId, idx) {
+      const arr = new Set(uncheckedImgsMap[itemId] || []);
+      if (arr.has(idx)) arr.delete(idx);
+      else arr.add(idx);
+      uncheckedImgsMap[itemId] = Array.from(arr);
+      saveJsonMap(LS_UNCHECKED_IMGS, uncheckedImgsMap);
+      renderActiveReader();
+    }
+
+    function projectPhotoToCabin(itemId, idx, zone) {
+      const item = allItems.find(x => x.id === itemId);
+      if (!item || !item.images || !item.images[idx]) return;
+      const photo = item.images[idx];
+      const msg = {
+        type: 'PREPRO_PUSH',
+        payload: zone === 'center' ? {
+          headline: item.title,
+          kicker: (item.feedName || 'WHIMSY RSS').toUpperCase(),
+          fact: photo.caption || item.title,
+          newCenterImage: photo.url,
+          pntMsg: 'Proyectado desde Lector RSS en Centro 9:16: ' + item.title.slice(0, 44),
+          ts: Date.now()
+        } : {
+          newRightImage: photo.url,
+          newRightTag: '[' + (item.feedName || 'RSS').toUpperCase() + ']',
+          newRightLabel: photo.caption || item.title,
+          pntMsg: 'Proyectado desde Lector RSS en Derecha: ' + item.title.slice(0, 44),
+          ts: Date.now()
+        }
+      };
+      try { localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(msg)); } catch {}
+      if (studioBus) studioBus.postMessage(msg);
+      showToast(`✅ Imagen enviada al <strong>${zone === 'center' ? 'Centro 9:16' : 'Panel Derecho'}</strong> de tu Cabina en vivo.`);
+    }
+
+    function openImageLightbox(url, caption) {
+      document.getElementById('modalTopTitle').textContent = caption || 'Imagen extraída de la fuente';
+      document.getElementById('airModalBody').innerHTML = `
+        <div style="text-align:center; background:#1A1A1A; border:1px solid var(--border-strong); border-radius:12px; padding:16px;">
+          <img src="${escapeHtml(url)}" alt="Vista ampliada" style="max-width:100%; max-height:76vh; border-radius:8px; object-fit:contain;">
+          <p style="margin-top:10px; font-size:0.84rem; color:var(--cream);">${escapeHtml(caption || '')}</p>
+        </div>
+      `;
+      document.getElementById('airModal').classList.add('open');
+    }
+
+    function renderActiveReader() {
+      const item = allItems.find(x => x.id === activeItemId);
+      const bar = document.getElementById('readerActionBar');
+      const box = document.getElementById('readerContent');
+
+      if (!item) {
+        bar.style.display = 'none';
+        return;
+      }
+
+      bar.style.display = 'flex';
+      document.getElementById('readerOrigLink').href = item.link || '#';
+      const starBtn = document.getElementById('readerStarBtn');
+      const isStar = !!starredMap[item.id];
+      starBtn.textContent = isStar ? '★ Guardado en Potenciales' : '⭐ Tema Potencial';
+      starBtn.classList.toggle('coral', isStar);
+
+      const imgs = item.images || [];
+      const galleryHtml = imgs.map((im, idx) => {
+        const checked = isImgChecked(item.id, idx);
+        return `
+          <div class="img-card ${checked ? 'checked' : ''}">
+            <div class="img-thumb" onclick="openImageLightbox('${escapeHtml(im.url)}', '${escapeHtml(im.caption)}')">
+              <img src="${escapeHtml(im.url)}" alt="Imagen ${idx + 1}" loading="lazy">
+              <label class="img-check-tag" onclick="event.stopPropagation();">
+                <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleImgCheck('${item.id}', ${idx})">
+                Llevar
+              </label>
+            </div>
+            <div class="img-card-actions">
+              <button class="img-mini-btn" onclick="projectPhotoToCabin('${item.id}', ${idx}, 'right')">➡️ A Derecha</button>
+              <button class="img-mini-btn" onclick="projectPhotoToCabin('${item.id}', ${idx}, 'center')">📱 A 9:16</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const hilo = item.hiloRojo || {};
+      const lensesStr = (item.lenses || []).join(' · ');
+
+      box.innerHTML = `
+        <div class="whimsy-match-box">
+          <h3>🧵 Cruce Whimsy POV · Lentes: ${escapeHtml(lensesStr)} · Reloj: ${escapeHtml(item.clock || '🌍 MUNDIAL')}</h3>
+          <p>
+            <strong>Hilo Rojo con tu archivo:</strong>
+            Minuta W <a href="${escapeHtml(hilo.minutaUrl || 'https://arianawajntraub.substack.com')}" target="_blank" rel="noopener">«${escapeHtml(hilo.minutaTitle || 'La Minuta W')}»</a>
+            + YouTube <a href="${escapeHtml(hilo.videoUrl || 'https://www.youtube.com/@whimsyPOV')}" target="_blank" rel="noopener">«${escapeHtml(hilo.videoTitle || '@whimsyPOV')}»</a>.
+          </p>
+        </div>
+
+        <div class="gallery-box">
+          <div class="gallery-header">
+            <h3>🖼️ Imágenes extraídas automáticamente de este artículo (${imgs.length})</h3>
+            <span style="font-size:0.71rem; color:var(--muted);">Tildá las que pasan a Pre-Pro o mandalas directo al aire en Cabina</span>
+          </div>
+          <div class="gallery-strip">${galleryHtml}</div>
+        </div>
+
+        <article class="air-paper ${isStudioDarkPaper ? 'studio-dark' : ''}">
+          <div class="air-paper-kicker">${escapeHtml(item.feedName)} · Vista Limpia de Aire</div>
+          <h2>${escapeHtml(item.title)}</h2>
+          <div class="air-paper-meta">
+            <span>✍️ ${escapeHtml(item.author || item.feedName)}</span>
+            <span>📅 ${formatShortDate(item.publishedAt)}</span>
+            <span>🔗 <a href="${escapeHtml(item.link)}" target="_blank" rel="noopener">Abrir página original ↗</a></span>
+          </div>
+          <div class="air-article-body">
+            ${item.cleanReaderHtml || ('<p>' + escapeHtml(item.summary) + '</p>')}
+          </div>
+        </article>
+      `;
+    }
+
+    function togglePaperTheme() {
+      isStudioDarkPaper = !isStudioDarkPaper;
+      renderActiveReader();
+      if (document.getElementById('airModal').classList.contains('open')) {
+        openAirPresentationMode();
+      }
+    }
+
+    function openAirPresentationMode() {
+      const item = allItems.find(x => x.id === activeItemId);
+      if (!item) return;
+      document.getElementById('modalTopTitle').textContent = `📺 Pantalla Limpia para Aire · ${item.feedName}`;
+      document.getElementById('airModalBody').innerHTML = `
+        <article class="air-paper ${isStudioDarkPaper ? 'studio-dark' : ''}" style="padding:36px 42px;">
+          <div class="air-paper-kicker">${escapeHtml(item.feedName)} · ${(item.lenses || []).join(' · ')}</div>
+          <h2 style="font-size:1.85rem;">${escapeHtml(item.title)}</h2>
+          <div class="air-paper-meta">
+            <span>✍️ ${escapeHtml(item.author || item.feedName)}</span>
+            <span>📅 ${formatShortDate(item.publishedAt)}</span>
+            <span>🕰️ ${escapeHtml(item.clock || '')}</span>
+          </div>
+          <div class="air-article-body" style="font-size:1.08rem; line-height:1.8;">
+            ${item.cleanReaderHtml || ('<p>' + escapeHtml(item.summary) + '</p>')}
+          </div>
+        </article>
+      `;
+      document.getElementById('airModal').classList.add('open');
+    }
+
+    function closeAirModal() {
+      document.getElementById('airModal').classList.remove('open');
+    }
+
+    function htmlToCleanDossier(html) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html || '';
+      const paras = Array.from(tmp.querySelectorAll('p, blockquote, h2, h3'))
+        .map(el => (el.textContent || '').trim())
+        .filter(Boolean);
+      return paras.join('\n\n');
+    }
+
+    function sendActiveToPrepro(targetStatus) {
+      if (activeItemId) sendItemToPrepro(activeItemId, targetStatus);
+    }
+
+    function sendItemToPrepro(itemId, targetStatus) {
+      const item = allItems.find(x => x.id === itemId);
+      if (!item) return;
+
+      const cardId = 'lector-' + item.id;
+      const chosenAlbum = (item.images || [])
+        .filter((_, idx) => isImgChecked(item.id, idx))
+        .map((im, i) => ({
+          url: im.url,
+          caption: im.caption || `${item.feedName} · Lámina ${i + 1}`,
+          checked: true
+        }));
+
+      if (chosenAlbum.length === 0) {
+        chosenAlbum.push({
+          url: 'evidencias/aris_flores_macro.jpg',
+          caption: item.title,
+          checked: true
+        });
+      }
+
+      const plainDossier = htmlToCleanDossier(item.cleanReaderHtml) || item.summary;
+      const noteByAriana = notesMap[item.id] ? `\n\nNOTA DE ARIANA:\n${notesMap[item.id]}` : '';
+      const lensTag = (item.lenses && item.lenses[0]) || 'Arte';
+
+      const preproCard = {
+        id: cardId,
+        cat: item.defaultCat || 'transito',
+        catLabel: `📡 RSS Lector → ${item.feedName} (${lensTag})`,
+        worldClockCity: item.clock || '🇺🇾 PUNTA DEL ESTE / GARZÓN',
+        rssFeedAdded: `${item.feedName} · ${item.feedUrl || item.link}`,
+        sourceName: item.feedName,
+        sourceUrl: item.link,
+        heroNum: formatShortDate(item.publishedAt) || 'HOY',
+        miniGraphKicker: `📡 EN PANTALLA · ${(item.feedName || 'WHIMSY RSS').toUpperCase()}`,
+        miniGraphText: item.title.slice(0, 74),
+        correspondentStory: `Crónica desde ${item.feedName}. ${item.summary}`,
+        extraSources: [
+          { label: `🔗 Artículo original en ${item.feedName}`, url: item.link },
+          { label: `✍️ Minuta W: ${item.hiloRojo?.minutaTitle || 'Archivo'}`, url: item.hiloRojo?.minutaUrl || 'https://arianawajntraub.substack.com' }
+        ],
+        title: item.title,
+        summary: item.summary,
+        longDossier: `1. TEXTO COMPLETO EXTRAÍDO DEL RSS (${item.feedName}):\n${plainDossier}${noteByAriana}\n\n2. CRUCE CON LAS 18 LENTES DE WHIMSY:\n• Lentes activadas: ${(item.lenses || []).join(' · ')}\n• ${item.hiloRojo?.summaryLine || ''}`,
+        dossiersTips: '💡 Las imágenes de este álbum fueron extraídas automáticamente desde el artículo original.',
+        coachPersonalAngle: `🎯 ÁNGULO DE LECTURA (${lensTag}): Conectar este hallazgo de ${item.feedName} con tu lectura de sistemas reales sin moralina ni frases hechas.`,
+        outreachPre: `Hi ${item.handle || item.feedName}! I'm Ariana Wajntraub (Whimsy POV & La Minuta W). We are featuring "${item.title.slice(0, 70)}" on our upcoming live show, crediting ${item.feedName} and ${item.link} on screen.`,
+        outreachPost: `Hi ${item.handle || item.feedName}! Today on Whimsy POV we featured "${item.title.slice(0, 70)}" with link and credit on screen: https://www.youtube.com/@whimsyPOV`,
+        album: chosenAlbum,
+        handles: [item.handle || '@whimsypov', '@whimsypov', '@arianawajntraub'],
+        hiloRojo: item.hiloRojo?.summaryLine || 'Conectado con tus 19 Minutas W y 91 videos en @whimsyPOV.'
+      };
+
+      // 1. Escribir en whimsy_custom_rss_cards_v13 (sin duplicar)
+      const existingCards = loadJsonMap('whimsy_custom_rss_cards_v13', []);
+      const filteredCards = existingCards.filter(c => c.id !== cardId);
+      filteredCards.unshift(preproCard);
+      saveJsonMap('whimsy_custom_rss_cards_v13', filteredCards);
+
+      // 2. Escribir estado Va HOY / En Gateras en whimsy_cards_meta_v15
+      const metaMap = loadJsonMap('whimsy_cards_meta_v15', {});
+      metaMap[cardId] = {
+        status: targetStatus === 'gateras' ? 'gateras' : 'hoy',
+        rotulo: `RSS · ${lensTag}`,
+        vencimiento: '',
+        withCorr: true
+      };
+      saveJsonMap('whimsy_cards_meta_v15', metaMap);
+
+      // 3. Registrar fuente en whimsy_active_rss_feeds_v16
+      const activeFeeds = loadJsonMap('whimsy_active_rss_feeds_v16', []);
+      if (!activeFeeds.some(f => f.name === item.feedName)) {
+        activeFeeds.unshift({ name: item.feedName, url: item.feedUrl || item.siteUrl || item.link });
+        saveJsonMap('whimsy_active_rss_feeds_v16', activeFeeds.slice(0, 35));
+      }
+
+      // 4. Guardar estado local en el lector
+      sentMap[item.id] = targetStatus === 'gateras' ? 'gateras' : 'hoy';
+      saveJsonMap(LS_SENT, sentMap);
+
+      renderSidebar();
+      renderInboxList();
+      showToast(`✅ ¡<strong>«${escapeHtml(item.title.slice(0, 52))}...»</strong> ya entró en tu Mesa de Pre-Pro como <strong>${targetStatus === 'gateras' ? '🟡 En Gateras' : '🟢 Va HOY'}</strong> con ${chosenAlbum.length} imágenes!`);
+    }
+
+    // PASO 2: LISTA DE TEMAS POTENCIALES
+    function updateTopicNote(id, val) {
+      notesMap[id] = val;
+      saveJsonMap(LS_NOTES, notesMap);
+    }
+
+    function addManualPotentialTopic() {
+      const title = (document.getElementById('manualTopicTitle').value || '').trim();
+      const url = (document.getElementById('manualTopicUrl').value || '').trim() || 'https://arianawajntraub.substack.com';
+      if (!title) return;
+      const newId = 'manual-' + Date.now();
+      const manualItem = {
+        id: newId,
+        feedId: 'manual',
+        feedName: 'Nota de Ariana',
+        feedUrl: url,
+        siteUrl: url,
+        handle: '@arianawajntraub',
+        defaultCat: 'hilo',
+        lenses: ['Arte', 'Libros'],
+        clock: '🇺🇾 PUNTA DEL ESTE / GARZÓN',
+        title,
+        link: url,
+        author: 'Ariana Wajntraub',
+        publishedAt: new Date().toISOString(),
+        summary: 'Tema potencial anotado por Ariana para investigar, extraer imágenes o llevar a Mesa de Pre-Pro.',
+        images: [{ url: 'evidencias/aris_cuaderno_boceto.jpg', caption: 'Cuaderno de notas Whimsy POV' }],
+        cleanReaderHtml: `<p>${escapeHtml(title)}</p><p><a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(url)}</a></p>`,
+        hiloRojo: {
+          minutaTitle: 'Escribir para ver mejor',
+          minutaUrl: 'https://arianawajntraub.substack.com/p/escribir-para-ver-mejor',
+          videoTitle: 'Whimsy POV',
+          videoUrl: 'https://www.youtube.com/@whimsyPOV',
+          summaryLine: 'Tema potencial sumado manualmente para cruzar con tu archivo.'
+        }
+      };
+      manualTopicsList.unshift(manualItem);
+      saveJsonMap(LS_MANUAL_TOPICS, manualTopicsList);
+      starredMap[newId] = true;
+      saveJsonMap(LS_STARRED, starredMap);
+      allItems.unshift(manualItem);
+      document.getElementById('manualTopicTitle').value = '';
+      document.getElementById('manualTopicUrl').value = '';
+      renderSidebar();
+      renderInboxList();
+      renderPotentialTopicsView();
+    }
+
+    function renderPotentialTopicsView() {
+      const grid = document.getElementById('potentialTopicsGrid');
+      const starredItems = allItems.filter(it => starredMap[it.id]);
+      if (!starredItems.length) {
+        grid.innerHTML = `<div class="panel-box"><h2>Todavía no marcaste estrellas (☆)</h2><p class="desc">Andá a «1. Bandeja RSS» y tocá la estrella en cualquier artículo que te llame la atención para ir armando tu lista de temas potenciales para el aire.</p></div>`;
+        return;
+      }
+      grid.innerHTML = starredItems.map(it => {
+        const firstImg = (it.images && it.images[0]) ? it.images[0].url : 'evidencias/aris_cuaderno_boceto.jpg';
+        return `
+          <div class="panel-box">
+            <img src="${escapeHtml(firstImg)}" alt="Previa" style="width:100%; height:140px; object-fit:cover; border-radius:8px;">
+            <div style="font-size:0.7rem; color:var(--sage); font-weight:700;">${escapeHtml(it.feedName)} · ${(it.lenses || []).join(' · ')}</div>
+            <h2>${escapeHtml(it.title)}</h2>
+            <p class="desc">${escapeHtml(it.summary.slice(0, 160))}...</p>
+            <textarea class="input-field" rows="2" placeholder="¿Por qué te vibra para el aire? Escribí tu ángulo acá..." onchange="updateTopicNote('${it.id}', this.value)">${escapeHtml(notesMap[it.id] || '')}</textarea>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn sage" onclick="sendItemToPrepro('${it.id}', 'hoy')">🟢 A Pre-Pro (HOY)</button>
+              <button class="btn sand" onclick="sendItemToPrepro('${it.id}', 'gateras')">🟡 En Gateras</button>
+              <button class="btn" onclick="switchStage('step1'); selectInboxItem('${it.id}')">👁️ Abrir en Lector</button>
+              <button class="btn" onclick="toggleStarItem('${it.id}'); renderPotentialTopicsView()">Quitar ★</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // PASO 3: RADAR SEMANAL
+    function renderWeeklyRadarView() {
+      const topGrid = document.getElementById('topSignalsGrid');
+      topGrid.innerHTML = (inboxData.topWhimsySignals || []).map(sig => `
+        <div class="panel-box">
+          <div style="font-size:0.68rem; font-weight:800; color:var(--coral);">🔥 ${sig.views} vistas · ${escapeHtml(sig.channel)}</div>
+          <h2 style="font-size:0.9rem;">${escapeHtml(sig.title)}</h2>
+          <div style="font-size:0.74rem; color:var(--sage); font-weight:700;">Lente dominante: ${escapeHtml(sig.lens)}</div>
+        </div>
+      `).join('');
+
+      const sugGrid = document.getElementById('weeklySuggestionsGrid');
+      const mergedSuggestions = [...customFeedsList, ...(inboxData.weeklySuggestedFeeds || [])];
+      sugGrid.innerHTML = mergedSuggestions.map(f => {
+        const activeFeeds = loadJsonMap('whimsy_active_rss_feeds_v16', []);
+        const isActive = activeFeeds.some(a => a.url === f.url || a.name === f.name);
+        return `
+          <div class="panel-box">
+            <div style="font-size:0.69rem; font-weight:800; color:var(--sand);">Lente: ${escapeHtml(f.lens || 'General')}</div>
+            <h2 style="font-size:0.94rem;">${escapeHtml(f.name)}</h2>
+            <p class="desc">${escapeHtml(f.reason || 'Feed RSS sumado para tu radar semanal.')}</p>
+            <div style="font-size:0.68rem; color:var(--muted); word-break:break-all;">${escapeHtml(f.url)}</div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+              <button class="btn ${isActive ? 'sage' : 'coral'}" data-name="${escapeHtml(f.name)}" data-url="${escapeHtml(f.url)}" data-cat="${escapeHtml(f.cat || 'transito')}" data-lens="${escapeHtml(f.lens || 'Arte')}" onclick="activateSuggestedFeed(this.dataset.name, this.dataset.url, this.dataset.cat, this.dataset.lens)">
+                ${isActive ? '✅ Activo en tu Radar (Releer)' : '➕ Activar este RSS ahora'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function activateSuggestedFeed(name, url, cat, lens) {
+      const activeFeeds = loadJsonMap('whimsy_active_rss_feeds_v16', []);
+      if (!activeFeeds.some(f => f.url === url)) {
+        activeFeeds.unshift({ name, url });
+        saveJsonMap('whimsy_active_rss_feeds_v16', activeFeeds.slice(0, 35));
+      }
+      if (!customFeedsList.some(f => f.url === url)) {
+        customFeedsList.unshift({ id: 'cf-' + Date.now(), name, url, cat, lens, reason: 'Activado desde tu Radar Semanal.' });
+        saveJsonMap(LS_CUSTOM_FEEDS, customFeedsList);
+      }
+      await fetchSingleFeedViaPublicReader(name, url, cat, lens);
+      renderWeeklyRadarView();
+    }
+
+    async function addCustomFeedFromInput() {
+      const name = (document.getElementById('customFeedName').value || '').trim();
+      const url = (document.getElementById('customFeedUrl').value || '').trim();
+      if (!name || !url) return;
+      document.getElementById('customFeedName').value = '';
+      document.getElementById('customFeedUrl').value = '';
+      await activateSuggestedFeed(name, url, 'transito', 'Arte');
+    }
+
+    async function fetchSingleFeedViaPublicReader(name, rssUrl, cat, lens) {
+      showToast(`🔄 Consultando en vivo <strong>${escapeHtml(name)}</strong>...`);
+      try {
+        const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error('No respondió directo');
+        const data = await res.json();
+        if (data.status !== 'ok' || !Array.isArray(data.items)) throw new Error('Feed protegido por CORS en navegador');
+
+        let added = 0;
+        data.items.slice(0, 6).forEach(entry => {
+          const itemUrl = entry.link || rssUrl;
+          if (allItems.some(existing => existing.link === itemUrl)) return;
+
+          const tmp = document.createElement('div');
+          tmp.innerHTML = entry.content || entry.description || '';
+          const imgs = [];
+          if (entry.thumbnail) imgs.push({ url: entry.thumbnail, caption: `Imagen principal de ${name}` });
+          if (entry.enclosure && entry.enclosure.link) imgs.push({ url: entry.enclosure.link, caption: `Imagen adjunta de ${name}` });
+          tmp.querySelectorAll('img').forEach(imgEl => {
+            const s = imgEl.getAttribute('src');
+            if (s && s.startsWith('http') && !imgs.some(x => x.url === s)) {
+              imgs.push({ url: s, caption: imgEl.getAttribute('alt') || `Imagen de ${name}` });
+            }
+          });
+          if (!imgs.length) imgs.push({ url: 'evidencias/prepro/arkivism_1.jpg', caption: 'Lámina Whimsy POV' });
+
+          const newItem = {
+            id: 'live-' + btoa(unescape(encodeURIComponent(itemUrl))).replace(/[^a-zA-Z0-9]/g, '').slice(0, 14),
+            feedId: name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+            feedName: name,
+            feedUrl: rssUrl,
+            siteUrl: itemUrl,
+            handle: '@whimsypov',
+            defaultCat: cat || 'transito',
+            lenses: [lens || 'Arte'],
+            clock: '🌍 MUNDIAL',
+            title: entry.title || 'Sin título',
+            link: itemUrl,
+            author: entry.author || name,
+            publishedAt: entry.pubDate ? new Date(entry.pubDate.replace(' ', 'T') + 'Z').toISOString() : new Date().toISOString(),
+            summary: (tmp.textContent || '').trim().slice(0, 260),
+            images: imgs,
+            cleanReaderHtml: entry.content || entry.description || ('<p>' + escapeHtml(entry.title) + '</p>'),
+            hiloRojo: {
+              minutaTitle: 'La Minuta W',
+              minutaUrl: 'https://arianawajntraub.substack.com',
+              videoTitle: '@whimsyPOV',
+              videoUrl: 'https://www.youtube.com/@whimsyPOV',
+              summaryLine: `Fuente viva sumada (${name}) lista para cruzar con tu archivo.`
+            }
+          };
+          allItems.unshift(newItem);
+          added++;
+        });
+
+        allItems.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+        populateLensesSelect();
+        renderSidebar();
+        renderInboxList();
+        showToast(`✅ <strong>${escapeHtml(name)}</strong> sumó ${added} artículos nuevos a tu Bandeja.`);
+      } catch (err) {
+        showToast(`⚠️ Quedó guardado <strong>${escapeHtml(name)}</strong> en tu lista de feeds. Si el medio bloquea lectura directa desde el navegador, corré el motorcito en tu Mac para traer su álbum completo.`);
+      }
+    }
+
+    async function refreshFeedsInBrowser() {
+      await loadInitialInbox();
+      for (const cf of customFeedsList.slice(0, 4)) {
+        await fetchSingleFeedViaPublicReader(cf.name, cf.url, cf.cat, cf.lens);
+      }
+      showToast('✅ Bandeja actualizada con los últimos artículos disponibles.');
+    }
+
+    // ATAJOS DE TECLADO ESTILO GOOGLE READER (J / K / S / P)
+    document.addEventListener('keydown', (e) => {
+      if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+      if (e.key === 'Escape') { closeAirModal(); return; }
+      const visible = getFilteredItems();
+      if (!visible.length) return;
+      const curIdx = visible.findIndex(x => x.id === activeItemId);
+      if (e.key === 'j' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        const next = visible[Math.min(visible.length - 1, curIdx + 1)];
+        if (next) selectInboxItem(next.id);
+      } else if (e.key === 'k' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = visible[Math.max(0, curIdx - 1)];
+        if (prev) selectInboxItem(prev.id);
+      } else if (e.key === 's' && activeItemId) {
+        toggleStarActive();
+      } else if (e.key === 'p' && activeItemId) {
+        sendActiveToPrepro('hoy');
+      }
+    });
+
+    loadInitialInbox();
+  </script>
+</body>
+</html>
