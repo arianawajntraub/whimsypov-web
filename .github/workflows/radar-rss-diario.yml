@@ -1,0 +1,34 @@
+name: Radar RSS Diario Whimsy POV
+
+on:
+  schedule:
+    - cron: '30 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  radar-rss:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run autonomous RSS radar engine
+        run: node scripts/motor_rss_whimsy.mjs
+
+      - name: Commit and push updated RSS inbox
+        run: |
+          git config user.name "Whimsy POV Bot"
+          git config user.email "whimsypov@gmail.com"
+          git add rss-inbox-live.json
+          if ! git diff --staged --quiet; then
+            git commit -m "Actualización diaria automática del radar RSS"
+            git push
+          fi

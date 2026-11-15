@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>Whimsy POV · Lector RSS & Radar Semanal (3 → 2 → 1)</title>
+  <title>Whimsy POV · La Pre de Pre-Pro (RSS + Entregas + Guion + Aprobalo)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -27,7 +28,11 @@
       --border-strong: rgba(234, 221, 194, 0.34);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       background: var(--bg);
@@ -39,12 +44,18 @@
       overflow-x: hidden;
     }
 
-    a { color: var(--coral); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a {
+      color: var(--coral);
+      text-decoration: none;
+    }
 
-    /* TOP BAR */
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* BARRA SUPERIOR */
     .topbar {
-      background: rgba(26, 26, 26, 0.96);
+      background: rgba(26, 26, 26, 0.97);
       border-bottom: 1px solid var(--border);
       padding: 10px 16px;
       display: flex;
@@ -61,6 +72,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      min-width: 0;
     }
 
     .brand-left img {
@@ -71,10 +83,11 @@
       object-fit: contain;
       padding: 2px;
       background: var(--bg);
+      flex-shrink: 0;
     }
 
     .brand-title h1 {
-      font-size: 1rem;
+      font-size: 0.98rem;
       font-weight: 800;
       color: var(--cream);
       letter-spacing: -0.01em;
@@ -128,7 +141,8 @@
       color: var(--paper);
     }
 
-    .btn.sage:hover {
+    .btn.sage:hover,
+    .btn.sage.active-choice {
       background: var(--sage);
       color: #1A1A1A;
     }
@@ -139,13 +153,25 @@
       color: var(--sand);
     }
 
+    .btn.sand:hover,
+    .btn.sand.active-choice {
+      background: var(--sand);
+      color: #1A1A1A;
+    }
+
     .btn.coral {
       background: var(--coral);
       border-color: var(--coral);
       color: #1A1A1A;
     }
 
-    /* STATUS TOAST */
+    .btn.coral.active-choice {
+      background: var(--white);
+      color: #1A1A1A;
+      border-color: var(--coral);
+    }
+
+    /* BANNER DE CONFIRMACIÓN */
     .toast-banner {
       display: none;
       background: rgba(111, 163, 151, 0.22);
@@ -159,19 +185,21 @@
       gap: 10px;
     }
 
-    .toast-banner.open { display: flex; }
+    .toast-banner.open {
+      display: flex;
+    }
 
-    /* STEP 1: GOOGLE READER + GMAIL 3-PANE WORKSPACE */
+    /* PASO 1: BANDEJA ESTILO GOOGLE READER + GMAIL (3 COLUMNAS) */
     .reader-layout {
       display: grid;
-      grid-template-columns: 248px 430px 1fr;
+      grid-template-columns: 256px 430px 1fr;
       flex: 1;
       min-height: calc(100vh - 60px);
     }
 
-    @media (max-width: 1220px) {
+    @media (max-width: 1240px) {
       .reader-layout {
-        grid-template-columns: 220px 360px 1fr;
+        grid-template-columns: 224px 360px 1fr;
       }
     }
 
@@ -179,14 +207,17 @@
       .reader-layout {
         grid-template-columns: 1fr;
       }
-      .pane-sidebar, .pane-inbox {
+
+      .pane-sidebar,
+      .pane-inbox,
+      .pane-reader {
         border-right: none;
         border-bottom: 1px solid var(--border);
         max-height: none;
       }
     }
 
-    /* PANE 1: SIDEBAR */
+    /* COLUMNA IZQUIERDA */
     .pane-sidebar {
       border-right: 1px solid var(--border);
       background: rgba(255, 255, 255, 0.02);
@@ -205,6 +236,9 @@
       letter-spacing: 0.06em;
       color: var(--muted);
       padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .nav-list {
@@ -219,9 +253,9 @@
       border: 1px solid transparent;
       color: var(--cream);
       border-radius: 7px;
-      padding: 7px 9px;
+      padding: 6px 9px;
       font-family: 'Manrope', 'Myriad Pro', sans-serif;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -257,9 +291,10 @@
       background: rgba(234, 215, 183, 0.14);
       padding: 1px 6px;
       border-radius: 99px;
+      flex-shrink: 0;
     }
 
-    /* PANE 2: GMAIL-STYLE INBOX LIST */
+    /* COLUMNA CENTRAL: LISTADO ESTILO GMAIL + TRIAJE EN 1 CLIC */
     .pane-inbox {
       border-right: 1px solid var(--border);
       display: flex;
@@ -282,7 +317,8 @@
       gap: 6px;
     }
 
-    .input-field {
+    .input-field,
+    textarea.input-field {
       width: 100%;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
@@ -294,7 +330,8 @@
       outline: none;
     }
 
-    .input-field:focus {
+    .input-field:focus,
+    textarea.input-field:focus {
       border-color: var(--coral);
     }
 
@@ -322,7 +359,6 @@
     .inbox-list {
       flex: 1;
       overflow-y: auto;
-      divide-y: 1px solid var(--border);
     }
 
     .gmail-row {
@@ -331,7 +367,7 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
       transition: background 0.12s ease;
     }
 
@@ -345,7 +381,7 @@
     }
 
     .gmail-row.is-read .row-title {
-      font-weight: 500;
+      font-weight: 600;
       color: var(--sand);
     }
 
@@ -388,7 +424,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 145px;
+      max-width: 155px;
     }
 
     .row-date {
@@ -418,9 +454,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 4px;
       flex-wrap: wrap;
-      margin-top: 2px;
     }
 
     .mini-pills {
@@ -431,7 +466,7 @@
     }
 
     .pill {
-      font-size: 0.64rem;
+      font-size: 0.63rem;
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 4px;
@@ -445,36 +480,72 @@
       color: var(--sand);
     }
 
-    .pill.sent-hoy {
-      background: rgba(111, 163, 151, 0.25);
-      border-color: var(--sage);
-      color: var(--white);
-    }
-
-    .pill.sent-gateras {
-      background: rgba(204, 123, 103, 0.22);
+    .pill.vid-count {
       border-color: var(--coral);
-      color: var(--white);
+      color: var(--coral);
     }
 
-    .row-quick-send {
-      background: rgba(111, 163, 151, 0.16);
-      border: 1px solid rgba(111, 163, 151, 0.45);
+    .triage-strip {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 2px;
+    }
+
+    .triage-chip {
+      background: rgba(234, 221, 194, 0.06);
+      border: 1px solid var(--border);
       color: var(--cream);
       border-radius: 5px;
-      padding: 2px 7px;
+      padding: 3px 6px;
       font-family: 'Manrope', 'Myriad Pro', sans-serif;
-      font-size: 0.65rem;
+      font-size: 0.63rem;
       font-weight: 700;
       cursor: pointer;
     }
 
-    .row-quick-send:hover {
-      background: var(--sage);
-      color: #1A1A1A;
+    .triage-chip:hover {
+      border-color: var(--coral);
     }
 
-    /* PANE 3: CLEAN AIR READER + EXTRACTED IMAGES */
+    .triage-chip.on-hoy {
+      background: var(--sage);
+      color: #1A1A1A;
+      border-color: var(--sage);
+    }
+
+    .triage-chip.on-manana {
+      background: var(--sand);
+      color: #1A1A1A;
+      border-color: var(--sand);
+    }
+
+    .triage-chip.on-tema {
+      background: var(--coral);
+      color: #1A1A1A;
+      border-color: var(--coral);
+    }
+
+    .triage-chip.on-gateras {
+      background: rgba(234, 215, 183, 0.28);
+      color: var(--white);
+      border-color: var(--sand);
+    }
+
+    .triage-select {
+      background: #1A1A1A;
+      border: 1px solid var(--border);
+      color: var(--sand);
+      border-radius: 5px;
+      padding: 2px 5px;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      font-size: 0.63rem;
+      font-weight: 700;
+      max-width: 150px;
+    }
+
+    /* COLUMNA DERECHA: CONSOLA DE AIRE + GALERÍA + LECTOR */
     .pane-reader {
       display: flex;
       flex-direction: column;
@@ -484,9 +555,9 @@
     }
 
     .reader-action-bar {
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
-      background: rgba(26, 26, 26, 0.94);
+      background: rgba(26, 26, 26, 0.96);
       position: sticky;
       top: 0;
       z-index: 15;
@@ -505,11 +576,11 @@
     }
 
     .reader-inner {
-      padding: 18px 22px 48px;
+      padding: 16px 20px 56px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      max-width: 920px;
+      gap: 14px;
+      max-width: 960px;
     }
 
     .whimsy-match-box {
@@ -537,7 +608,53 @@
       line-height: 1.45;
     }
 
-    /* EXTRACTED IMAGES GALLERY */
+    /* CONSOLAS DE PRE-PRODUCCIÓN POR ARTÍCULO */
+    .studio-prep-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+      gap: 10px;
+    }
+
+    .prep-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .prep-box h3 {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--sand);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .prep-sub {
+      font-size: 0.71rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .mode-grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    /* GALERÍA DE IMÁGENES EXTRAÍDAS */
     .gallery-box {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border);
@@ -562,7 +679,7 @@
 
     .gallery-strip {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
       gap: 10px;
     }
 
@@ -581,7 +698,7 @@
 
     .img-thumb {
       position: relative;
-      height: 125px;
+      height: 120px;
       background: rgba(255, 255, 255, 0.03);
       cursor: zoom-in;
       overflow: hidden;
@@ -637,12 +754,12 @@
       color: var(--white);
     }
 
-    /* CLEAN RENDERED ARTICLE FOR AIR */
+    /* LECTURA LIMPIA DE AIRE */
     .air-paper {
       background: var(--paper);
       color: #1A1A1A;
       border-radius: 14px;
-      padding: 26px 28px;
+      padding: 24px 26px;
       border: 1px solid var(--sand);
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
     }
@@ -667,7 +784,7 @@
     }
 
     .air-paper h2 {
-      font-size: 1.52rem;
+      font-size: 1.48rem;
       font-weight: 800;
       line-height: 1.24;
       margin-bottom: 10px;
@@ -681,7 +798,7 @@
     .air-paper-meta {
       font-size: 0.76rem;
       color: var(--bronze);
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       padding-bottom: 12px;
       border-bottom: 1px solid rgba(110, 83, 58, 0.25);
       display: flex;
@@ -695,7 +812,7 @@
     }
 
     .air-article-body {
-      font-size: 0.98rem;
+      font-size: 0.97rem;
       line-height: 1.72;
       overflow-wrap: anywhere;
     }
@@ -706,18 +823,23 @@
 
     .inline-form-grid {
       display: grid;
-      grid-template-columns: 1.4fr 1.2fr auto;
+      grid-template-columns: 1.3fr 1.2fr auto;
       gap: 8px;
       margin-top: 6px;
     }
 
     @media (max-width: 760px) {
-      .inline-form-grid {
+
+      .inline-form-grid,
+      .two-cols,
+      .mode-grid-4 {
         grid-template-columns: 1fr;
       }
+
       .air-paper {
-        padding: 18px 14px;
+        padding: 16px 14px;
       }
+
       .reader-inner {
         padding: 12px 12px 36px;
       }
@@ -733,7 +855,7 @@
     .air-article-body h3,
     .air-article-body h4 {
       margin: 18px 0 8px;
-      font-size: 1.14rem;
+      font-size: 1.12rem;
       font-weight: 800;
     }
 
@@ -750,7 +872,7 @@
     }
 
     .air-article-body figure {
-      margin: 18px 0;
+      margin: 16px 0;
     }
 
     .air-article-body img {
@@ -776,24 +898,37 @@
       color: var(--coral);
     }
 
-    /* STEP 2 & STEP 3 FULL VIEWS */
+    /* VISTAS PASO 2 (ARMAR ENTREGA + GUION + APROBALO) Y PASO 3 (RADAR) */
     .stage-page {
       display: none;
-      padding: 20px 24px 60px;
-      max-width: 1260px;
+      padding: 18px 22px 64px;
+      max-width: 1320px;
       width: 100%;
       margin: 0 auto;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
     .stage-page.active {
       display: flex;
     }
 
+    .delivery-workspace {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 1020px) {
+      .delivery-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 14px;
     }
 
@@ -801,22 +936,22 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 16px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
     .panel-box h2 {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 800;
       color: var(--sand);
     }
 
     .panel-box p.desc {
-      font-size: 0.81rem;
+      font-size: 0.8rem;
       color: var(--cream);
-      line-height: 1.5;
+      line-height: 1.48;
     }
 
     .code-copy {
@@ -824,13 +959,65 @@
       border: 1px solid var(--border-strong);
       border-radius: 8px;
       padding: 10px 12px;
-      font-family: monospace;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
       font-size: 0.76rem;
       color: var(--paper);
       overflow-x: auto;
     }
 
-    /* FULLSCREEN AIR PRESENTATION + LIGHTBOX */
+    .script-textarea {
+      width: 100%;
+      min-height: 310px;
+      background: #1A1A1A;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      color: var(--paper);
+      padding: 12px 14px;
+      font-family: 'Manrope', 'Myriad Pro', sans-serif;
+      font-size: 0.84rem;
+      line-height: 1.62;
+      resize: vertical;
+      outline: none;
+    }
+
+    .script-textarea:focus {
+      border-color: var(--coral);
+    }
+
+    .linter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .linter-pill.pass {
+      background: rgba(111, 163, 151, 0.22);
+      border: 1px solid var(--sage);
+      color: var(--white);
+    }
+
+    .linter-pill.warn {
+      background: rgba(204, 123, 103, 0.22);
+      border: 1px solid var(--coral);
+      color: var(--white);
+    }
+
+    .delivery-item-card {
+      background: rgba(26, 26, 26, 0.88);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--sage);
+      border-radius: 10px;
+      padding: 11px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    /* MODAL PANTALLA LIMPIA / ZOOM */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -872,6 +1059,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- BARRA SUPERIOR -->
@@ -879,24 +1067,30 @@
     <div class="brand-left">
       <img src="logo-whimsy-rosa.png" alt="Whimsy POV">
       <div class="brand-title">
-        <h1>Whimsy POV · Lector RSS & Pre-Selección (3 → 2 → 1)</h1>
+        <h1>Whimsy POV · La Pre de Pre-Pro (RSS + Entregas + Aprobalo)</h1>
         <p id="feedMetaStatus">Cargando fuentes reales en vivo...</p>
       </div>
     </div>
     <nav class="stage-nav">
-      <button class="btn active-tab" id="navStep1" onclick="switchStage('step1')">📥 1. Bandeja RSS (Google Reader)</button>
-      <button class="btn" id="navStep2" onclick="switchStage('step2')">⭐ 2. Temas Potenciales (<span id="topPotCount">0</span>)</button>
+      <button class="btn active-tab" id="navStep1" onclick="switchStage('step1')">📥 1. Bandeja RSS (<span
+          id="topAllCount">0</span>)</button>
+      <button class="btn" id="navStep2" onclick="switchStage('step2')">🎬 2. Armar Entrega, Guion y Aprobalo (<span
+          id="topEntregaCount">0</span>)</button>
       <button class="btn" id="navStep3" onclick="switchStage('step3')">🔥 3. Radar Semanal</button>
-      <a href="mesa-prepro.html" target="_blank" class="btn sage">🗂️ Abrir Mesa de Pre-Pro ↗</a>
+      <a href="mesa-prepro.html" target="_blank" class="btn sage">🗂️ Mesa de Pre-Pro ↗</a>
       <a href="cabina-v8.html" target="_blank" class="btn sand">🎛️ Cabina en Vivo ↗</a>
+      <a href="https://aprobala-app.943ari.workers.dev" target="_blank" rel="noopener" class="btn">☁️ Aprobalo ↗</a>
     </nav>
   </header>
 
-  <!-- BANNER DE CONFIRMACIÓN PUENTE -->
+  <!-- BANNER DE CONFIRMACIÓN -->
   <div class="toast-banner" id="toastBanner">
     <span id="toastText">✅ Listo.</span>
-    <div style="display:flex; gap:8px; align-items:center;">
-      <a href="mesa-prepro.html" target="_blank" class="btn coral" style="padding:5px 10px; font-size:0.72rem;">👉 Ver ahora en Mesa de Pre-Pro ↗</a>
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <button class="btn coral" style="padding:5px 10px; font-size:0.72rem;" onclick="switchStage('step2')">🎬 Ir a
+        Armar Entrega y Guion</button>
+      <a href="mesa-prepro.html" target="_blank" class="btn sage" style="padding:5px 10px; font-size:0.72rem;">👉 Abrir
+        Mesa de Pre-Pro ↗</a>
       <button class="btn" style="padding:4px 8px; font-size:0.7rem;" onclick="closeToast()">✕</button>
     </div>
   </div>
@@ -904,12 +1098,38 @@
   <!-- VISTA PASO 1: BANDEJA ESTILO GOOGLE READER / GMAIL -->
   <main class="reader-layout" id="stageStep1">
 
-    <!-- COLUMNA IZQUIERDA: SUSCRIPCIONES POR NOMBRE -->
+    <!-- COLUMNA IZQUIERDA: ENTREGAS, VISTAS Y FUENTES -->
     <aside class="pane-sidebar">
-      <button class="btn coral" style="width:100%; justify-content:center;" onclick="refreshFeedsInBrowser()">🔄 Buscar nuevos RSS ahora</button>
+      <button class="btn coral" style="width:100%; justify-content:center;" onclick="refreshFeedsInBrowser()">🔄
+        Refrescar RSS ahora</button>
 
       <div>
-        <div class="sidebar-section-title">Vistas Ordenadas</div>
+        <div class="sidebar-section-title">
+          <span>🎯 Mis Entregas y Carpetas</span>
+        </div>
+        <div class="nav-list">
+          <button class="nav-item" id="filter-bucket-hoy" onclick="setSidebarFilter('bucket:hoy', this)">
+            <span class="label-wrap">🟢 Entrega de HOY</span>
+            <span class="count-pill" id="cntHoy">0</span>
+          </button>
+          <button class="nav-item" id="filter-bucket-manana" onclick="setSidebarFilter('bucket:manana', this)">
+            <span class="label-wrap">🌅 Entrega de MAÑANA</span>
+            <span class="count-pill" id="cntManana">0</span>
+          </button>
+          <button class="nav-item" id="filter-bucket-gateras" onclick="setSidebarFilter('bucket:gateras', this)">
+            <span class="label-wrap">🟡 En Gateras (Plan B)</span>
+            <span class="count-pill" id="cntGateras">0</span>
+          </button>
+        </div>
+        <div class="sidebar-section-title" style="margin-top:6px;">
+          <span>🏷️ Cuando hablemos de...</span>
+          <button class="triage-chip" onclick="promptCreateCustomTopic()">+ Nuevo</button>
+        </div>
+        <div class="nav-list" id="topicFoldersSidebar"></div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">Vistas de Bandeja</div>
         <div class="nav-list">
           <button class="nav-item active" id="filter-all" onclick="setSidebarFilter('all', this)">
             <span class="label-wrap">📥 Todos los RSS (Por fecha)</span>
@@ -919,9 +1139,9 @@
             <span class="label-wrap">⭐ Temas Potenciales</span>
             <span class="count-pill" id="cntStarred">0</span>
           </button>
-          <button class="nav-item" id="filter-sent" onclick="setSidebarFilter('sent', this)">
-            <span class="label-wrap">🟢 Enviados a Pre-Pro</span>
-            <span class="count-pill" id="cntSent">0</span>
+          <button class="nav-item" id="filter-videos" onclick="setSidebarFilter('videos', this)">
+            <span class="label-wrap">🎬 Con Video / Animación</span>
+            <span class="count-pill" id="cntVideos">0</span>
           </button>
           <button class="nav-item" id="filter-week" onclick="setSidebarFilter('week', this)">
             <span class="label-wrap">🕒 Últimos 7 días</span>
@@ -933,7 +1153,7 @@
       <div>
         <div class="sidebar-section-title">Filtrar por Lente (18 Lentes)</div>
         <select class="select-field" id="lensFilterSelect" style="width:100%;" onchange="renderInboxList()">
-          <option value="">Todas las lentes</option>
+          <option value="">Todas las 18 lentes</option>
         </select>
       </div>
 
@@ -943,75 +1163,226 @@
       </div>
     </aside>
 
-    <!-- COLUMNA CENTRAL: LISTADO ESTILO GMAIL -->
+    <!-- COLUMNA CENTRAL: LISTADO ESTILO GMAIL CON TRIAJE INMEDIATO -->
     <section class="pane-inbox">
       <div class="inbox-controls">
         <div class="search-row">
-          <input type="text" class="input-field" id="inboxSearch" placeholder="Buscar titular, fuente o palabra..." oninput="renderInboxList()">
+          <input type="text" class="input-field" id="inboxSearch" placeholder="Buscar titular, fuente o protagonista..."
+            oninput="renderInboxList()">
           <select class="select-field" id="inboxSort" onchange="renderInboxList()">
             <option value="date">Orden: Aparición</option>
             <option value="images">Orden: Más fotos</option>
+            <option value="videos">Orden: Con video</option>
             <option value="source">Orden: Fuente</option>
           </select>
         </div>
         <div class="inbox-meta-bar">
           <span id="inboxVisibleLabel">Mostrando 0 artículos</span>
-          <span>Teclas: J/K mover · S estrella · P Pre-Pro</span>
+          <span id="quickGoDeliveryWrap"></span>
         </div>
       </div>
       <div class="inbox-list" id="inboxList"></div>
     </section>
 
-    <!-- COLUMNA DERECHA: VISOR LIMPIO DE AIRE + IMÁGENES EXTRAÍDAS -->
+    <!-- COLUMNA DERECHA: CONSOLA DE TRANSMISIÓN, @PROTAGONISTA, MÚSICA Y LECTOR -->
     <section class="pane-reader" id="readerPane">
       <div class="reader-action-bar" id="readerActionBar" style="display:none;">
         <div class="reader-actions-group">
-          <button class="btn sage" onclick="sendActiveToPrepro('hoy')">🟢 Mandar a Pre-Pro (Va HOY)</button>
-          <button class="btn sand" onclick="sendActiveToPrepro('gateras')">🟡 En Gateras</button>
-          <button class="btn" id="readerStarBtn" onclick="toggleStarActive()">⭐ Tema Potencial</button>
+          <button class="btn" id="btnBarHoy" onclick="assignBucketActive('hoy')">🟢 Para HOY</button>
+          <button class="btn" id="btnBarManana" onclick="assignBucketActive('manana')">🌅 Para MAÑANA</button>
+          <select class="select-field" id="barTopicSelect" onchange="assignTopicFromBar(this.value)">
+            <option value="">🏷️ Cuando hablemos de...</option>
+          </select>
+          <button class="btn" id="btnBarGateras" onclick="assignBucketActive('gateras')">🟡 En Gateras</button>
+          <button class="btn" id="readerStarBtn" onclick="toggleStarActive()">⭐ Estrella</button>
         </div>
         <div class="reader-actions-group">
-          <button class="btn coral" onclick="openAirPresentationMode()">📺 Pantalla Limpia para Aire</button>
-          <button class="btn" onclick="togglePaperTheme()">🌓 Claro / Oscuro</button>
+          <button class="btn coral" onclick="openAirPresentationMode()">📺 Pantalla Limpia</button>
+          <button class="btn" onclick="togglePaperTheme()">🌓 Papel</button>
           <a id="readerOrigLink" href="#" target="_blank" rel="noopener" class="btn">🔗 Fuente ↗</a>
         </div>
       </div>
       <div class="reader-inner" id="readerContent">
         <div class="panel-box">
           <h2>Elegí cualquier artículo de la bandeja</h2>
-          <p class="desc">Acá vas a ver todas las imágenes reales extraídas del sitio, el cruce automático con tus 19 Minutas W y 91 videos de YouTube, y el artículo completo renderizado limpio para recorrerlo al aire.</p>
+          <p class="desc">Mientras barrés tus fuentes RSS podés clasificar en 1 clic si va HOY, MAÑANA o para la carpeta
+            de un tema, elegir si sale como sitio, imágenes o video con/sin sonido, definir la música libre, invitar al
+            protagonista por @arroba y mandar todo tejido con Hilo Rojo al Teleprompter.</p>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- VISTA PASO 2: LISTA DE TEMAS POTENCIALES & EXTRACTOR VISUAL -->
+  <!-- VISTA PASO 2: ARMAR ENTREGA, GUION LARGO CON HILO ROJO & PUENTE APROBALO -->
   <section class="stage-page" id="stageStep2">
     <div class="panel-box">
-      <h2>⭐ Paso 2 · Lista de Temas Potenciales para el Aire & Extractor de Enlaces</h2>
-      <p class="desc">Todo lo que marcás con estrella (★) en tu Bandeja RSS se acumula acá como banco de temas curados. Anotá por qué te vibra, revisá las fotos extraídas y pasalo a tu Mesa de Pre-Pro cuando quieras.</p>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h2>🎬 Paso 2 · Armar Entrega, Guion Largo con Hilo Rojo & Puente Aprobalo</h2>
+          <p class="desc">Elegí la entrega que querés producir (HOY, MAÑANA o una carpeta temática). El sistema junta
+            todas tus notas elegidas, cruza sus 18 Lentes con tu archivo, teje un guion largo completo con indicaciones
+            de imagen, video y música libre, y deja todo listo para el Teleprompter y para Aprobalo Cloud.</p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <label style="font-size:0.74rem; color:var(--sand); font-weight:700;">Entrega activa:</label>
+          <select class="select-field" id="activeDeliverySelect" style="font-size:0.82rem; padding:8px 10px;"
+            onchange="changeActiveDeliveryBucket(this.value)"></select>
+          <button class="btn coral" onclick="switchStage('step1')">📥 Volver a barrer RSS</button>
+        </div>
+      </div>
+
       <div class="inline-form-grid">
-        <input type="text" class="input-field" id="manualTopicTitle" placeholder="Sumar una idea o enlace suelto a Temas Potenciales (título)...">
+        <input type="text" class="input-field" id="manualTopicTitle"
+          placeholder="Sumar una idea o nota manual directo a esta entrega...">
         <input type="text" class="input-field" id="manualTopicUrl" placeholder="https://... (opcional)">
-        <button class="btn coral" onclick="addManualPotentialTopic()">➕ Agregar a Lista</button>
+        <button class="btn sage" onclick="addManualItemToActiveDelivery()">➕ Sumar a esta Entrega</button>
       </div>
     </div>
-    <div class="card-grid" id="potentialTopicsGrid"></div>
+
+    <div class="delivery-workspace">
+      <!-- COLUMNA A: PIEZAS SELECCIONADAS DE ESTA ENTREGA -->
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="panel-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h2 id="deliverySummaryHeading">📦 Piezas en esta entrega (0)</h2>
+            <span class="pill img-count" id="deliveryStatsBadge">0 notas · 0 fotos · 0 min aprox.</span>
+          </div>
+          <div id="deliveryItemsList" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+        <div class="panel-box">
+          <h2>🎵 Música libre asignada a esta entrega</h2>
+          <p class="desc">Podés escuchar la pista de mobygratis.com o Groove Session acá mismo antes de enviarla al
+            aire.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            <select class="select-field" id="deliveryMusicSelect" style="flex:1; min-width:220px;"
+              onchange="setDeliveryMusic(this.value)"></select>
+            <button class="btn sage" onclick="testDeliveryMusicInCabin()">🎛️ Probar en Cabina</button>
+          </div>
+          <audio id="deliveryMusicPreview" controls style="width:100%; height:36px;"></audio>
+        </div>
+      </div>
+
+      <!-- COLUMNA B: GUION LARGO + QUE VAYA + APROBALO -->
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="panel-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h2>🧵 Guion largo de toda la entrega (5 Bloques)</h2>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn coral" onclick="weaveLongScriptForDelivery(true)">🧵 Tejer Guion Largo con Hilo
+                Rojo</button>
+              <button class="btn" id="btnVoiceDictate" onclick="toggleDeliveryVoiceDictation()">🎙️ Dictar con mi
+                voz</button>
+            </div>
+          </div>
+
+          <label style="font-size:0.72rem; color:var(--sand); font-weight:700;">Titular unificado de la entrega (Zócalo
+            9:16 y YouTube)</label>
+          <input type="text" class="input-field" id="deliveryTitleInput" oninput="saveDeliveryEdits()">
+
+          <label style="font-size:0.72rem; color:var(--sand); font-weight:700;">Hilo Rojo común de la entrega</label>
+          <input type="text" class="input-field" id="deliveryHiloInput" oninput="saveDeliveryEdits()">
+
+          <label style="font-size:0.72rem; color:var(--sand); font-weight:700;">Texto completo palabra por palabra (para
+            leer en Teleprompter)</label>
+          <textarea class="script-textarea" id="deliveryScriptArea" oninput="saveDeliveryEdits()"></textarea>
+
+          <label style="font-size:0.72rem; color:var(--sand); font-weight:700;">@Arrobas de protagonistas y medios
+            incluidos en esta entrega</label>
+          <input type="text" class="input-field" id="deliveryHandlesInput" oninput="saveDeliveryEdits()">
+
+          <div class="two-cols" style="align-items:end; margin-top:4px;">
+            <div>
+              <label
+                style="font-size:0.72rem; color:var(--sand); font-weight:700; display:block; margin-bottom:4px;">Pestaña
+                destino en Cabina en Vivo</label>
+              <select class="select-field" id="deliveryCabinSlotSelect" style="width:100%;">
+                <option value="0">📜 Pestaña 1 de Cabina: GUION TITULAR DE AIRE</option>
+                <option value="1">📜 Pestaña 2 de Cabina: BACKUP COMPLETO #1</option>
+                <option value="2">📜 Pestaña 3 de Cabina: BACKUP COMPLETO #2</option>
+              </select>
+            </div>
+            <button class="btn sage" style="justify-content:center; padding:10px 14px;"
+              onclick="sendDeliveryEverywhere()">🚀 QUE VAYA: Enviar a Mesa de Pre-Pro + Cabina</button>
+          </div>
+          <div id="deliveryPushResult"
+            style="display:none; font-size:0.77rem; color:var(--paper); background:rgba(111,163,151,0.2); border:1px solid var(--sage); border-radius:8px; padding:9px 12px;">
+          </div>
+        </div>
+
+        <!-- PUENTE CON APROBALO CLOUD + LINTER SÍ/NO -->
+        <div class="panel-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h2>☁️ Puente Aprobalo Cloud + La Minuta W (Substack)</h2>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+              <span id="linterStatusPill" class="linter-pill pass">✅ Linter SÍ/NO: Limpio</span>
+              <button class="btn sand" onclick="generateAprobaloMultichannelPack()">🔄 Generar Pack</button>
+              <button class="btn" onclick="autoCleanAprobaloLinter()">🧹 Limpiar Linter</button>
+            </div>
+          </div>
+          <div id="linterDetailText" class="prep-sub">Verifica cero adverbios en -mente, cero negaciones por contraste,
+            título de YouTube hasta 100 caracteres y cero enlaces crudos en Instagram.</div>
+
+          <div class="two-cols">
+            <div>
+              <label style="font-size:0.71rem; color:var(--sand); font-weight:700;">Título YouTube (<span
+                  id="ytLenCounter">0</span>/100 car.)</label>
+              <input type="text" class="input-field" id="aprobalaYtTitle" maxlength="100" oninput="runCopyLinter()">
+            </div>
+            <div>
+              <label style="font-size:0.71rem; color:var(--sand); font-weight:700;">Fecha programada en Aprobalo</label>
+              <input type="date" class="input-field" id="aprobalaDateInput">
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:0.71rem; color:var(--sand); font-weight:700;">Cápsula puente para Substack · La
+              Minuta W (<span id="subWordsCounter">0</span> palabras)</label>
+            <textarea class="input-field" id="aprobalaSubstackCopy" rows="4" oninput="runCopyLinter()"></textarea>
+          </div>
+
+          <div class="two-cols">
+            <div>
+              <label style="font-size:0.71rem; color:var(--sand); font-weight:700;">Copy Instagram & TikTok (con
+                @arrobas, cero enlaces)</label>
+              <textarea class="input-field" id="aprobalaIgCopy" rows="4" oninput="runCopyLinter()"></textarea>
+            </div>
+            <div>
+              <label style="font-size:0.71rem; color:var(--sand); font-weight:700;">Copy LinkedIn personal (Ariana
+                Wajntraub)</label>
+              <textarea class="input-field" id="aprobalaLiCopy" rows="4" oninput="runCopyLinter()"></textarea>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn coral" onclick="copyAprobaloJsonPayload()">📋 Copiar JSON oficial Aprobalo</button>
+            <button class="btn sage" onclick="downloadAprobaloJsonFile()">⬇️ Descargar
+              lote_aprobala_whimsy.json</button>
+            <a href="https://aprobala-app.943ari.workers.dev" target="_blank" rel="noopener" class="btn sand">☁️ Abrir
+              Aprobalo Cloud ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- VISTA PASO 3: RADAR SEMANAL DE NUEVAS FUENTES RSS -->
   <section class="stage-page" id="stageStep3">
     <div class="panel-box">
       <h2>🔥 Paso 3 · Radar Semanal: Qué alimentar según lo más visto de Whimsy POV y La Minuta W</h2>
-      <p class="desc">Cada semana el motorcito cruza tus piezas con mayor audiencia en YouTube (@whimsyPOV) y Substack (La Minuta W) para sugerir nuevas fuentes RSS vivas y mantener la bandeja fresca.</p>
+      <p class="desc">Cada semana el motor en la nube cruza tus piezas con mayor audiencia en YouTube (@whimsyPOV) y
+        Substack (La Minuta W) para sugerir nuevas fuentes RSS vivas y mantener la bandeja fresca cada mañana sin abrir
+        el chat.</p>
       <div class="card-grid" id="topSignalsGrid"></div>
     </div>
 
     <div class="panel-box">
       <h2>📡 Fuentes RSS Sugeridas Esta Semana (Activar en 1 clic)</h2>
-      <p class="desc">Activá cualquier medio sugerido o pegá el RSS de un museo, revista o blog nuevo para sumarlo a tu Bandeja estilo Google Reader.</p>
+      <p class="desc">Activá cualquier medio sugerido o pegá el RSS de un museo, revista o archivo nuevo para sumarlo a
+        tu Bandeja.</p>
       <div class="inline-form-grid" style="margin-bottom:8px;">
-        <input type="text" class="input-field" id="customFeedName" placeholder="Nombre de la fuente (ej: Museo del Prado)">
+        <input type="text" class="input-field" id="customFeedName"
+          placeholder="Nombre de la fuente (ej: Museo del Prado)">
         <input type="text" class="input-field" id="customFeedUrl" placeholder="URL del feed RSS / Atom (https://...)">
         <button class="btn sage" onclick="addCustomFeedFromInput()">➕ Sumar RSS</button>
       </div>
@@ -1019,20 +1390,23 @@
     </div>
 
     <div class="panel-box">
-      <h2>🤖 Cómo pedirle a Antigravity o a Claude Code que actualice el motorcito fuera del navegador</h2>
-      <p class="desc">Este archivo corre de forma independiente leyendo tus feeds RSS y limpiando imágenes HTML en tu Mac sin tocar la Cabina ni la Mesa de Pre-Pro. Para correr una recolección semanal profunda desde la terminal o desde Claude Code:</p>
+      <h2>☁️ Recolección diaria encendida en la nube (y disparo manual opcional)</h2>
+      <p class="desc">Este panel recibe todos los días a las 05:30 AM (hora de Uruguay y Argentina) una recolección
+        fresca desde el servidor de tu web sin depender de tu computadora encendida. Si alguna vez querés forzar una
+        recolección profunda desde tu Mac:</p>
       <div class="code-copy">node "02_RADAR_SCRAPING_DIARIO/motor_rss_whimsy.mjs"</div>
     </div>
   </section>
 
-  <!-- MODAL PANTALLA LIMPIA DE AIRE / ZOOM IMAGEN -->
+  <!-- MODAL PANTALLA LIMPIA DE AIRE / ZOOM -->
   <div class="modal-overlay" id="airModal" onclick="if(event.target===this) closeAirModal()">
     <div class="modal-inner">
       <div class="modal-top-bar">
-        <span style="font-size:0.8rem; font-weight:800; color:var(--sand);" id="modalTopTitle">Modo Navegación Limpia al Aire</span>
+        <span style="font-size:0.8rem; font-weight:800; color:var(--sand);" id="modalTopTitle">Modo Navegación Limpia al
+          Aire</span>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn sage" onclick="sendActiveToPrepro('hoy')">🟢 Mandar a Pre-Pro (Va HOY)</button>
-          <button class="btn" onclick="togglePaperTheme()">🌓 Cambiar Papel Claro / Oscuro</button>
+          <button class="btn sage" onclick="assignBucketActive('hoy')">🟢 Para HOY</button>
+          <button class="btn" onclick="togglePaperTheme()">🌓 Claro / Oscuro</button>
           <button class="btn coral" onclick="closeAirModal()">✕ Cerrar</button>
         </div>
       </div>
@@ -1042,19 +1416,48 @@
 
   <script>
     const studioBus = ('BroadcastChannel' in window) ? new BroadcastChannel('whimsy_studio_v8') : null;
+
+    // Almacenamiento local persistente entre sesiones
     const LS_STARRED = 'whimsy_lector_starred_v1';
     const LS_NOTES = 'whimsy_lector_notes_v1';
     const LS_READ = 'whimsy_lector_read_v1';
-    const LS_SENT = 'whimsy_lector_sent_v1';
+    const LS_BUCKETS = 'whimsy_lector_buckets_v2';
     const LS_UNCHECKED_IMGS = 'whimsy_lector_unchecked_imgs_v1';
     const LS_CUSTOM_FEEDS = 'whimsy_lector_custom_feeds_v1';
     const LS_MANUAL_TOPICS = 'whimsy_lector_manual_topics_v1';
+    const LS_CUSTOM_TOPICS = 'whimsy_lector_topic_folders_v2';
+    const LS_BROADCAST_MODES = 'whimsy_lector_broadcast_v2';
+    const LS_PROTAGONISTS = 'whimsy_lector_protagonists_v2';
+    const LS_MUSIC_MAP = 'whimsy_lector_music_v2';
+    const LS_CUSTOM_TRACKS = 'whimsy_lector_custom_tracks_v2';
+    const LS_CUSTOM_VIDEOS = 'whimsy_lector_custom_videos_v2';
+    const LS_DELIVERIES_STATE = 'whimsy_lector_deliveries_v2';
+    const LS_INVITED_MAP = 'whimsy_lector_invited_v2';
 
-    let inboxData = { totalItems: 0, topWhimsySignals: [], weeklySuggestedFeeds: [], feeds: [], items: [] };
-    let allItems = [];
-    let currentSidebarFilter = 'all';
-    let activeItemId = null;
-    let isStudioDarkPaper = false;
+    const FALLBACK_MUSIC_BANK = [
+      { id: 'A-0', rack: 'A', trackIdx: 0, title: 'hollywood (Moby)', mood: 'Groove Sexy Driving', bpm: '120', file: 'audio/fast_01_hollywood.m4a' },
+      { id: 'A-1', rack: 'A', trackIdx: 1, title: 'get it (Moby)', mood: 'Funky Driving Beat', bpm: '100', file: 'audio/fast_02_get-it.m4a' },
+      { id: 'A-2', rack: 'A', trackIdx: 2, title: 'fail safe audio (Moby)', mood: 'Electro Hypnotic Groove', bpm: '108', file: 'audio/fast_03_fail-safe-audio.m4a' },
+      { id: 'A-3', rack: 'A', trackIdx: 3, title: 'great weight lifted (Moby)', mood: 'Rock / Aggressive Driving', bpm: '132', file: 'audio/fast_04_great-weight-lifted.m4a' },
+      { id: 'A-4', rack: 'A', trackIdx: 4, title: 'falling out of love (Moby)', mood: 'Dark Post-Punk Driving', bpm: '124', file: 'audio/fast_05_falling-out-of-love.m4a' },
+      { id: 'A-5', rack: 'A', trackIdx: 5, title: 'friday heretic (Moby)', mood: 'Indie Electro Arriba', bpm: '126', file: 'audio/fast_06_friday-heretic.m4a' },
+      { id: 'A-6', rack: 'A', trackIdx: 6, title: '1983 (Moby)', mood: 'Upbeat Synth 80s', bpm: '145', file: 'audio/fast_07_1983.m4a' },
+      { id: 'A-7', rack: 'A', trackIdx: 7, title: 'out stands (Moby)', mood: 'Pulso Hipnótico', bpm: '102', file: 'audio/fast_08_out-stands.m4a' },
+      { id: 'A-8', rack: 'A', trackIdx: 8, title: 'Vibe Centric (Kaelin Ellis · Groove Session)', mood: 'Neo-Soul / Beat con Onda', bpm: '98', file: 'audio/groove_09_kaelin-ellis-vibe-centric.m4a' },
+      { id: 'A-9', rack: 'A', trackIdx: 9, title: '80s Synth Groove (Kaelin Ellis · Groove Session)', mood: 'Synth Funk / Radio Beat', bpm: '110', file: 'audio/groove_10_kaelin-ellis-80s-synth.m4a' },
+      { id: 'B-0', rack: 'B', trackIdx: 0, title: 'fever dreams (Moby · Rack B)', mood: 'Pulso Nocturno', bpm: '106', file: 'audio/rackb_02.m4a' },
+      { id: 'B-1', rack: 'B', trackIdx: 1, title: 'clip show (Moby · Rack B)', mood: 'Beat Rítmico', bpm: '114', file: 'audio/rackb_04.m4a' },
+      { id: 'B-2', rack: 'B', trackIdx: 2, title: 'eight and eight (Moby · Rack B)', mood: 'Groove Medio', bpm: '96', file: 'audio/rackb_05.m4a' },
+      { id: 'B-3', rack: 'B', trackIdx: 3, title: 'idiots (Moby · Rack B)', mood: 'Tensión Cruda', bpm: '118', file: 'audio/rackb_10.m4a' },
+      { id: 'B-4', rack: 'B', trackIdx: 4, title: 'out mid 1 (Moby · Rack B)', mood: 'Apertura Aire', bpm: '94', file: 'audio/rackb_01.m4a' },
+      { id: 'B-5', rack: 'B', trackIdx: 5, title: 'it was so clear (Moby · Rack B)', mood: 'Crónica en Movimiento', bpm: '98', file: 'audio/rackb_03.m4a' },
+      { id: 'B-6', rack: 'B', trackIdx: 6, title: 'inspire modulate (Moby · Rack B)', mood: 'Synth Textura', bpm: '92', file: 'audio/rackb_06.m4a' },
+      { id: 'B-7', rack: 'B', trackIdx: 7, title: 'open (Moby · Rack B)', mood: 'Respiro Corto', bpm: '90', file: 'audio/rackb_07.m4a' },
+      { id: 'B-8', rack: 'B', trackIdx: 8, title: 'june 13 (Moby · Rack B)', mood: 'Fondo Largo', bpm: '100', file: 'audio/rackb_08.m4a' },
+      { id: 'B-9', rack: 'B', trackIdx: 9, title: 'dec 14 (Moby · Rack B)', mood: 'Cierre Instrumental', bpm: '95', file: 'audio/rackb_09.m4a' }
+    ];
+
+    const CORE_TOPICS = ['Papel', 'Árbol', 'Animal', 'Hilo', 'Sombra', 'Color', 'Silencio', 'IA y sesgos', 'Botánica', 'Libros'];
 
     function loadJsonMap(key, fallback) {
       try {
@@ -1066,16 +1469,63 @@
     }
 
     function saveJsonMap(key, val) {
-      try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch { }
     }
 
     let starredMap = loadJsonMap(LS_STARRED, {});
     let notesMap = loadJsonMap(LS_NOTES, {});
     let readMap = loadJsonMap(LS_READ, {});
-    let sentMap = loadJsonMap(LS_SENT, {});
+    let bucketMap = loadJsonMap(LS_BUCKETS, {});
     let uncheckedImgsMap = loadJsonMap(LS_UNCHECKED_IMGS, {});
     let customFeedsList = loadJsonMap(LS_CUSTOM_FEEDS, []);
     let manualTopicsList = loadJsonMap(LS_MANUAL_TOPICS, []);
+    let customTopicsList = loadJsonMap(LS_CUSTOM_TOPICS, []);
+    let broadcastModeMap = loadJsonMap(LS_BROADCAST_MODES, {});
+    let protagonistEditsMap = loadJsonMap(LS_PROTAGONISTS, {});
+    let musicOverrideMap = loadJsonMap(LS_MUSIC_MAP, {});
+    let customTracksList = loadJsonMap(LS_CUSTOM_TRACKS, []);
+    let customVideosMap = loadJsonMap(LS_CUSTOM_VIDEOS, {});
+    let deliveriesStateMap = loadJsonMap(LS_DELIVERIES_STATE, {});
+    let invitedMap = loadJsonMap(LS_INVITED_MAP, {});
+    let inviteLangMap = {};
+
+    // Migración suave de datos previos (si había envíos en v1)
+    const legacySent = loadJsonMap('whimsy_lector_sent_v1', {});
+    Object.entries(legacySent).forEach(([id, st]) => {
+      if (!bucketMap[id] && (st === 'hoy' || st === 'gateras')) {
+        bucketMap[id] = st;
+      }
+    });
+
+    let inboxData = { totalItems: 0, topWhimsySignals: [], weeklySuggestedFeeds: [], freeMusicTracks: FALLBACK_MUSIC_BANK, topicBuckets: CORE_TOPICS, feeds: [], items: [] };
+    let allItems = [];
+    let currentSidebarFilter = 'all';
+    let activeItemId = null;
+    let isStudioDarkPaper = false;
+    let activeDeliveryBucket = 'hoy';
+
+    function getAllTopicNames() {
+      const fromJson = Array.isArray(inboxData.topicBuckets) ? inboxData.topicBuckets : CORE_TOPICS;
+      const fromItems = Object.values(bucketMap).filter(v => v && v.startsWith('tema:')).map(v => v.slice(5));
+      return Array.from(new Set([...fromJson, ...customTopicsList, ...fromItems]));
+    }
+
+    function getAllMusicTracks() {
+      const base = (Array.isArray(inboxData.freeMusicTracks) && inboxData.freeMusicTracks.length)
+        ? inboxData.freeMusicTracks
+        : FALLBACK_MUSIC_BANK;
+      return [...customTracksList, ...base];
+    }
+
+    function formatBucketLabel(bKey) {
+      if (!bKey) return 'Sin asignar';
+      if (bKey === 'hoy') return '🟢 Entrega de HOY';
+      if (bKey === 'manana') return '🌅 Entrega de MAÑANA';
+      if (bKey === 'gateras') return '🟡 En Gateras (Plan B)';
+      if (bKey === 'starred') return '⭐ Banco de Temas Potenciales';
+      if (bKey.startsWith('tema:')) return '🏷️ Cuando hablemos de: ' + bKey.slice(5);
+      return bKey;
+    }
 
     function showToast(htmlMsg) {
       const el = document.getElementById('toastBanner');
@@ -1096,7 +1546,7 @@
       document.getElementById('navStep2').classList.toggle('active-tab', stage === 'step2');
       document.getElementById('navStep3').classList.toggle('active-tab', stage === 'step3');
 
-      if (stage === 'step2') renderPotentialTopicsView();
+      if (stage === 'step2') renderDeliveryWorkspace();
       if (stage === 'step3') renderWeeklyRadarView();
     }
 
@@ -1121,6 +1571,73 @@
         .replace(/"/g, '&quot;');
     }
 
+    function getItemVideos(item) {
+      const custom = customVideosMap[item.id] || [];
+      return [...custom, ...(item.videos || [])];
+    }
+
+    function getItemBroadcastMode(item) {
+      if (broadcastModeMap[item.id]) return broadcastModeMap[item.id];
+      const vids = getItemVideos(item);
+      if (vids.length > 0) return 'video_sound';
+      if (item.broadcastPreset && item.broadcastPreset.mode) return item.broadcastPreset.mode;
+      return 'images';
+    }
+
+    function getBroadcastLabel(mode) {
+      if (mode === 'site') return '🌐 Sitio Web';
+      if (mode === 'video_sound') return '🔊 Video CON Sonido';
+      if (mode === 'video_muted') return '🔇 Video SIN Sonido';
+      return '🖼️ Imágenes';
+    }
+
+    function getItemProtagonist(item) {
+      const base = item.protagonist || {
+        name: item.author || item.feedName || 'Whimsy POV',
+        handle: item.handle || '@whimsypov',
+        foundHandles: [item.handle || '@whimsypov', '@whimsypov'],
+        contactUrl: item.link || item.siteUrl || '',
+        contactEmail: '',
+        inviteEs: '',
+        inviteEn: '',
+        postAirEs: ''
+      };
+      const ov = protagonistEditsMap[item.id] || {};
+      const name = ov.name !== undefined ? ov.name : base.name;
+      const handle = ov.handle !== undefined ? ov.handle : base.handle;
+      const contactUrl = ov.contactUrl !== undefined ? ov.contactUrl : base.contactUrl;
+      const contactEmail = ov.contactEmail !== undefined ? ov.contactEmail : base.contactEmail;
+      const shortTitle = (item.title || '').slice(0, 64);
+
+      const defaultInviteEs = `¡Hola ${name} (${handle})! Soy Ariana Wajntraub, conductora de Whimsy POV y La Minuta W. Estamos armando una entrega sobre «${shortTitle}» y vamos a proyectar tu material acreditando fuente y arroba en pantalla. Si querés enviar una nota de voz de 40 segundos contando el detrás de escena para pasar al aire, te leo.`;
+      const defaultInviteEn = `Hi ${name} (${handle})! I am Ariana Wajntraub, host of Whimsy POV & La Minuta W. We are featuring "${shortTitle}" in our upcoming live broadcast, crediting your source and handle on screen. If you would like to send a 40-second voice note with the backstory to play on air, let me know!`;
+
+      return {
+        ...base,
+        name,
+        handle,
+        contactUrl,
+        contactEmail,
+        inviteEs: ov.inviteEs !== undefined ? ov.inviteEs : (base.inviteEs || defaultInviteEs),
+        inviteEn: ov.inviteEn !== undefined ? ov.inviteEn : (base.inviteEn || defaultInviteEn)
+      };
+    }
+
+    function getItemMusic(item) {
+      const tracks = getAllMusicTracks();
+      const chosenId = musicOverrideMap[item.id];
+      if (chosenId) {
+        const hit = tracks.find(t => t.id === chosenId);
+        if (hit) return hit;
+      }
+      if (item.suggestedMusic && item.suggestedMusic.file) {
+        const match = tracks.find(t => t.id === item.suggestedMusic.id || t.file === item.suggestedMusic.file);
+        if (match) return match;
+        return item.suggestedMusic;
+      }
+      return tracks[0];
+    }
+
     async function loadInitialInbox() {
       try {
         const res = await fetch('rss-inbox-live.json?t=' + Date.now());
@@ -1131,16 +1648,17 @@
 
         const genDate = inboxData.generatedAt ? new Date(inboxData.generatedAt).toLocaleString('es-AR') : 'hoy';
         document.getElementById('feedMetaStatus').textContent =
-          `${allItems.length} artículos reales · ${(inboxData.feeds || []).length} feeds conectados · Última recolección: ${genDate}`;
+          `${allItems.length} artículos vivos · ${(inboxData.feeds || []).length} fuentes · Actualizado: ${genDate}`;
 
         populateLensesSelect();
+        populateBarTopicSelect();
         renderSidebar();
         renderInboxList();
         if (allItems.length && !activeItemId) {
           selectInboxItem(allItems[0].id);
         }
       } catch (err) {
-        document.getElementById('feedMetaStatus').textContent = 'No se pudo cargar rss-inbox-live.json (' + err.message + ')';
+        document.getElementById('feedMetaStatus').textContent = 'Sin conexión con rss-inbox-live.json (' + err.message + ')';
       }
     }
 
@@ -1154,23 +1672,56 @@
       sel.value = prev;
     }
 
+    function populateBarTopicSelect() {
+      const sel = document.getElementById('barTopicSelect');
+      if (!sel) return;
+      const topics = getAllTopicNames();
+      sel.innerHTML = '<option value="">🏷️ Cuando hablemos de...</option>' +
+        topics.map(t => `<option value="tema:${escapeHtml(t)}">🏷️ ${escapeHtml(t)}</option>`).join('') +
+        '<option value="__new__">+ Crear carpeta nueva...</option>';
+    }
+
     function setSidebarFilter(filterId, btnEl) {
       currentSidebarFilter = filterId;
       document.querySelectorAll('.pane-sidebar .nav-item').forEach(b => b.classList.remove('active'));
       if (btnEl) btnEl.classList.add('active');
+      if (filterId.startsWith('bucket:')) {
+        activeDeliveryBucket = filterId.slice(7);
+      }
       renderInboxList();
     }
 
     function renderSidebar() {
+      const cntHoy = allItems.filter(it => bucketMap[it.id] === 'hoy').length;
+      const cntManana = allItems.filter(it => bucketMap[it.id] === 'manana').length;
+      const cntGateras = allItems.filter(it => bucketMap[it.id] === 'gateras').length;
       const starredCount = allItems.filter(it => starredMap[it.id]).length;
-      const sentCount = allItems.filter(it => sentMap[it.id]).length;
+      const videosCount = allItems.filter(it => getItemVideos(it).length > 0).length;
       const weekCount = allItems.filter(it => isWithinDays(it.publishedAt, 7)).length;
+      const totalSelectedForAny = allItems.filter(it => !!bucketMap[it.id]).length;
 
+      document.getElementById('cntHoy').textContent = cntHoy;
+      document.getElementById('cntManana').textContent = cntManana;
+      document.getElementById('cntGateras').textContent = cntGateras;
       document.getElementById('cntAll').textContent = allItems.length;
       document.getElementById('cntStarred').textContent = starredCount;
-      document.getElementById('cntSent').textContent = sentCount;
+      document.getElementById('cntVideos').textContent = videosCount;
       document.getElementById('cntWeek').textContent = weekCount;
-      document.getElementById('topPotCount').textContent = starredCount;
+      document.getElementById('topAllCount').textContent = allItems.length;
+      document.getElementById('topEntregaCount').textContent = totalSelectedForAny;
+
+      const topics = getAllTopicNames();
+      const topicEl = document.getElementById('topicFoldersSidebar');
+      topicEl.innerHTML = topics.map(t => {
+        const bKey = 'tema:' + t;
+        const cnt = allItems.filter(it => bucketMap[it.id] === bKey).length;
+        return `
+          <button class="nav-item ${currentSidebarFilter === 'bucket:' + bKey ? 'active' : ''}" onclick="setSidebarFilter('bucket:' + ${JSON.stringify(bKey)}, this)">
+            <span class="label-wrap">🏷️ ${escapeHtml(t)}</span>
+            <span class="count-pill">${cnt}</span>
+          </button>
+        `;
+      }).join('');
 
       const countsByFeed = {};
       allItems.forEach(it => {
@@ -1189,6 +1740,65 @@
         `).join('');
     }
 
+    function promptCreateCustomTopic(assignToItemId) {
+      const raw = prompt('Nombre de la carpeta temática («Cuando hablemos de...»):', 'Memoria');
+      if (!raw || !raw.trim()) return;
+      const clean = raw.trim();
+      if (!customTopicsList.includes(clean)) {
+        customTopicsList.push(clean);
+        saveJsonMap(LS_CUSTOM_TOPICS, customTopicsList);
+      }
+      populateBarTopicSelect();
+      if (assignToItemId) {
+        setItemBucket(assignToItemId, 'tema:' + clean);
+      } else {
+        renderSidebar();
+      }
+    }
+
+    function setItemBucket(itemId, bucketKey) {
+      if (!bucketKey) {
+        delete bucketMap[itemId];
+      } else {
+        bucketMap[itemId] = bucketKey;
+        if (bucketKey.startsWith('tema:') || bucketKey === 'hoy' || bucketKey === 'manana') {
+          activeDeliveryBucket = bucketKey;
+        }
+      }
+      saveJsonMap(LS_BUCKETS, bucketMap);
+      renderSidebar();
+      renderInboxList();
+      if (itemId === activeItemId) renderActiveReader();
+      if (bucketKey) {
+        const item = allItems.find(x => x.id === itemId);
+        showToast(`✅ «${escapeHtml((item?.title || 'Nota').slice(0, 44))}» quedó en <strong>${escapeHtml(formatBucketLabel(bucketKey))}</strong>.`);
+      }
+    }
+
+    function assignBucketActive(bucketKey) {
+      if (!activeItemId) return;
+      const cur = bucketMap[activeItemId];
+      setItemBucket(activeItemId, cur === bucketKey ? '' : bucketKey);
+    }
+
+    function assignTopicFromBar(val) {
+      if (!val || !activeItemId) return;
+      if (val === '__new__') {
+        promptCreateCustomTopic(activeItemId);
+        return;
+      }
+      setItemBucket(activeItemId, val);
+    }
+
+    function assignTopicFromRow(itemId, val) {
+      if (!val) return;
+      if (val === '__new__') {
+        promptCreateCustomTopic(itemId);
+        return;
+      }
+      setItemBucket(itemId, val);
+    }
+
     function getFilteredItems() {
       const q = (document.getElementById('inboxSearch').value || '').trim().toLowerCase();
       const lensFilter = document.getElementById('lensFilterSelect').value;
@@ -1196,12 +1806,17 @@
 
       let list = allItems.filter(it => {
         if (currentSidebarFilter === 'starred' && !starredMap[it.id]) return false;
-        if (currentSidebarFilter === 'sent' && !sentMap[it.id]) return false;
+        if (currentSidebarFilter === 'videos' && getItemVideos(it).length === 0) return false;
         if (currentSidebarFilter === 'week' && !isWithinDays(it.publishedAt, 7)) return false;
+        if (currentSidebarFilter.startsWith('bucket:')) {
+          const target = currentSidebarFilter.slice(7);
+          if (bucketMap[it.id] !== target) return false;
+        }
         if (currentSidebarFilter.startsWith('feed:') && it.feedName !== currentSidebarFilter.slice(5)) return false;
         if (lensFilter && !(it.lenses || []).includes(lensFilter)) return false;
         if (q) {
-          const hay = `${it.title} ${it.summary} ${it.feedName} ${it.author}`.toLowerCase();
+          const p = getItemProtagonist(it);
+          const hay = `${it.title} ${it.summary} ${it.feedName} ${p.name} ${p.handle}`.toLowerCase();
           if (!hay.includes(q)) return false;
         }
         return true;
@@ -1209,6 +1824,8 @@
 
       if (sortMode === 'images') {
         list.sort((a, b) => (b.images?.length || 0) - (a.images?.length || 0));
+      } else if (sortMode === 'videos') {
+        list.sort((a, b) => getItemVideos(b).length - getItemVideos(a).length);
       } else if (sortMode === 'source') {
         list.sort((a, b) => (a.feedName || '').localeCompare(b.feedName || ''));
       } else {
@@ -1221,25 +1838,37 @@
       const list = getFilteredItems();
       document.getElementById('inboxVisibleLabel').textContent = `Mostrando ${list.length} artículos`;
 
+      const quickWrap = document.getElementById('quickGoDeliveryWrap');
+      if (currentSidebarFilter.startsWith('bucket:')) {
+        const bKey = currentSidebarFilter.slice(7);
+        quickWrap.innerHTML = `<button class="triage-chip on-hoy" onclick="openDeliveryInStep2('${escapeHtml(bKey)}')">🎬 Armar esta entrega (${list.length})</button>`;
+      } else {
+        quickWrap.innerHTML = '<span>Teclas: J/K mover · S ★ · H HOY · M Mañana</span>';
+      }
+
       const container = document.getElementById('inboxList');
       if (!list.length) {
-        container.innerHTML = `<div style="padding:20px; font-size:0.8rem; color:var(--muted);">No hay artículos con este filtro. Probá limpiar la búsqueda o elegir «Todos los RSS».</div>`;
+        container.innerHTML = `<div style="padding:20px; font-size:0.8rem; color:var(--muted);">No hay artículos en esta vista. Elegí «Todos los RSS» o limpiá la búsqueda.</div>`;
         return;
       }
 
+      const topics = getAllTopicNames();
       container.innerHTML = list.map(it => {
         const isSel = it.id === activeItemId;
         const isStar = !!starredMap[it.id];
         const isRead = !!readMap[it.id];
-        const sentStatus = sentMap[it.id];
+        const bStatus = bucketMap[it.id] || '';
         const imgLen = (it.images || []).length;
+        const vidLen = getItemVideos(it).length;
         const primaryLens = (it.lenses && it.lenses[0]) || 'Arte';
+        const prot = getItemProtagonist(it);
+        const curTopic = bStatus.startsWith('tema:') ? bStatus : '';
 
         return `
           <div class="gmail-row ${isSel ? 'selected' : ''} ${isRead ? 'is-read' : ''}" onclick="selectInboxItem('${it.id}')">
             <div class="gmail-row-top">
               <div class="row-left-meta">
-                <button class="star-btn ${isStar ? 'starred' : ''}" title="Guardar en Temas Potenciales" onclick="event.stopPropagation(); toggleStarItem('${it.id}')">${isStar ? '★' : '☆'}</button>
+                <button class="star-btn ${isStar ? 'starred' : ''}" title="Tema Potencial" onclick="event.stopPropagation(); toggleStarItem('${it.id}')">${isStar ? '★' : '☆'}</button>
                 <span class="source-tag">${escapeHtml(it.feedName)}</span>
               </div>
               <span class="row-date">${formatShortDate(it.publishedAt)}</span>
@@ -1248,16 +1877,30 @@
             <div class="row-snippet">${escapeHtml(it.summary)}</div>
             <div class="row-badges">
               <div class="mini-pills">
-                <span class="pill img-count">🖼️ ${imgLen} ${imgLen === 1 ? 'foto' : 'fotos'}</span>
+                <span class="pill img-count">🖼️ ${imgLen}</span>
+                ${vidLen > 0 ? `<span class="pill vid-count">🎬 ${vidLen} vid</span>` : ''}
                 <span class="pill">${escapeHtml(primaryLens)}</span>
-                ${sentStatus === 'hoy' ? '<span class="pill sent-hoy">🟢 En Pre-Pro (HOY)</span>' : ''}
-                ${sentStatus === 'gateras' ? '<span class="pill sent-gateras">🟡 En Gateras</span>' : ''}
+                <span class="pill">${escapeHtml(prot.handle)}</span>
               </div>
-              <button class="row-quick-send" onclick="event.stopPropagation(); sendItemToPrepro('${it.id}', 'hoy')">🟢 A Pre-Pro</button>
+            </div>
+            <div class="triage-strip" onclick="event.stopPropagation()">
+              <button class="triage-chip ${bStatus === 'hoy' ? 'on-hoy' : ''}" onclick="setItemBucket('${it.id}', '${bStatus === 'hoy' ? '' : 'hoy'}')">🟢 HOY</button>
+              <button class="triage-chip ${bStatus === 'manana' ? 'on-manana' : ''}" onclick="setItemBucket('${it.id}', '${bStatus === 'manana' ? '' : 'manana'}')">🌅 Mañana</button>
+              <select class="triage-select ${curTopic ? 'on-tema' : ''}" onchange="assignTopicFromRow('${it.id}', this.value)">
+                <option value="">🏷️ Cuando hablemos de...</option>
+                ${topics.map(t => `<option value="tema:${escapeHtml(t)}" ${curTopic === 'tema:' + t ? 'selected' : ''}>🏷️ ${escapeHtml(t)}</option>`).join('')}
+                <option value="__new__">+ Nuevo tema...</option>
+              </select>
+              <button class="triage-chip ${bStatus === 'gateras' ? 'on-gateras' : ''}" onclick="setItemBucket('${it.id}', '${bStatus === 'gateras' ? '' : 'gateras'}')">🟡 Gateras</button>
             </div>
           </div>
         `;
       }).join('');
+    }
+
+    function openDeliveryInStep2(bucketKey) {
+      activeDeliveryBucket = bucketKey;
+      switchStage('step2');
     }
 
     function selectInboxItem(id) {
@@ -1295,6 +1938,110 @@
       renderActiveReader();
     }
 
+    function setItemBroadcastMode(itemId, mode) {
+      broadcastModeMap[itemId] = mode;
+      saveJsonMap(LS_BROADCAST_MODES, broadcastModeMap);
+      renderActiveReader();
+      showToast(`📡 Modo de salida guardado para esta nota: <strong>${getBroadcastLabel(mode)}</strong>.`);
+    }
+
+    function addCustomVideoToItem(itemId) {
+      const inp = document.getElementById('customVideoUrlInput');
+      if (!inp || !inp.value.trim()) return;
+      const raw = inp.value.trim();
+      let embedUrl = raw;
+      let type = 'iframe';
+      const ytM = raw.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+      const vmM = raw.match(/(?:player\.)?vimeo\.com\/(?:video\/)?(\d{6,12})/i);
+      if (ytM) { embedUrl = `https://www.youtube.com/embed/${ytM[1]}?autoplay=1&rel=0`; type = 'youtube'; }
+      else if (vmM) { embedUrl = `https://player.vimeo.com/video/${vmM[1]}?autoplay=1`; type = 'vimeo'; }
+      else if (/\.(?:mp4|webm|m4v)(\?|$)/i.test(raw)) { type = 'mp4'; }
+
+      const arr = customVideosMap[itemId] || [];
+      arr.unshift({ url: raw, embedUrl, type, caption: 'Video sumado por Ariana' });
+      customVideosMap[itemId] = arr;
+      saveJsonMap(LS_CUSTOM_VIDEOS, customVideosMap);
+      broadcastModeMap[itemId] = 'video_sound';
+      saveJsonMap(LS_BROADCAST_MODES, broadcastModeMap);
+      inp.value = '';
+      renderInboxList();
+      renderActiveReader();
+    }
+
+    function fireItemToCabinBroadcast(itemId, aspectMode) {
+      const item = allItems.find(x => x.id === itemId);
+      if (!item) return;
+      const mode = getItemBroadcastMode(item);
+      const vids = getItemVideos(item);
+      const imgs = (item.images || []).filter((_, i) => isImgChecked(itemId, i));
+      const firstImg = imgs[0] || (item.images && item.images[0]) || { url: 'evidencias/aris_flores_macro.jpg', caption: item.title };
+
+      let payload = {
+        headline: item.title,
+        kicker: (item.feedName || 'WHIMSY POV').toUpperCase(),
+        fact: `${getBroadcastLabel(mode)} · ${item.protagonist?.handle || item.handle || '@whimsypov'}`,
+        ts: Date.now()
+      };
+
+      if (mode === 'site') {
+        payload.cinemaMode = aspectMode || '16x9';
+        payload.cinemaMediaType = 'iframe';
+        payload.cinemaMediaSrc = item.link;
+        payload.moscaMiniGraphKicker = '🌐 SITIO EN VIVO · ' + item.feedName.toUpperCase();
+        payload.moscaMiniGraphText = item.title.slice(0, 74);
+        payload.pntMsg = 'Transmitiendo sitio original en ' + (aspectMode || '16x9') + ': ' + item.title.slice(0, 44);
+      } else if (mode === 'video_sound' || mode === 'video_muted') {
+        const targetVid = vids[0];
+        if (!targetVid) {
+          payload.newRightImage = firstImg.url;
+          payload.newRightTag = '[SIN VIDEO EN RSS → IMAGEN]';
+          payload.newRightLabel = firstImg.caption;
+          payload.pntMsg = 'Nota sin enlace de video directo; se proyectó su imagen principal en Panel Derecho.';
+        } else if (targetVid.type === 'gif') {
+          payload.cinemaMode = aspectMode || '16x9';
+          payload.cinemaMediaType = 'img';
+          payload.cinemaMediaSrc = targetVid.url;
+          payload.moscaMiniGraphKicker = '🎞️ ANIMACIÓN AL AIRE · ' + item.feedName.toUpperCase();
+          payload.moscaMiniGraphText = item.title.slice(0, 74);
+          payload.pntMsg = 'GIF animado al aire (con tu música libre sonando).';
+        } else {
+          let src = targetVid.embedUrl || targetVid.url;
+          if (mode === 'video_muted') {
+            src += (src.includes('?') ? '&' : '?') + 'mute=1&muted=1';
+          }
+          payload.cinemaMode = aspectMode || '16x9';
+          payload.cinemaMediaType = 'iframe';
+          payload.cinemaMediaSrc = src;
+          payload.moscaMiniGraphKicker = (mode === 'video_sound' ? '🔊 VIDEO CON SONIDO · ' : '🔇 VIDEO MUDO · ') + item.feedName.toUpperCase();
+          payload.moscaMiniGraphText = item.title.slice(0, 74);
+          payload.pntMsg = (mode === 'video_sound' ? 'Video CON sonido al aire (música baja en fade 3s).' : 'Video SIN sonido al aire (podés subir música desde Cabina).');
+        }
+      } else {
+        // modo images
+        payload.cinemaMode = 'off';
+        payload.fullAlbum = imgs.length ? imgs : [firstImg];
+        payload.newRightImage = firstImg.url;
+        payload.newRightTag = '[' + item.feedName.toUpperCase() + ']';
+        payload.newRightLabel = firstImg.caption;
+        payload.pntMsg = `Álbum (${payload.fullAlbum.length} fotos) enviado a Cabina.`;
+      }
+
+      const msg = { type: 'PREPRO_PUSH', payload };
+      saveJsonMap('whimsy_prepro_push_v8', msg);
+      if (studioBus) studioBus.postMessage(msg);
+      showToast(`🎛️ ¡Enviado a tu Cabina en vivo! Modo: <strong>${getBroadcastLabel(mode)}</strong> (${aspectMode || 'panel'}).`);
+    }
+
+    function restoreCabin3Columns() {
+      const msg = {
+        type: 'PREPRO_PUSH',
+        payload: { cinemaMode: 'off', pntMsg: 'Cabina restaurada a 3 columnas.', ts: Date.now() }
+      };
+      saveJsonMap('whimsy_prepro_push_v8', msg);
+      if (studioBus) studioBus.postMessage(msg);
+      showToast('🛑 Cabina restaurada a sus 3 columnas normales.');
+    }
+
     function projectPhotoToCabin(itemId, idx, zone) {
       const item = allItems.find(x => x.id === itemId);
       if (!item || !item.images || !item.images[idx]) return;
@@ -1302,23 +2049,112 @@
       const msg = {
         type: 'PREPRO_PUSH',
         payload: zone === 'center' ? {
+          cinemaMode: 'off',
           headline: item.title,
           kicker: (item.feedName || 'WHIMSY RSS').toUpperCase(),
           fact: photo.caption || item.title,
           newCenterImage: photo.url,
-          pntMsg: 'Proyectado desde Lector RSS en Centro 9:16: ' + item.title.slice(0, 44),
+          pntMsg: 'Foto proyectada en Centro 9:16: ' + item.title.slice(0, 44),
           ts: Date.now()
         } : {
+          cinemaMode: 'off',
           newRightImage: photo.url,
           newRightTag: '[' + (item.feedName || 'RSS').toUpperCase() + ']',
           newRightLabel: photo.caption || item.title,
-          pntMsg: 'Proyectado desde Lector RSS en Derecha: ' + item.title.slice(0, 44),
+          pntMsg: 'Foto proyectada en Panel Derecho: ' + item.title.slice(0, 44),
           ts: Date.now()
         }
       };
-      try { localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(msg)); } catch {}
+      saveJsonMap('whimsy_prepro_push_v8', msg);
       if (studioBus) studioBus.postMessage(msg);
-      showToast(`✅ Imagen enviada al <strong>${zone === 'center' ? 'Centro 9:16' : 'Panel Derecho'}</strong> de tu Cabina en vivo.`);
+      showToast(`✅ Imagen proyectada en <strong>${zone === 'center' ? 'Centro 9:16' : 'Panel Derecho'}</strong> de tu Cabina.`);
+    }
+
+    function updateProtagonistField(itemId, field, value) {
+      const cur = protagonistEditsMap[itemId] || {};
+      cur[field] = value;
+      protagonistEditsMap[itemId] = cur;
+      saveJsonMap(LS_PROTAGONISTS, protagonistEditsMap);
+      if (field === 'handle') renderInboxList();
+    }
+
+    function toggleProtagonistInvited(itemId, checked) {
+      invitedMap[itemId] = checked;
+      saveJsonMap(LS_INVITED_MAP, invitedMap);
+      showToast(checked ? '☑️ Protagonista marcado como invitado a participar.' : 'Invitación desmarcada.');
+    }
+
+    function setInviteLanguage(itemId, lang) {
+      inviteLangMap[itemId] = lang;
+      renderActiveReader();
+    }
+
+    function copyProtagonistInvite(itemId) {
+      const area = document.getElementById('protInviteArea');
+      if (!area) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(area.value).catch(() => { });
+      }
+      showToast('📋 Mensaje para el protagonista copiado listo para pegar en Instagram o WhatsApp.');
+    }
+
+    function sendProtagonistWhatsApp(itemId) {
+      const area = document.getElementById('protInviteArea');
+      const txt = area ? area.value : '';
+      window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank', 'noopener');
+    }
+
+    function sendProtagonistEmail(itemId) {
+      const item = allItems.find(x => x.id === itemId);
+      if (!item) return;
+      const prot = getItemProtagonist(item);
+      const area = document.getElementById('protInviteArea');
+      const body = area ? area.value : prot.inviteEs;
+      const subj = `Whimsy POV · Tu trabajo en nuestro próximo programa (${item.title.slice(0, 45)})`;
+      window.open(`mailto:${encodeURIComponent(prot.contactEmail || '')}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`, '_blank');
+    }
+
+    function setItemMusicTrack(itemId, trackId) {
+      musicOverrideMap[itemId] = trackId;
+      saveJsonMap(LS_MUSIC_MAP, musicOverrideMap);
+      renderActiveReader();
+    }
+
+    function addCustomFreeMusicTrack(itemId) {
+      const title = prompt('Título de la pista libre de derechos:', 'Pista nueva (mobygratis.com)');
+      if (!title || !title.trim()) return;
+      const file = prompt('URL o ruta del audio (.mp3 / .m4a):', 'audio/fast_01_hollywood.m4a');
+      if (!file || !file.trim()) return;
+      const bpm = prompt('BPM aproximado:', '110') || '110';
+      const newTrack = {
+        id: 'C-' + Date.now(),
+        rack: 'A',
+        trackIdx: 0,
+        title: title.trim(),
+        mood: 'Sumada por Ariana',
+        bpm: bpm.trim(),
+        file: file.trim()
+      };
+      customTracksList.unshift(newTrack);
+      saveJsonMap(LS_CUSTOM_TRACKS, customTracksList);
+      setItemMusicTrack(itemId, newTrack.id);
+      showToast(`🎵 Pista libre «${escapeHtml(newTrack.title)}» guardada y asignada.`);
+    }
+
+    function fireMusicTrackToCabin(trackId) {
+      const trk = getAllMusicTracks().find(t => t.id === trackId);
+      if (!trk) return;
+      if (studioBus) {
+        studioBus.postMessage({ type: 'REMOTE_ACTION', action: 'playMoby', idx: trk.trackIdx || 0 });
+        studioBus.postMessage({
+          type: 'PREPRO_PUSH',
+          payload: {
+            pntMsg: `🎵 Música libre sugerida (${trk.rack === 'B' ? 'Rack B' : 'Rack A'} #${(trk.trackIdx || 0) + 1}): ${trk.title} (${trk.bpm} BPM)`,
+            ts: Date.now()
+          }
+        });
+      }
+      showToast(`🎵 Señal enviada a Cabina: <strong>${escapeHtml(trk.title)}</strong> (${trk.rack === 'B' ? 'Rack B' : 'Rack A'}).`);
     }
 
     function openImageLightbox(url, caption) {
@@ -1344,12 +2180,29 @@
 
       bar.style.display = 'flex';
       document.getElementById('readerOrigLink').href = item.link || '#';
+
+      const bKey = bucketMap[item.id] || '';
+      document.getElementById('btnBarHoy').className = 'btn ' + (bKey === 'hoy' ? 'sage active-choice' : '');
+      document.getElementById('btnBarManana').className = 'btn ' + (bKey === 'manana' ? 'sand active-choice' : '');
+      document.getElementById('btnBarGateras').className = 'btn ' + (bKey === 'gateras' ? 'sand active-choice' : '');
+      const barSel = document.getElementById('barTopicSelect');
+      barSel.value = bKey.startsWith('tema:') ? bKey : '';
+
       const starBtn = document.getElementById('readerStarBtn');
       const isStar = !!starredMap[item.id];
-      starBtn.textContent = isStar ? '★ Guardado en Potenciales' : '⭐ Tema Potencial';
+      starBtn.textContent = isStar ? '★ Estrella' : '⭐ Estrella';
       starBtn.classList.toggle('coral', isStar);
 
       const imgs = item.images || [];
+      const vids = getItemVideos(item);
+      const bMode = getItemBroadcastMode(item);
+      const prot = getItemProtagonist(item);
+      const curLang = inviteLangMap[item.id] || 'es';
+      const curInvite = curLang === 'en' ? prot.inviteEn : prot.inviteEs;
+      const isInv = !!invitedMap[item.id];
+      const tracks = getAllMusicTracks();
+      const music = getItemMusic(item);
+
       const galleryHtml = imgs.map((im, idx) => {
         const checked = isImgChecked(item.id, idx);
         return `
@@ -1362,12 +2215,21 @@
               </label>
             </div>
             <div class="img-card-actions">
-              <button class="img-mini-btn" onclick="projectPhotoToCabin('${item.id}', ${idx}, 'right')">➡️ A Derecha</button>
-              <button class="img-mini-btn" onclick="projectPhotoToCabin('${item.id}', ${idx}, 'center')">📱 A 9:16</button>
+              <button class="img-mini-btn" onclick="projectPhotoToCabin('${item.id}', ${idx}, 'right')">➡️ Derecha</button>
+              <button class="img-mini-btn" onclick="projectPhotoToCabin('${item.id}', ${idx}, 'center')">📱 9:16</button>
             </div>
           </div>
         `;
       }).join('');
+
+      const videosHtml = vids.length
+        ? vids.map(v => `
+            <div style="font-size:0.71rem; background:rgba(26,26,26,0.75); border:1px solid var(--border); border-radius:7px; padding:6px 8px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">🎬 [${escapeHtml(v.type.toUpperCase())}] ${escapeHtml(v.caption)}</span>
+              <a href="${escapeHtml(v.url)}" target="_blank" rel="noopener">Abrir ↗</a>
+            </div>
+          `).join('')
+        : '<div class="prep-sub">El RSS trajo solo texto y fotos. Podés pegar abajo un video o transmitir el sitio directo.</div>';
 
       const hilo = item.hiloRojo || {};
       const lensesStr = (item.lenses || []).join(' · ');
@@ -1375,26 +2237,102 @@
       box.innerHTML = `
         <div class="whimsy-match-box">
           <h3>🧵 Cruce Whimsy POV · Lentes: ${escapeHtml(lensesStr)} · Reloj: ${escapeHtml(item.clock || '🌍 MUNDIAL')}</h3>
+          <p>${escapeHtml(item.curatorialAngle || '')}</p>
           <p>
             <strong>Hilo Rojo con tu archivo:</strong>
             Minuta W <a href="${escapeHtml(hilo.minutaUrl || 'https://arianawajntraub.substack.com')}" target="_blank" rel="noopener">«${escapeHtml(hilo.minutaTitle || 'La Minuta W')}»</a>
-            + YouTube <a href="${escapeHtml(hilo.videoUrl || 'https://www.youtube.com/@whimsyPOV')}" target="_blank" rel="noopener">«${escapeHtml(hilo.videoTitle || '@whimsyPOV')}»</a>.
+            + YouTube <a href="${escapeHtml(hilo.videoUrl || 'https://www.youtube.com/@whimsyPOV')}" target="_blank" rel="noopener">«${escapeHtml(hilo.videoTitle || '@whimsyPOV')}»</a>
+            ${!bKey && item.suggestedBucket ? `· <button class="triage-chip" onclick="setItemBucket('${item.id}', '${escapeHtml(item.suggestedBucket)}')">💡 Sugerencia del motor: ${escapeHtml(formatBucketLabel(item.suggestedBucket))}</button>` : ''}
           </p>
         </div>
 
+        <!-- 3 CONSOLAS OPERATIVAS DE PRE-PRODUCCIÓN -->
+        <div class="studio-prep-grid">
+
+          <!-- CONSOLA A: QUÉ TRANSMITIR Y SONIDO -->
+          <div class="prep-box">
+            <h3>
+              <span>📺 Qué transmitir al aire</span>
+              <span class="pill">${getBroadcastLabel(bMode)}</span>
+            </h3>
+            <div class="mode-grid-4">
+              <button class="btn ${bMode === 'site' ? 'sage active-choice' : ''}" onclick="setItemBroadcastMode('${item.id}', 'site')">🌐 Sitio Web</button>
+              <button class="btn ${bMode === 'images' ? 'sage active-choice' : ''}" onclick="setItemBroadcastMode('${item.id}', 'images')">🖼️ Imágenes (${imgs.length})</button>
+              <button class="btn ${bMode === 'video_sound' ? 'coral active-choice' : ''}" onclick="setItemBroadcastMode('${item.id}', 'video_sound')">🔊 Video CON Sonido</button>
+              <button class="btn ${bMode === 'video_muted' ? 'sand active-choice' : ''}" onclick="setItemBroadcastMode('${item.id}', 'video_muted')">🔇 Video SIN Sonido</button>
+            </div>
+            ${videosHtml}
+            <div style="display:flex; gap:6px;">
+              <input type="text" class="input-field" id="customVideoUrlInput" placeholder="Pegar YouTube / Vimeo / .mp4...">
+              <button class="btn" onclick="addCustomVideoToItem('${item.id}')">➕ Video</button>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn coral" style="flex:1; justify-content:center;" onclick="fireItemToCabinBroadcast('${item.id}', '16x9')">🚀 Al aire 16:9</button>
+              <button class="btn sand" style="flex:1; justify-content:center;" onclick="fireItemToCabinBroadcast('${item.id}', '9x16')">📱 Smart 9:16</button>
+              <button class="btn" onclick="restoreCabin3Columns()">🛑</button>
+            </div>
+          </div>
+
+          <!-- CONSOLA B: PROTAGONISTA, @ARROBA E INVITACIÓN 40s -->
+          <div class="prep-box">
+            <h3>
+              <span>📣 Protagonista y @Arroba</span>
+              <label style="font-size:0.7rem; color:var(--cream); cursor:pointer; display:inline-flex; gap:4px; align-items:center;">
+                <input type="checkbox" ${isInv ? 'checked' : ''} onchange="toggleProtagonistInvited('${item.id}', this.checked)">
+                Invitado
+              </label>
+            </h3>
+            <div class="two-cols">
+              <input type="text" class="input-field" value="${escapeHtml(prot.name)}" placeholder="Nombre protagonista" onchange="updateProtagonistField('${item.id}', 'name', this.value)">
+              <input type="text" class="input-field" value="${escapeHtml(prot.handle)}" placeholder="@arroba" onchange="updateProtagonistField('${item.id}', 'handle', this.value)">
+            </div>
+            <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
+              <button class="triage-chip ${curLang === 'es' ? 'on-hoy' : ''}" onclick="setInviteLanguage('${item.id}', 'es')">🇦🇷 Español</button>
+              <button class="triage-chip ${curLang === 'en' ? 'on-hoy' : ''}" onclick="setInviteLanguage('${item.id}', 'en')">🇺🇸 English</button>
+              ${(prot.foundHandles || []).map(h => `<button class="triage-chip" onclick="updateProtagonistField('${item.id}', 'handle', '${escapeHtml(h)}'); renderActiveReader()">${escapeHtml(h)}</button>`).join('')}
+            </div>
+            <textarea id="protInviteArea" class="input-field" rows="3" onchange="updateProtagonistField('${item.id}', '${curLang === 'en' ? 'inviteEn' : 'inviteEs'}', this.value)">${escapeHtml(curInvite)}</textarea>
+            <div style="display:flex; gap:5px; flex-wrap:wrap;">
+              <button class="btn sage" onclick="copyProtagonistInvite('${item.id}')">📋 Copiar</button>
+              <a href="${escapeHtml(prot.contactUrl || item.link)}" target="_blank" rel="noopener" class="btn">📸 Fuente ↗</a>
+              <button class="btn sand" onclick="sendProtagonistWhatsApp('${item.id}')">📲 WA</button>
+              <button class="btn" onclick="sendProtagonistEmail('${item.id}')">✉️ Mail</button>
+            </div>
+          </div>
+
+          <!-- CONSOLA C: MÚSICA LIBRE DEL BLOQUE -->
+          <div class="prep-box">
+            <h3>
+              <span>🎵 Música libre (mobygratis)</span>
+              <span class="pill">${escapeHtml(music.bpm)} BPM</span>
+            </h3>
+            <select class="select-field" style="width:100%;" onchange="setItemMusicTrack('${item.id}', this.value)">
+              ${tracks.map(t => `<option value="${escapeHtml(t.id)}" ${t.id === music.id ? 'selected' : ''}>${escapeHtml(t.title)} · ${escapeHtml(t.bpm)} BPM (${t.rack === 'B' ? 'Rack B' : 'Rack A'})</option>`).join('')}
+            </select>
+            <div class="prep-sub">${escapeHtml(music.mood || '')} · ${bMode === 'video_sound' ? 'Con video con sonido la música baja sola con fade de 3s.' : 'Suena al 18% debajo de tu lectura.'}</div>
+            <audio controls src="${escapeHtml(music.file)}" style="width:100%; height:34px;"></audio>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn sage" style="flex:1; justify-content:center;" onclick="fireMusicTrackToCabin('${escapeHtml(music.id)}')">🎛️ Probar en Cabina</button>
+              <button class="btn" onclick="addCustomFreeMusicTrack('${item.id}')">➕ Sumar tema libre</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- GALERÍA DE IMÁGENES EXTRAÍDAS -->
         <div class="gallery-box">
           <div class="gallery-header">
-            <h3>🖼️ Imágenes extraídas automáticamente de este artículo (${imgs.length})</h3>
-            <span style="font-size:0.71rem; color:var(--muted);">Tildá las que pasan a Pre-Pro o mandalas directo al aire en Cabina</span>
+            <h3>🖼️ Imágenes extraídas del artículo (${imgs.length})</h3>
+            <span style="font-size:0.71rem; color:var(--muted);">Tildá las elegidas para tu entrega o proyectalas en vivo en Cabina</span>
           </div>
           <div class="gallery-strip">${galleryHtml}</div>
         </div>
 
+        <!-- ARTÍCULO LIMPIO PARA AIRE -->
         <article class="air-paper ${isStudioDarkPaper ? 'studio-dark' : ''}">
           <div class="air-paper-kicker">${escapeHtml(item.feedName)} · Vista Limpia de Aire</div>
           <h2>${escapeHtml(item.title)}</h2>
           <div class="air-paper-meta">
-            <span>✍️ ${escapeHtml(item.author || item.feedName)}</span>
+            <span>✍️ ${escapeHtml(prot.name)} (${escapeHtml(prot.handle)})</span>
             <span>📅 ${formatShortDate(item.publishedAt)}</span>
             <span>🔗 <a href="${escapeHtml(item.link)}" target="_blank" rel="noopener">Abrir página original ↗</a></span>
           </div>
@@ -1447,106 +2385,40 @@
       return paras.join('\n\n');
     }
 
-    function sendActiveToPrepro(targetStatus) {
-      if (activeItemId) sendItemToPrepro(activeItemId, targetStatus);
+    // PASO 2: ARMAR ENTREGA, GUION LARGO CON HILO ROJO & APROBALO
+    function getItemsInDeliveryBucket(bKey) {
+      if (bKey === 'starred') return allItems.filter(it => starredMap[it.id]);
+      return allItems.filter(it => bucketMap[it.id] === bKey);
     }
 
-    function sendItemToPrepro(itemId, targetStatus) {
-      const item = allItems.find(x => x.id === itemId);
-      if (!item) return;
+    function populateActiveDeliverySelect() {
+      const sel = document.getElementById('activeDeliverySelect');
+      const topics = getAllTopicNames();
+      const baseOpts = [
+        { k: 'hoy', label: `🟢 Entrega de HOY (${getItemsInDeliveryBucket('hoy').length})` },
+        { k: 'manana', label: `🌅 Entrega de MAÑANA (${getItemsInDeliveryBucket('manana').length})` },
+        { k: 'gateras', label: `🟡 Plan B / En Gateras (${getItemsInDeliveryBucket('gateras').length})` },
+        { k: 'starred', label: `⭐ Temas Potenciales (${getItemsInDeliveryBucket('starred').length})` }
+      ];
+      topics.forEach(t => {
+        const k = 'tema:' + t;
+        baseOpts.push({ k, label: `🏷️ Cuando hablemos de: ${t} (${getItemsInDeliveryBucket(k).length})` });
+      });
 
-      const cardId = 'lector-' + item.id;
-      const chosenAlbum = (item.images || [])
-        .filter((_, idx) => isImgChecked(item.id, idx))
-        .map((im, i) => ({
-          url: im.url,
-          caption: im.caption || `${item.feedName} · Lámina ${i + 1}`,
-          checked: true
-        }));
-
-      if (chosenAlbum.length === 0) {
-        chosenAlbum.push({
-          url: 'evidencias/aris_flores_macro.jpg',
-          caption: item.title,
-          checked: true
-        });
-      }
-
-      const plainDossier = htmlToCleanDossier(item.cleanReaderHtml) || item.summary;
-      const noteByAriana = notesMap[item.id] ? `\n\nNOTA DE ARIANA:\n${notesMap[item.id]}` : '';
-      const lensTag = (item.lenses && item.lenses[0]) || 'Arte';
-
-      const preproCard = {
-        id: cardId,
-        cat: item.defaultCat || 'transito',
-        catLabel: `📡 RSS Lector → ${item.feedName} (${lensTag})`,
-        worldClockCity: item.clock || '🇺🇾 PUNTA DEL ESTE / GARZÓN',
-        rssFeedAdded: `${item.feedName} · ${item.feedUrl || item.link}`,
-        sourceName: item.feedName,
-        sourceUrl: item.link,
-        heroNum: formatShortDate(item.publishedAt) || 'HOY',
-        miniGraphKicker: `📡 EN PANTALLA · ${(item.feedName || 'WHIMSY RSS').toUpperCase()}`,
-        miniGraphText: item.title.slice(0, 74),
-        correspondentStory: `Crónica desde ${item.feedName}. ${item.summary}`,
-        extraSources: [
-          { label: `🔗 Artículo original en ${item.feedName}`, url: item.link },
-          { label: `✍️ Minuta W: ${item.hiloRojo?.minutaTitle || 'Archivo'}`, url: item.hiloRojo?.minutaUrl || 'https://arianawajntraub.substack.com' }
-        ],
-        title: item.title,
-        summary: item.summary,
-        longDossier: `1. TEXTO COMPLETO EXTRAÍDO DEL RSS (${item.feedName}):\n${plainDossier}${noteByAriana}\n\n2. CRUCE CON LAS 18 LENTES DE WHIMSY:\n• Lentes activadas: ${(item.lenses || []).join(' · ')}\n• ${item.hiloRojo?.summaryLine || ''}`,
-        dossiersTips: '💡 Las imágenes de este álbum fueron extraídas automáticamente desde el artículo original.',
-        coachPersonalAngle: `🎯 ÁNGULO DE LECTURA (${lensTag}): Conectar este hallazgo de ${item.feedName} con tu lectura de sistemas reales sin moralina ni frases hechas.`,
-        outreachPre: `Hi ${item.handle || item.feedName}! I'm Ariana Wajntraub (Whimsy POV & La Minuta W). We are featuring "${item.title.slice(0, 70)}" on our upcoming live show, crediting ${item.feedName} and ${item.link} on screen.`,
-        outreachPost: `Hi ${item.handle || item.feedName}! Today on Whimsy POV we featured "${item.title.slice(0, 70)}" with link and credit on screen: https://www.youtube.com/@whimsyPOV`,
-        album: chosenAlbum,
-        handles: [item.handle || '@whimsypov', '@whimsypov', '@arianawajntraub'],
-        hiloRojo: item.hiloRojo?.summaryLine || 'Conectado con tus 19 Minutas W y 91 videos en @whimsyPOV.'
-      };
-
-      // 1. Escribir en whimsy_custom_rss_cards_v13 (sin duplicar)
-      const existingCards = loadJsonMap('whimsy_custom_rss_cards_v13', []);
-      const filteredCards = existingCards.filter(c => c.id !== cardId);
-      filteredCards.unshift(preproCard);
-      saveJsonMap('whimsy_custom_rss_cards_v13', filteredCards);
-
-      // 2. Escribir estado Va HOY / En Gateras en whimsy_cards_meta_v15
-      const metaMap = loadJsonMap('whimsy_cards_meta_v15', {});
-      metaMap[cardId] = {
-        status: targetStatus === 'gateras' ? 'gateras' : 'hoy',
-        rotulo: `RSS · ${lensTag}`,
-        vencimiento: '',
-        withCorr: true
-      };
-      saveJsonMap('whimsy_cards_meta_v15', metaMap);
-
-      // 3. Registrar fuente en whimsy_active_rss_feeds_v16
-      const activeFeeds = loadJsonMap('whimsy_active_rss_feeds_v16', []);
-      if (!activeFeeds.some(f => f.name === item.feedName)) {
-        activeFeeds.unshift({ name: item.feedName, url: item.feedUrl || item.siteUrl || item.link });
-        saveJsonMap('whimsy_active_rss_feeds_v16', activeFeeds.slice(0, 35));
-      }
-
-      // 4. Guardar estado local en el lector
-      sentMap[item.id] = targetStatus === 'gateras' ? 'gateras' : 'hoy';
-      saveJsonMap(LS_SENT, sentMap);
-
-      renderSidebar();
-      renderInboxList();
-      showToast(`✅ ¡<strong>«${escapeHtml(item.title.slice(0, 52))}...»</strong> ya entró en tu Mesa de Pre-Pro como <strong>${targetStatus === 'gateras' ? '🟡 En Gateras' : '🟢 Va HOY'}</strong> con ${chosenAlbum.length} imágenes!`);
+      sel.innerHTML = baseOpts.map(o => `<option value="${escapeHtml(o.k)}" ${o.k === activeDeliveryBucket ? 'selected' : ''}>${escapeHtml(o.label)}</option>`).join('');
     }
 
-    // PASO 2: LISTA DE TEMAS POTENCIALES
-    function updateTopicNote(id, val) {
-      notesMap[id] = val;
-      saveJsonMap(LS_NOTES, notesMap);
+    function changeActiveDeliveryBucket(bKey) {
+      activeDeliveryBucket = bKey;
+      renderDeliveryWorkspace();
     }
 
-    function addManualPotentialTopic() {
+    function addManualItemToActiveDelivery() {
       const title = (document.getElementById('manualTopicTitle').value || '').trim();
       const url = (document.getElementById('manualTopicUrl').value || '').trim() || 'https://arianawajntraub.substack.com';
       if (!title) return;
       const newId = 'manual-' + Date.now();
+      const tracks = getAllMusicTracks();
       const manualItem = {
         id: newId,
         feedId: 'manual',
@@ -1561,54 +2433,612 @@
         link: url,
         author: 'Ariana Wajntraub',
         publishedAt: new Date().toISOString(),
-        summary: 'Tema potencial anotado por Ariana para investigar, extraer imágenes o llevar a Mesa de Pre-Pro.',
+        summary: 'Hallazgo anotado por Ariana para integrar con Hilo Rojo en esta entrega.',
+        curatorialAngle: 'Desde la mirada de Whimsy POV, esta nota abre un cruce directo con tu archivo vivo en esta entrega.',
         images: [{ url: 'evidencias/aris_cuaderno_boceto.jpg', caption: 'Cuaderno de notas Whimsy POV' }],
+        videos: [],
+        suggestedMusic: tracks[0],
+        protagonist: {
+          name: 'Ariana Wajntraub',
+          handle: '@arianawajntraub',
+          foundHandles: ['@arianawajntraub', '@whimsypov'],
+          contactUrl: url,
+          contactEmail: ''
+        },
         cleanReaderHtml: `<p>${escapeHtml(title)}</p><p><a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(url)}</a></p>`,
         hiloRojo: {
           minutaTitle: 'Escribir para ver mejor',
           minutaUrl: 'https://arianawajntraub.substack.com/p/escribir-para-ver-mejor',
           videoTitle: 'Whimsy POV',
           videoUrl: 'https://www.youtube.com/@whimsyPOV',
-          summaryLine: 'Tema potencial sumado manualmente para cruzar con tu archivo.'
+          summaryLine: 'Tema sumado directo para esta entrega.'
         }
       };
       manualTopicsList.unshift(manualItem);
       saveJsonMap(LS_MANUAL_TOPICS, manualTopicsList);
-      starredMap[newId] = true;
-      saveJsonMap(LS_STARRED, starredMap);
+      const targetBucket = activeDeliveryBucket === 'starred' ? 'hoy' : activeDeliveryBucket;
+      bucketMap[newId] = targetBucket;
+      saveJsonMap(LS_BUCKETS, bucketMap);
+      if (activeDeliveryBucket === 'starred') {
+        starredMap[newId] = true;
+        saveJsonMap(LS_STARRED, starredMap);
+      }
       allItems.unshift(manualItem);
       document.getElementById('manualTopicTitle').value = '';
       document.getElementById('manualTopicUrl').value = '';
       renderSidebar();
       renderInboxList();
-      renderPotentialTopicsView();
+      renderDeliveryWorkspace();
     }
 
-    function renderPotentialTopicsView() {
-      const grid = document.getElementById('potentialTopicsGrid');
-      const starredItems = allItems.filter(it => starredMap[it.id]);
-      if (!starredItems.length) {
-        grid.innerHTML = `<div class="panel-box"><h2>Todavía no marcaste estrellas (☆)</h2><p class="desc">Andá a «1. Bandeja RSS» y tocá la estrella en cualquier artículo que te llame la atención para ir armando tu lista de temas potenciales para el aire.</p></div>`;
+    function setDeliveryMusic(trackId) {
+      const st = deliveriesStateMap[activeDeliveryBucket] || {};
+      st.musicId = trackId;
+      deliveriesStateMap[activeDeliveryBucket] = st;
+      saveJsonMap(LS_DELIVERIES_STATE, deliveriesStateMap);
+      const trk = getAllMusicTracks().find(t => t.id === trackId);
+      const audioEl = document.getElementById('deliveryMusicPreview');
+      if (audioEl && trk) audioEl.src = trk.file;
+    }
+
+    function testDeliveryMusicInCabin() {
+      const sel = document.getElementById('deliveryMusicSelect');
+      if (sel && sel.value) fireMusicTrackToCabin(sel.value);
+    }
+
+    function saveDeliveryEdits() {
+      const st = deliveriesStateMap[activeDeliveryBucket] || {};
+      st.title = document.getElementById('deliveryTitleInput').value;
+      st.hiloRojo = document.getElementById('deliveryHiloInput').value;
+      st.script = document.getElementById('deliveryScriptArea').value;
+      st.handles = document.getElementById('deliveryHandlesInput').value;
+      deliveriesStateMap[activeDeliveryBucket] = st;
+      saveJsonMap(LS_DELIVERIES_STATE, deliveriesStateMap);
+    }
+
+    function cleanNoMenteOrNeg(str = '') {
+      // Quita atajos obvios para asegurar que el texto generado cumpla la Biblia y Linter SÍ/NO
+      return String(str)
+        .replace(/\bno es ([^,.]+), sino\b/gi, 'sobre todo resulta $1 y')
+        .replace(/\bno ([^,.]+), sino\b/gi, 'en vez de $1 surge')
+        .replace(/\bactualmente\b/gi, 'hoy')
+        .replace(/\brealmente\b/gi, 'de verdad')
+        .replace(/\bfinalmente\b/gi, 'al cierre')
+        .replace(/\bsimplemente\b/gi, 'apenas')
+        .replace(/\bdirectamente\b/gi, 'en directo')
+        .replace(/\bautomáticamente\b/gi, 'en el acto')
+        .replace(/\bcronológicamente\b/gi, 'por fecha');
+    }
+
+    function weaveLongScriptForDelivery(forceRebuild = false) {
+      const items = getItemsInDeliveryBucket(activeDeliveryBucket);
+      const saved = deliveriesStateMap[activeDeliveryBucket] || {};
+      const tracks = getAllMusicTracks();
+      const firstMusic = (saved.musicId && tracks.find(t => t.id === saved.musicId))
+        || (items[0] ? getItemMusic(items[0]) : tracks[0]);
+
+      const delMusicSel = document.getElementById('deliveryMusicSelect');
+      if (delMusicSel && firstMusic) {
+        delMusicSel.value = firstMusic.id;
+        const audioEl = document.getElementById('deliveryMusicPreview');
+        if (audioEl) audioEl.src = firstMusic.file;
+      }
+
+      if (!items.length) {
+        document.getElementById('deliveryTitleInput').value = formatBucketLabel(activeDeliveryBucket);
+        document.getElementById('deliveryHiloInput').value = '';
+        document.getElementById('deliveryScriptArea').value = 'Todavía no hay notas en esta carpeta. Marcá 2 o más artículos desde «1. Bandeja RSS» con 🟢 HOY, 🌅 Mañana o 🏷️ Cuando hablemos de... para tejer el guion largo de la entrega.';
+        document.getElementById('deliveryHandlesInput').value = '@whimsypov @arianawajntraub';
         return;
       }
-      grid.innerHTML = starredItems.map(it => {
-        const firstImg = (it.images && it.images[0]) ? it.images[0].url : 'evidencias/aris_cuaderno_boceto.jpg';
-        return `
-          <div class="panel-box">
-            <img src="${escapeHtml(firstImg)}" alt="Previa" style="width:100%; height:140px; object-fit:cover; border-radius:8px;">
-            <div style="font-size:0.7rem; color:var(--sage); font-weight:700;">${escapeHtml(it.feedName)} · ${(it.lenses || []).join(' · ')}</div>
-            <h2>${escapeHtml(it.title)}</h2>
-            <p class="desc">${escapeHtml(it.summary.slice(0, 160))}...</p>
-            <textarea class="input-field" rows="2" placeholder="¿Por qué te vibra para el aire? Escribí tu ángulo acá..." onchange="updateTopicNote('${it.id}', this.value)">${escapeHtml(notesMap[it.id] || '')}</textarea>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn sage" onclick="sendItemToPrepro('${it.id}', 'hoy')">🟢 A Pre-Pro (HOY)</button>
-              <button class="btn sand" onclick="sendItemToPrepro('${it.id}', 'gateras')">🟡 En Gateras</button>
-              <button class="btn" onclick="switchStage('step1'); selectInboxItem('${it.id}')">👁️ Abrir en Lector</button>
-              <button class="btn" onclick="toggleStarItem('${it.id}'); renderPotentialTopicsView()">Quitar ★</button>
+
+      if (!forceRebuild && saved.script && saved.script.trim().length > 60) {
+        document.getElementById('deliveryTitleInput').value = saved.title || items[0].title;
+        document.getElementById('deliveryHiloInput').value = saved.hiloRojo || '';
+        document.getElementById('deliveryScriptArea').value = saved.script;
+        document.getElementById('deliveryHandlesInput').value = saved.handles || '@whimsypov @arianawajntraub';
+        generateAprobaloMultichannelPack();
+        return;
+      }
+
+      const labelTopic = activeDeliveryBucket.startsWith('tema:')
+        ? activeDeliveryBucket.slice(5)
+        : (items[0].lenses?.[0] || 'Arte y Ciencia');
+
+      const unifiedTitle = items.length === 1
+        ? items[0].title.slice(0, 88)
+        : `${labelTopic}: ${items[0].title.split(':')[0].slice(0, 38)} × ${items[1].title.split(':')[0].slice(0, 38)}`;
+
+      const allLenses = Array.from(new Set(items.flatMap(it => it.lenses || []))).slice(0, 4);
+      const firstHilo = items[0].hiloRojo || {};
+      const commonHilo = `Hilo Rojo (${labelTopic}): cruzamos ${allLenses.join(', ')} entre ${items.map(i => i.feedName).slice(0, 3).join(', ')} junto con «${firstHilo.minutaTitle || 'La Minuta W'}».`;
+
+      const handlesSet = new Set(['@whimsypov', '@arianawajntraub']);
+      items.forEach(it => {
+        const p = getItemProtagonist(it);
+        if (p.handle) handlesSet.add(p.handle);
+        (p.foundHandles || []).forEach(h => handlesSet.add(h));
+      });
+      const handlesStr = Array.from(handlesSet).join(' ');
+
+      const describeMediaCue = (it) => {
+        const m = getItemBroadcastMode(it);
+        const imgsCount = (it.images || []).filter((_, i) => isImgChecked(it.id, i)).length;
+        if (m === 'site') return `ABRIR SITIO WEB EN VIVO (${it.feedName})`;
+        if (m === 'video_sound') return `DISPARAR VIDEO CON SONIDO + BAJAR MÚSICA CON FADE 3S`;
+        if (m === 'video_muted') return `DISPARAR VIDEO SIN SONIDO + MANTENER ${firstMusic.title} AL 18%`;
+        return `PONCHAR GALERÍA DE ${imgsCount} IMÁGENES EXTRAÍDAS`;
+      };
+
+      const itemDossierSnippet = (it) => {
+        const full = htmlToCleanDossier(it.cleanReaderHtml) || it.summary || '';
+        const clean = cleanNoMenteOrNeg(full).slice(0, 520).trim();
+        const note = notesMap[it.id] ? ` Observación propia para el aire: ${cleanNoMenteOrNeg(notesMap[it.id])}.` : '';
+        return clean + note;
+      };
+
+      const n1 = items[0];
+      const n2 = items[1] || items[0];
+      const rest = items.slice(2);
+
+      const block1 = `[BLOQUE 01 · APERTURA Y RELOJES MUNDIALES]\n` +
+        `[RESPIRACIÓN · MÚSICA LIBRE: ${firstMusic.title} (${firstMusic.bpm} BPM) AL 18%]\n` +
+        `Son las seis y media de la mañana en Punta del Este frente al agua, media mañana en Londres y madrugada todavía abierta en Nueva York. Hoy nos sentamos frente a ${items.length} hallazgos reunidos bajo una misma pregunta de mesa: ${cleanNoMenteOrNeg(commonHilo)}.`;
+
+      const block2 = `[BLOQUE 02 · HALLAZGO PRINCIPAL · ${n1.feedName.toUpperCase()}]\n` +
+        `[${describeMediaCue(n1)} · CRÉDITO: ${getItemProtagonist(n1).handle}]\n` +
+        `Arrancamos por ${n1.title}, recogido desde ${n1.feedName} con el trabajo de ${getItemProtagonist(n1).name}. ${itemDossierSnippet(n1)} ${cleanNoMenteOrNeg(n1.curatorialAngle || '')}`;
+
+      const block3 = items.length >= 2
+        ? `[BLOQUE 03 · EL CRUCE Y LA SEGUNDA MIRADA · ${n2.feedName.toUpperCase()}]\n` +
+        `[${describeMediaCue(n2)} · CRÉDITO: ${getItemProtagonist(n2).handle}]\n` +
+        `Poné ahora esta segunda escena al lado de la anterior: ${n2.title}, publicado en ${n2.feedName} por ${getItemProtagonist(n2).name}. ${itemDossierSnippet(n2)} ${cleanNoMenteOrNeg(n2.curatorialAngle || '')}`
+        : `[BLOQUE 03 · EL REVERSO DE LA LÁMINA]\n` +
+        `[PONCHAR ZOOM DE LA SEGUNDA IMAGEN DE ${n1.feedName.toUpperCase()}]\n` +
+        `Cuando sostenés la lupa sobre el detalle de ${n1.title} aparecen capas materiales que en la lectura veloz de titulares pasan de largo. La lente ${n1.lenses?.[1] || 'Arte'} revela cómo diálogo, técnica y memoria comparten la misma textura.`;
+
+      const restSummary = rest.length
+        ? ' Además sumamos en mesa: ' + rest.map(r => `«${r.title}» (${r.feedName}, ${getItemProtagonist(r).handle}, modo ${getBroadcastLabel(getItemBroadcastMode(r))})`).join(' y ') + '.'
+        : '';
+
+      const block4 = `[BLOQUE 04 · LA VITRINA Y EL ARCHIVO PROPIO]\n` +
+        `[PLACA LA VITRINA · MINUTA W Y @WHIMSYPOV]\n` +
+        `Acá entra el correlato vivo de nuestro archivo: tu Minuta W «${firstHilo.minutaTitle || 'Eppur si muove'}» junto con «${firstHilo.videoTitle || 'Lucio Fontana'}» en @whimsyPOV muestran cómo estas escenas conversan a lo largo del tiempo.${restSummary} En La Vitrina sumamos este puente material para abrir una nueva capa de sentido.`;
+
+      const block5 = `[BLOQUE 05 · CIERRE Y PREGUNTA QUE CAE SOLA]\n` +
+        `[ACREDITAR PROTAGONISTAS: ${handlesStr} · SUBE ${firstMusic.title.toUpperCase()} AL 68%]\n` +
+        `Todas las fuentes originales y menciones de ${handlesStr} quedan acreditadas en pantalla y en el ensayo de La Minuta W. Antes de cerrar el bloque te dejo esta pregunta apoyada en la mesa: ¿qué detalle mínimo de todo lo que miraste hoy merece sobrevivir veinte años fuera del ruido? Nos leemos en Substack y seguimos en @whimsyPOV.`;
+
+      const fullScript = [block1, block2, block3, block4, block5].join('\n\n');
+
+      document.getElementById('deliveryTitleInput').value = unifiedTitle;
+      document.getElementById('deliveryHiloInput').value = commonHilo;
+      document.getElementById('deliveryScriptArea').value = fullScript;
+      document.getElementById('deliveryHandlesInput').value = handlesStr;
+      saveDeliveryEdits();
+      generateAprobaloMultichannelPack();
+    }
+
+    function renderDeliveryWorkspace() {
+      populateActiveDeliverySelect();
+      const items = getItemsInDeliveryBucket(activeDeliveryBucket);
+      const listEl = document.getElementById('deliveryItemsList');
+      const totalImgs = items.reduce((acc, it) => acc + (it.images || []).filter((_, i) => isImgChecked(it.id, i)).length, 0);
+      const totalVids = items.reduce((acc, it) => acc + getItemVideos(it).length, 0);
+      const estMins = Math.max(3, Math.round(items.length * 4 + totalImgs * 0.4 + totalVids * 1.5));
+
+      document.getElementById('deliverySummaryHeading').textContent = `📦 ${formatBucketLabel(activeDeliveryBucket)} (${items.length})`;
+      document.getElementById('deliveryStatsBadge').textContent = `${items.length} notas · ${totalImgs} fotos · ${totalVids} videos · ~${estMins} min`;
+
+      const tracks = getAllMusicTracks();
+      const delMusicSel = document.getElementById('deliveryMusicSelect');
+      delMusicSel.innerHTML = tracks.map(t => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.title)} · ${escapeHtml(t.bpm)} BPM</option>`).join('');
+
+      if (!items.length) {
+        listEl.innerHTML = `<p class="desc">Esta entrega todavía espera notas. Andá a «1. Bandeja RSS» y tocá 🟢 HOY, 🌅 Mañana o 🏷️ Cuando hablemos de... en las notas que quieras juntar acá.</p>`;
+      } else {
+        listEl.innerHTML = items.map((it, idx) => {
+          const imgsChecked = (it.images || []).filter((_, i) => isImgChecked(it.id, i)).length;
+          const bMode = getItemBroadcastMode(it);
+          const prot = getItemProtagonist(it);
+          const mus = getItemMusic(it);
+          const isInv = !!invitedMap[it.id];
+          return `
+            <div class="delivery-item-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; flex-wrap:wrap;">
+                <span class="source-tag">#${idx + 1} · ${escapeHtml(it.feedName)}</span>
+                <div style="display:flex; gap:4px; align-items:center;">
+                  <button class="triage-chip" onclick="switchStage('step1'); selectInboxItem('${it.id}')">👁️ Editar en Lector</button>
+                  <button class="triage-chip" onclick="setItemBucket('${it.id}', ''); renderDeliveryWorkspace()">✕ Quitar</button>
+                </div>
+              </div>
+              <div style="font-size:0.86rem; font-weight:800; color:var(--white);">${escapeHtml(it.title)}</div>
+              <div class="mini-pills">
+                <span class="pill">${getBroadcastLabel(bMode)}</span>
+                <span class="pill img-count">🖼️ ${imgsChecked} fotos</span>
+                <span class="pill">📣 ${escapeHtml(prot.handle)} ${isInv ? '(Invitado ✓)' : ''}</span>
+                <span class="pill">🎵 ${escapeHtml(mus.title)}</span>
+              </div>
             </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      }
+
+      const dateInp = document.getElementById('aprobalaDateInput');
+      if (dateInp && !dateInp.value) {
+        const d = new Date();
+        if (activeDeliveryBucket === 'manana') d.setDate(d.getDate() + 1);
+        dateInp.value = d.toISOString().slice(0, 10);
+      }
+
+      weaveLongScriptForDelivery(false);
+    }
+
+    function sendDeliveryEverywhere() {
+      const items = getItemsInDeliveryBucket(activeDeliveryBucket);
+      if (!items.length) {
+        showToast('⚠️ Sumá al menos 1 nota a esta entrega antes de enviarla al Teleprompter.');
+        return;
+      }
+
+      const title = document.getElementById('deliveryTitleInput').value.trim() || items[0].title;
+      const hilo = document.getElementById('deliveryHiloInput').value.trim();
+      const rawScript = document.getElementById('deliveryScriptArea').value.trim();
+      const handles = document.getElementById('deliveryHandlesInput').value.trim() || '@whimsypov';
+      const targetSlot = Number(document.getElementById('deliveryCabinSlotSelect').value || 0);
+
+      // 1. Volcar cada nota a Mesa de Pre-Pro (whimsy_custom_rss_cards_v13 + whimsy_cards_meta_v15)
+      const existingCards = loadJsonMap('whimsy_custom_rss_cards_v13', []);
+      const metaMap = loadJsonMap('whimsy_cards_meta_v15', {});
+      const activeFeeds = loadJsonMap('whimsy_active_rss_feeds_v16', []);
+      const existingFiltered = existingCards.filter(c => !items.some(it => 'lector-' + it.id === c.id));
+      const newCards = [];
+      const fullAlbumAll = [];
+
+      items.forEach(item => {
+        const cardId = 'lector-' + item.id;
+        const chosenAlbum = (item.images || [])
+          .filter((_, idx) => isImgChecked(item.id, idx))
+          .map((im, i) => ({
+            url: im.url,
+            caption: im.caption || `${item.feedName} · Lámina ${i + 1}`,
+            checked: true
+          }));
+        if (!chosenAlbum.length) {
+          chosenAlbum.push({ url: 'evidencias/aris_flores_macro.jpg', caption: item.title, checked: true });
+        }
+        chosenAlbum.forEach(p => fullAlbumAll.push(p));
+
+        const prot = getItemProtagonist(item);
+        const lensTag = (item.lenses && item.lenses[0]) || 'Arte';
+        const plainDossier = htmlToCleanDossier(item.cleanReaderHtml) || item.summary;
+
+        newCards.push({
+          id: cardId,
+          cat: item.defaultCat || 'transito',
+          catLabel: `📡 ${formatBucketLabel(activeDeliveryBucket)} · ${item.feedName} (${lensTag})`,
+          worldClockCity: item.clock || '🇺🇾 PUNTA DEL ESTE / GARZÓN',
+          rssFeedAdded: `${item.feedName} · ${item.feedUrl || item.link}`,
+          sourceName: item.feedName,
+          sourceUrl: item.link,
+          heroNum: formatShortDate(item.publishedAt) || 'HOY',
+          miniGraphKicker: `📡 EN PANTALLA · ${item.feedName.toUpperCase()}`,
+          miniGraphText: item.title.slice(0, 74),
+          correspondentStory: `Crónica desde ${item.feedName}. ${item.summary}`,
+          extraSources: [
+            { label: `🔗 Artículo original en ${item.feedName}`, url: item.link },
+            { label: `✍️ Minuta W: ${item.hiloRojo?.minutaTitle || 'Archivo'}`, url: item.hiloRojo?.minutaUrl || 'https://arianawajntraub.substack.com' }
+          ],
+          title: item.title,
+          summary: item.summary,
+          longDossier: `${plainDossier}\n\n${item.curatorialAngle || ''}\n\n${hilo}`,
+          dossiersTips: `Modo elegido: ${getBroadcastLabel(getItemBroadcastMode(item))} · Música: ${getItemMusic(item).title}.`,
+          coachPersonalAngle: `Ángulo Whimsy POV (${lensTag}): ${item.curatorialAngle || item.summary}`,
+          outreachPre: prot.inviteEs,
+          outreachPost: prot.postAirEs || '',
+          album: chosenAlbum,
+          handles: [prot.handle, '@whimsypov', '@arianawajntraub'],
+          hiloRojo: item.hiloRojo?.summaryLine || hilo
+        });
+
+        metaMap[cardId] = {
+          status: activeDeliveryBucket === 'gateras' ? 'gateras' : 'hoy',
+          rotulo: `${formatBucketLabel(activeDeliveryBucket).replace(/^[^\w]+/, '').slice(0, 26)}`,
+          vencimiento: '',
+          withCorr: true
+        };
+
+        if (!activeFeeds.some(f => f.name === item.feedName)) {
+          activeFeeds.unshift({ name: item.feedName, url: item.feedUrl || item.siteUrl || item.link });
+        }
+      });
+
+      saveJsonMap('whimsy_custom_rss_cards_v13', [...newCards, ...existingFiltered]);
+      saveJsonMap('whimsy_cards_meta_v15', metaMap);
+      saveJsonMap('whimsy_active_rss_feeds_v16', activeFeeds.slice(0, 35));
+
+      // 2. Construir cues exactos compatibles con cabina-v8.html (step, ref, techCue, script, kicker, headline, fact, img)
+      const paragraphs = rawScript.split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
+      const musSel = document.getElementById('deliveryMusicSelect');
+      const chosenTrack = getAllMusicTracks().find(t => t.id === (musSel ? musSel.value : '')) || getItemMusic(items[0]);
+
+      const cues = paragraphs.map((p, idx) => {
+        const it = items[idx] || items[idx % items.length] || items[0];
+        const imgObj = fullAlbumAll[idx % fullAlbumAll.length] || { url: 'evidencias/aris_flores_macro.jpg', caption: it.title };
+        const stepLabel = `BLOQUE ${String(idx + 1).padStart(2, '0')} / ${String(paragraphs.length).padStart(2, '0')}`;
+        const refLabel = `${it.feedName} · ${it.title.slice(0, 34)}`;
+        const techCue = `🎵 Música libre: ${chosenTrack.title} · 📺 ${getBroadcastLabel(getItemBroadcastMode(it))} · 📣 ${getItemProtagonist(it).handle}`;
+        const formattedHtml = p
+          .replace(/\[([^\]]+)\]/g, '<span class="stage-dir">[$1]</span>')
+          .split('\n')
+          .map(line => `<p>${line}</p>`)
+          .join('');
+
+        return {
+          // Campos nativos de cabina-v8.html
+          step: stepLabel,
+          ref: refLabel,
+          techCue,
+          script: formattedHtml,
+          kicker: `WHIMSY POV · ${formatBucketLabel(activeDeliveryBucket).toUpperCase()}`,
+          headline: it.title.slice(0, 88),
+          fact: `${imgObj.caption.slice(0, 90)} · ${getItemProtagonist(it).handle}`,
+          img: imgObj.url,
+          // Campos adicionales espejo para mesa-prepro.html
+          time: stepLabel,
+          action: techCue,
+          text: formattedHtml,
+          note: `Fuente: ${it.feedName} · ${handles}`,
+          badge: stepLabel,
+          refLabel: imgObj.caption.slice(0, 52),
+          heroNum: formatShortDate(it.publishedAt) || 'HOY',
+          wingTitle: it.title.slice(0, 65),
+          bumperKicker: `WHIMSY POV · ${stepLabel}`,
+          bumperTitle: it.title.slice(0, 64)
+        };
+      });
+
+      const primaryImg = fullAlbumAll[0]?.url || 'evidencias/aris_flores_macro.jpg';
+      const primaryCap = fullAlbumAll[0]?.caption || title;
+
+      const pushPayload = {
+        targetSlot,
+        scriptTitle: title,
+        customScriptCues: cues,
+        fullAlbum: fullAlbumAll,
+        headline: title,
+        kicker: `ENTREGA ARMADA EN PRE-PRO (${items.length} NOTAS)`,
+        fact: `${primaryCap.slice(0, 72)} · ${handles}`,
+        newRightImage: primaryImg,
+        newRightTag: `[ENTREGA · ${fullAlbumAll.length} FOTOS]`,
+        newRightLabel: primaryCap,
+        comingUpItems: items.map(c => c.title.slice(0, 58)),
+        pntMsg: `Entrega «${title.slice(0, 42)}» (${cues.length} bloques) lista en Cabina Pestaña #${targetSlot + 1}.`,
+        ts: Date.now()
+      };
+
+      const pushMsg = { type: 'PREPRO_PUSH', payload: pushPayload };
+      saveJsonMap('whimsy_prepro_push_v8', pushMsg);
+      if (studioBus) studioBus.postMessage(pushMsg);
+
+      const hist = loadJsonMap('whimsy_sent_blocks_history_v15', []);
+      const now = new Date();
+      hist.unshift({
+        timeStr: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+        title,
+        rawScript,
+        handles,
+        slot: targetSlot,
+        cuesCount: cues.length,
+        pushPayload
+      });
+      saveJsonMap('whimsy_sent_blocks_history_v15', hist.slice(0, 20));
+
+      const resBox = document.getElementById('deliveryPushResult');
+      resBox.style.display = 'block';
+      resBox.innerHTML = `✅ <strong>¡Enviado!</strong> Ya entraron ${newCards.length} tarjetas a tu <strong>Mesa de Pre-Pro</strong> y tu guion de ${cues.length} bloques con ${fullAlbumAll.length} fotos quedó cargado en la <strong>Pestaña #${targetSlot + 1} de tu Cabina en vivo</strong>.`;
+      showToast(`🚀 Entrega «${escapeHtml(title.slice(0, 46))}» enviada a Mesa de Pre-Pro y Cabina.`);
+    }
+
+    // DICTADO POR VOZ PARA GUION LARGO
+    let deliveryRec = null;
+    let isDeliveryDictating = false;
+    function toggleDeliveryVoiceDictation() {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const btn = document.getElementById('btnVoiceDictate');
+      if (!SpeechRec) {
+        showToast('⚠️ Abrí esta pantalla en Chrome o Safari para usar dictado por voz.');
+        return;
+      }
+      if (isDeliveryDictating && deliveryRec) {
+        deliveryRec.stop();
+        isDeliveryDictating = false;
+        btn.textContent = '🎙️ Dictar con mi voz';
+        return;
+      }
+      deliveryRec = new SpeechRec();
+      deliveryRec.lang = 'es-UY';
+      deliveryRec.continuous = true;
+      deliveryRec.interimResults = false;
+      deliveryRec.onresult = (ev) => {
+        let out = '';
+        for (let i = ev.resultIndex; i < ev.results.length; i++) {
+          if (ev.results[i].isFinal) out += ev.results[i][0].transcript + ' ';
+        }
+        if (out.trim()) {
+          const area = document.getElementById('deliveryScriptArea');
+          area.value = (area.value ? area.value + '\n\n' : '') + out.trim();
+          saveDeliveryEdits();
+        }
+      };
+      deliveryRec.onend = () => {
+        isDeliveryDictating = false;
+        btn.textContent = '🎙️ Dictar con mi voz';
+      };
+      deliveryRec.start();
+      isDeliveryDictating = true;
+      btn.textContent = '🔴 Escuchando... (Tocá para frenar)';
+    }
+
+    // PUENTE APROBALO CLOUD + LINTER SÍ/NO
+    function generateAprobaloMultichannelPack() {
+      const items = getItemsInDeliveryBucket(activeDeliveryBucket);
+      const rawTitle = document.getElementById('deliveryTitleInput').value.trim() || 'Whimsy POV · Nueva entrega';
+      const hilo = document.getElementById('deliveryHiloInput').value.trim();
+      const handles = document.getElementById('deliveryHandlesInput').value.trim() || '@whimsypov';
+
+      const ytTitle = cleanNoMenteOrNeg(rawTitle).slice(0, 96);
+      document.getElementById('aprobalaYtTitle').value = ytTitle;
+
+      const sourceNames = items.map(i => i.feedName).slice(0, 3).join(', ') || 'archivo cultural';
+      const titlesList = items.map(i => `«${i.title.slice(0, 75)}»`).slice(0, 3).join(' junto con ');
+      const firstHilo = items[0]?.hiloRojo || {};
+
+      const substackCapsule = cleanNoMenteOrNeg(
+        `Abrimos este paréntesis con una pregunta concreta sobre ${ytTitle}. En la mesa de esta semana reunimos ${titlesList} desde ${sourceNames}, observando qué cambia cuando bajamos el ruido ambiente y miramos la materia de frente. ` +
+        `${hilo} ` +
+        `Este recorrido dialoga con «${firstHilo.minutaTitle || 'La Minuta W'}» y con los hallazgos vivos que compartimos al aire en @whimsyPOV. ¿Qué pieza de todo lo que viste hoy merece seguir viva dentro de veinte años? Leé las fuentes completas y escuchá el episodio entero acá abajo.`
+      );
+      document.getElementById('aprobalaSubstackCopy').value = substackCapsule;
+
+      const igCopy = cleanNoMenteOrNeg(
+        `☕ ${ytTitle}\n\n` +
+        `Hoy en Whimsy POV cruzamos ${titlesList || 'hallazgos reales de arte y ciencia'} desde ${sourceNames}.\n\n` +
+        `Cada fuente entra con lupa propia para abrir preguntas nuevas fuera del apuro diario.\n\n` +
+        `Créditos de mesa: ${handles}\n` +
+        `Episodio entero en YouTube (@whimsyPOV) y texto completo en La Minuta W.`
+      ).replace(/https?:\/\/\S+/gi, '').replace(/\s{2,}/g, ' ').trim();
+      document.getElementById('aprobalaIgCopy').value = igCopy;
+
+      const liCopy = cleanNoMenteOrNeg(
+        `${ytTitle}\n\n` +
+        `En esta entrega de Whimsy POV y La Minuta W reunimos ${titlesList || 'investigaciones verificadas'} para pensar diseño, sistemas vivos y cultura material con criterio propio.\n\n` +
+        `Menciones: ${handles}\n` +
+        `Lectura completa en La Minuta W (arianawajntraub.substack.com) y video en youtube.com/@whimsyPOV.`
+      );
+      document.getElementById('aprobalaLiCopy').value = liCopy;
+
+      runCopyLinter();
+    }
+
+    function runCopyLinter() {
+      const yt = document.getElementById('aprobalaYtTitle').value || '';
+      const sub = document.getElementById('aprobalaSubstackCopy').value || '';
+      const ig = document.getElementById('aprobalaIgCopy').value || '';
+      const li = document.getElementById('aprobalaLiCopy').value || '';
+
+      document.getElementById('ytLenCounter').textContent = yt.length;
+      const subWords = sub.trim() ? sub.trim().split(/\s+/).length : 0;
+      document.getElementById('subWordsCounter').textContent = subWords;
+
+      const combined = `${yt} ${sub} ${ig} ${li}`;
+      const issues = [];
+
+      // Adverbios terminados en -mente (permitimos el sustantivo plural 'mentes')
+      const menteMatches = combined.match(/\b[a-záéíóúñ]{3,}mente\b/gi) || [];
+      if (menteMatches.length) issues.push(`Evitar adverbios en -mente (${menteMatches.join(', ')})`);
+
+      // Negación por contraste
+      if (/\bno\s+(?:es|era|son|solo|se trata)[^.?!]{1,60},\s*sino\b/i.test(combined)) {
+        issues.push('Evitar estructura de negación por contraste');
+      }
+
+      // Enlaces crudos en Instagram
+      if (/https?:\/\//i.test(ig)) {
+        issues.push('Quitar enlace crudo del texto de Instagram');
+      }
+
+      // Título YouTube
+      if (yt.length > 100) issues.push('Título YouTube supera 100 caracteres');
+
+      // Palabras prohibidas
+      const forbidden = ['storytelling', 'mindset', 'repositorio', 'catálogo', 'catalogo', 'piezas audiovisuales'];
+      forbidden.forEach(w => {
+        if (combined.toLowerCase().includes(w)) issues.push(`Reemplazar término «${w}»`);
+      });
+
+      const pill = document.getElementById('linterStatusPill');
+      const det = document.getElementById('linterDetailText');
+      if (issues.length === 0) {
+        pill.className = 'linter-pill pass';
+        pill.textContent = '✅ Linter SÍ/NO: Limpio';
+        det.textContent = 'Aprobado: 0 adverbios en -mente, 0 negaciones por contraste, YouTube hasta 100 car. y 0 enlaces crudos en Instagram.';
+      } else {
+        pill.className = 'linter-pill warn';
+        pill.textContent = `⚠️ ${issues.length} ajuste(s)`;
+        det.textContent = issues.join(' · ');
+      }
+      return issues;
+    }
+
+    function autoCleanAprobaloLinter() {
+      ['aprobalaYtTitle', 'aprobalaSubstackCopy', 'aprobalaIgCopy', 'aprobalaLiCopy'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        let v = cleanNoMenteOrNeg(el.value);
+        v = v.replace(/\bstorytelling\b/gi, 'relato').replace(/\bmindset\b/gi, 'criterio').replace(/\brepositorio\b/gi, 'archivo').replace(/\bcat[aá]logo\b/gi, 'banco').replace(/\bpiezas audiovisuales\b/gi, 'bloques de aire');
+        if (id === 'aprobalaIgCopy') v = v.replace(/https?:\/\/\S+/gi, '').trim();
+        if (id === 'aprobalaYtTitle') v = v.slice(0, 100);
+        el.value = v;
+      });
+      runCopyLinter();
+      showToast('🧹 Limpieza del Linter SÍ/NO aplicada sobre los textos.');
+    }
+
+    function buildAprobaloJsonObject() {
+      const items = getItemsInDeliveryBucket(activeDeliveryBucket);
+      const fecha = document.getElementById('aprobalaDateInput').value || new Date().toISOString().slice(0, 10);
+      const tema = document.getElementById('deliveryTitleInput').value.trim() || formatBucketLabel(activeDeliveryBucket);
+      const handles = document.getElementById('deliveryHandlesInput').value.trim() || '@whimsypov';
+      const musSel = document.getElementById('deliveryMusicSelect');
+      const mus = getAllMusicTracks().find(t => t.id === (musSel ? musSel.value : '')) || getAllMusicTracks()[0];
+
+      return {
+        cuenta: 'Whimsy POV',
+        fecha,
+        tema,
+        titular: true,
+        carpeta_origen: activeDeliveryBucket,
+        musica_libre: { titulo: mus.title, bpm: mus.bpm, archivo: mus.file },
+        protagonistas: items.map(it => {
+          const p = getItemProtagonist(it);
+          return { nombre: p.name, handle: p.handle, fuente: it.link, invitado: !!invitedMap[it.id], modo_aire: getItemBroadcastMode(it) };
+        }),
+        carteles: items.slice(0, 4).map((it, i) => `${i + 1}. ${it.title.slice(0, 72)}`),
+        copies: {
+          madre: document.getElementById('aprobalaSubstackCopy').value,
+          substack: document.getElementById('aprobalaSubstackCopy').value,
+          youtube_titulo: document.getElementById('aprobalaYtTitle').value,
+          instagram: document.getElementById('aprobalaIgCopy').value,
+          tiktok: document.getElementById('aprobalaIgCopy').value,
+          linkedin: document.getElementById('aprobalaLiCopy').value
+        },
+        arrobas: handles,
+        guion_largo_aire: document.getElementById('deliveryScriptArea').value
+      };
+    }
+
+    function copyAprobaloJsonPayload() {
+      const obj = buildAprobaloJsonObject();
+      const txt = JSON.stringify(obj, null, 2);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).catch(() => { });
+      }
+      showToast('📋 Lote JSON de Aprobalo copiado al portapapeles listo para subir.');
+    }
+
+    function downloadAprobaloJsonFile() {
+      const obj = buildAprobaloJsonObject();
+      const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lote_aprobala_whimsy_${obj.fecha}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast('⬇️ Descargado archivo oficial para Aprobalo Cloud.');
     }
 
     // PASO 3: RADAR SEMANAL
@@ -1629,7 +3059,7 @@
         const isActive = activeFeeds.some(a => a.url === f.url || a.name === f.name);
         return `
           <div class="panel-box">
-            <div style="font-size:0.69rem; font-weight:800; color:var(--sand);">Lente: ${escapeHtml(f.lens || 'General')}</div>
+            <div style="font-size:0.69rem; font-weight:800; color:var(--sand);">Lente: ${escapeHtml(f.lens || 'Arte')}</div>
             <h2 style="font-size:0.94rem;">${escapeHtml(f.name)}</h2>
             <p class="desc">${escapeHtml(f.reason || 'Feed RSS sumado para tu radar semanal.')}</p>
             <div style="font-size:0.68rem; color:var(--muted); word-break:break-all;">${escapeHtml(f.url)}</div>
@@ -1671,11 +3101,12 @@
       try {
         const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
         const res = await fetch(apiUrl);
-        if (!res.ok) throw new Error('No respondió directo');
+        if (!res.ok) throw new Error('Sin respuesta directa');
         const data = await res.json();
-        if (data.status !== 'ok' || !Array.isArray(data.items)) throw new Error('Feed protegido por CORS en navegador');
+        if (data.status !== 'ok' || !Array.isArray(data.items)) throw new Error('Feed protegido en navegador');
 
         let added = 0;
+        const tracks = getAllMusicTracks();
         data.items.slice(0, 6).forEach(entry => {
           const itemUrl = entry.link || rssUrl;
           if (allItems.some(existing => existing.link === itemUrl)) return;
@@ -1708,7 +3139,17 @@
             author: entry.author || name,
             publishedAt: entry.pubDate ? new Date(entry.pubDate.replace(' ', 'T') + 'Z').toISOString() : new Date().toISOString(),
             summary: (tmp.textContent || '').trim().slice(0, 260),
+            curatorialAngle: `Hallazgo vivo de ${name} desde la lente ${lens || 'Arte'} listo para cruzar en esta semana.`,
             images: imgs,
+            videos: [],
+            suggestedMusic: tracks[0],
+            protagonist: {
+              name: entry.author || name,
+              handle: '@whimsypov',
+              foundHandles: ['@whimsypov'],
+              contactUrl: itemUrl,
+              contactEmail: ''
+            },
             cleanReaderHtml: entry.content || entry.description || ('<p>' + escapeHtml(entry.title) + '</p>'),
             hiloRojo: {
               minutaTitle: 'La Minuta W',
@@ -1728,7 +3169,7 @@
         renderInboxList();
         showToast(`✅ <strong>${escapeHtml(name)}</strong> sumó ${added} artículos nuevos a tu Bandeja.`);
       } catch (err) {
-        showToast(`⚠️ Quedó guardado <strong>${escapeHtml(name)}</strong> en tu lista de feeds. Si el medio bloquea lectura directa desde el navegador, corré el motorcito en tu Mac para traer su álbum completo.`);
+        showToast(`⚠️ Quedó guardado <strong>${escapeHtml(name)}</strong> en tu lista de feeds para la próxima recolección en la nube.`);
       }
     }
 
@@ -1740,7 +3181,7 @@
       showToast('✅ Bandeja actualizada con los últimos artículos disponibles.');
     }
 
-    // ATAJOS DE TECLADO ESTILO GOOGLE READER (J / K / S / P)
+    // ATAJOS DE TECLADO (J / K mover · S ★ · H Hoy · M Mañana)
     document.addEventListener('keydown', (e) => {
       if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
       if (e.key === 'Escape') { closeAirModal(); return; }
@@ -1757,12 +3198,15 @@
         if (prev) selectInboxItem(prev.id);
       } else if (e.key === 's' && activeItemId) {
         toggleStarActive();
-      } else if (e.key === 'p' && activeItemId) {
-        sendActiveToPrepro('hoy');
+      } else if (e.key === 'h' && activeItemId) {
+        assignBucketActive('hoy');
+      } else if (e.key === 'm' && activeItemId) {
+        assignBucketActive('manana');
       }
     });
 
     loadInitialInbox();
   </script>
 </body>
+
 </html>
