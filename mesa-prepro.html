@@ -2199,16 +2199,27 @@
             </div>
           </div>
 
-          <h3 class="card-title">${card.title}</h3>
+          <!-- TÍTULO CLICABLE DIRECTO AFUERA -->
+          <h3 class="card-title">
+            <a href="${card.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--cream); text-decoration:none; display:inline-flex; align-items:baseline; gap:8px;">
+              <span>${card.title}</span>
+              <span style="font-size:0.85rem; color:var(--gold); font-family:'JetBrains Mono',monospace;">↗</span>
+            </a>
+          </h3>
           <p class="card-summary">${card.summary}</p>
 
-          <!-- VERIFIED LINKS + POP-OUT RESPONSIVE READER WINDOW -->
-          <div class="verified-sources-box">
-            <div class="verified-sources-title">
-              <span>🌐 URL DIRECTA: <a href="${card.sourceUrl}" target="_blank" style="color:var(--gold); text-decoration:underline;">${card.sourceUrl}</a></span>
-              <button class="btn gold" style="padding:4px 10px; font-size:0.7rem;" onclick="openCleanReaderWindow('${card.sourceUrl}')">🪟 Abrir web en Ventana Limpia Responsive (para recorrer)</button>
+          <!-- ENLACES Y FUENTES EXTERNAS SIEMPRE EN PESTAÑA NUEVA -->
+          <div class="verified-sources-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem;">
+              <span style="color:var(--muted);">FUENTE:</span>
+              <a href="${card.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--gold); text-decoration:underline; font-weight:700; margin-left:6px;">
+                ${card.sourceName} ↗
+              </a>
             </div>
-            <div class="source-pills">
+            <div class="source-pills" style="margin:0;">
+              <a href="${card.sourceUrl}" target="_blank" rel="noopener noreferrer" class="source-pill" style="background:var(--pink); color:#000; font-weight:700; border:none; padding:6px 12px;">
+                ↗ ABRIR ARTÍCULO ORIGINAL AFUERA
+              </a>
               ${extraLinksHtml}
             </div>
           </div>
@@ -2285,17 +2296,17 @@
 
           <!-- MAIN CARD ACTIONS -->
           <div class="card-actions">
+            <a href="${card.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn" style="background:rgba(212,175,55,0.2); border-color:var(--gold); color:var(--cream); text-decoration:none; font-weight:700;">
+              🌐 Abrir Fuente Afuera ↗
+            </a>
             <button class="btn ${isSelected ? 'green' : 'primary'}" onclick="toggleSelectCard('${card.id}')">
-              ${isSelected ? '✅ Elegida en tu Canasta (Quitar)' : '➕ Elegir para mi Bloque (Fase 2)'}
+              ${isSelected ? '✅ En tu Canasta (Quitar)' : '➕ Elegir para mi Bloque'}
             </button>
             <button class="btn gold" onclick="openLightbox('${card.id}', 0)">
-              🔍 Abrir Álbum en Previa Grande
-            </button>
-            <button class="btn" onclick="openCleanReaderWindow('${card.sourceUrl}')">
-              🪟 Abrir Fuente Responsive al lado
+              🔍 Fotos en Grande
             </button>
             <button class="btn" onclick="captureExternalSourceWindow('right')">
-              🎥 Proyectar Ventana en Derecha
+              🎥 Proyectar en Derecha
             </button>
           </div>
         </div>
