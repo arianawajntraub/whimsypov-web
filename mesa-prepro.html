@@ -536,6 +536,7 @@
     margin-bottom: 8px;
   }
   .mini-screen-16-9 {
+    position: relative;
     display: grid;
     grid-template-columns: 0.85fr 1.15fr 1.4fr;
     gap: 6px;
@@ -545,6 +546,99 @@
     border-radius: 8px;
     padding: 6px;
     overflow: hidden;
+  }
+  .mini-cinema-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 12;
+    background: #050508;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .mini-cinema-overlay.active { display: flex; }
+  .mini-cinema-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mini-cinema-overlay.mode-9x16 .mini-cinema-stage {
+    width: 34%;
+    height: 92%;
+    border: 1.5px solid var(--pink);
+    border-radius: 6px;
+    overflow: hidden;
+    background: #08080c;
+  }
+  .mini-cinema-stage img, .mini-cinema-stage iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: contain;
+    background: #050508;
+  }
+  .mini-cinema-hud {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    left: 6px;
+    z-index: 15;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+  .mini-cinema-graph {
+    background: rgba(10,10,14,0.9);
+    border: 1px solid rgba(212,168,83,0.65);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.54rem;
+    color: var(--cream);
+    max-width: 72%;
+  }
+  .mini-cinema-graph strong {
+    display: block;
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+  }
+  .live-rss-box {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(74,222,128,0.3);
+  }
+  .live-rss-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+    max-height: 360px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .live-rss-item {
+    background: rgba(8,8,14,0.92);
+    border: 1px solid rgba(234,221,194,0.16);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 7px;
+  }
+  .live-rss-item:hover { border-color: var(--green); }
+  .live-rss-thumb {
+    width: 100%;
+    height: 112px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #0d0d15;
   }
   .mini-wing-left {
     background: #0d0d12;
@@ -816,6 +910,31 @@
       </div>
     </div>
     <div id="rssFeedsPillsRow" style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:6px; flex-wrap:wrap; align-items:center; font-size:0.7rem; color:var(--muted);"></div>
+
+    <!-- LECTOR DE ENTRADAS NUEVAS EN VIVO DESDE TUS FEEDS RSS -->
+    <div id="liveRssIncomingBox" class="live-rss-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--green); font-weight:700;">
+            📡 ÚLTIMAS ENTRADAS REALES DE TUS FEEDS RSS (ACTUALIZADAS EN VIVO DESDE LA FUENTE)
+          </div>
+          <div id="liveRssStatusLine" style="font-size:0.74rem; color:var(--muted); margin-top:2px;">
+            Cargando artículos nuevos reales desde tus feeds...
+          </div>
+        </div>
+        <div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center;">
+          <button class="btn green" style="padding:4px 9px; font-size:0.69rem;" onclick="fetchLiveRssFeedsNow('all')">🌐 Todas</button>
+          <button class="btn" style="padding:4px 8px; font-size:0.69rem;" onclick="fetchLiveRssFeedsNow('colossal')">Colossal</button>
+          <button class="btn" style="padding:4px 8px; font-size:0.69rem;" onclick="fetchLiveRssFeedsNow('pdr')">Public Domain Review</button>
+          <button class="btn" style="padding:4px 8px; font-size:0.69rem;" onclick="fetchLiveRssFeedsNow('quanta')">Quanta Magazine</button>
+          <button class="btn" style="padding:4px 8px; font-size:0.69rem;" onclick="fetchLiveRssFeedsNow('smithsonian')">Smithsonian</button>
+          <button class="btn" style="padding:4px 8px; font-size:0.69rem;" onclick="fetchLiveRssFeedsNow('okinawa')">Okinawa Nature</button>
+          <button class="btn" style="padding:4px 8px; font-size:0.69rem;" onclick="fetchLiveRssFeedsNow('substack')">La Minuta W Substack</button>
+          <button class="btn gold" style="padding:4px 10px; font-size:0.7rem;" onclick="fetchLiveRssFeedsNow('all', true)">🔄 Actualizar RSS Ahora</button>
+        </div>
+      </div>
+      <div id="liveRssArticlesGrid" class="live-rss-grid"></div>
+    </div>
   </div>
 
   <!-- PANEL 2: COACH ESCÉNICO Y COMERCIAL DE ARIANA + PLAN DE 2 HORAS EN PARALELO -->
@@ -955,7 +1074,7 @@
     <!-- RIGHT: STICKY LIVE MONITOR PREVIEW + MULTI-CARD BLOCK BUILDER -->
     <div class="builder-panel">
 
-      <!-- MONITOR EN VIVO (CON AMPLIACIÓN EN 1 CLIC) -->
+      <!-- MONITOR EN VIVO (CON AMPLIACIÓN EN 1 CLIC + CINE + CRÓNICA + MOBY CON FADE 3s SÍ O SÍ) -->
       <div class="live-mini-monitor" id="liveMiniMonitorBox">
         <div class="live-mini-header">
           <span>🟢 MONITOR EN VIVO DE TU SALIDA (TOCÁ LA PANTALLA PARA AMPLIAR)</span>
@@ -964,8 +1083,8 @@
         <div class="mini-screen-16-9">
           <div class="mini-wing-left">
             <div><strong style="color:var(--pink);">WHIMSY POV</strong><br>06:30 / 18:30</div>
-            <div id="miniLeftText" style="font-size:0.55rem; color:var(--cream);">«Hice una película en Excel» · Maria Tomazou</div>
-            <div style="color:var(--green);">🎵 Moby Gratis</div>
+            <div id="miniLeftText" style="font-size:0.55rem; color:var(--cream);">«Edison» en Okinawa · Shawn Miller</div>
+            <div id="miniLeftMusicLabel" style="color:var(--green);">🎵 Moby Gratis</div>
           </div>
           <div class="mini-center-9-16" onclick="openMonitorFullPreview('center')" title="Clic para ampliar el Centro 9:16 en pantalla grande">
             <img id="miniCenterImg" src="logo-whimsy-rosa.png" alt="Centro 9:16" style="object-fit:contain; padding:14px; background:#101018;">
@@ -973,17 +1092,69 @@
             <div class="mini-center-caption" id="miniCenterCaption">📱 CENTRO 9:16: Tu cámara / Placa central</div>
           </div>
           <div class="mini-wing-right" onclick="openMonitorFullPreview('right')" title="Clic para ampliar el Panel Derecho en pantalla grande">
-            <img id="miniRightImg" src="evidencias/prepro/excel_film_1.gif" alt="Panel Derecho">
+            <img id="miniRightImg" src="evidencias/prepro/shawn_miller_edison_1.jpg" alt="Panel Derecho">
             <video id="miniRightVideo" muted playsinline style="display:none;"></video>
-            <div class="mini-right-caption" id="miniRightCaption">➡️ DERECHA: GIF Película en Excel (Maria Tomazou)</div>
+            <div class="mini-right-caption" id="miniRightCaption">➡️ DERECHA: Cangrejo «Edison» en bombilla rota (Okinawa)</div>
+          </div>
+          <!-- CAPA MODO CINE 16:9 / SMART 9:16 EN MONITOR -->
+          <div class="mini-cinema-overlay" id="miniCinemaOverlay">
+            <div class="mini-cinema-hud">
+              <div class="mini-cinema-graph">
+                <strong id="miniCinemaGraphKicker">🎬 EN PANTALLA · WHIMSY POV</strong>
+                <span id="miniCinemaGraphText">Obra proyectada al aire</span>
+              </div>
+              <img src="logo-whimsy-rosa.png" alt="Mosca" style="width:26px; height:26px; object-fit:contain; filter:drop-shadow(0 1px 4px #000);">
+            </div>
+            <div class="mini-cinema-stage" onclick="openMonitorFullPreview('cinema')">
+              <img id="miniCinemaImg" src="" alt="Obra en Cine" style="display:none;">
+              <iframe id="miniCinemaIframe" src="about:blank" style="display:none;" allow="autoplay; fullscreen; picture-in-picture"></iframe>
+            </div>
           </div>
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
           <button class="btn gold" style="padding:5px 9px; font-size:0.7rem;" onclick="punchRightToCenterFromPrepro()">🎬 Ponchar Foto Derecha ↔ Centro 9:16</button>
-          <button class="btn primary" style="padding:5px 9px; font-size:0.7rem;" onclick="triggerCinemaFromCard('colossal-maria-tomazou-excel', '16x9')">🍿 Cine 16:9 (Solo Mosca + Graph Izq)</button>
-          <button class="btn green" style="padding:5px 9px; font-size:0.7rem;" onclick="triggerCinemaFromCard('colossal-maria-tomazou-excel', '9x16')">📱 Cine Smart 9:16 (p/Shorts)</button>
+          <button class="btn primary" style="padding:5px 9px; font-size:0.7rem;" onclick="triggerCinemaFromCard(selectedCardIds[0] || 'okinawa-shawn-miller-cangrejo-azul', '16x9')">🍿 Cine 16:9 (Solo Mosca + Graph Izq)</button>
+          <button class="btn green" style="padding:5px 9px; font-size:0.7rem;" onclick="triggerCinemaFromCard(selectedCardIds[0] || 'okinawa-shawn-miller-cangrejo-azul', '9x16')">📱 Cine Smart 9:16 (p/Shorts)</button>
           <button class="btn" style="padding:5px 9px; font-size:0.7rem;" onclick="stopCinemaModeFromPrepro()">🛑 Volver a 3 Columnas</button>
           <button class="btn" style="padding:5px 9px; font-size:0.7rem;" onclick="captureExternalSourceWindow('right')">🎥 Capturar Ventana → Derecha</button>
+        </div>
+
+        <!-- BANNER VIVO DE CRÓNICA EN AIRE + CUENTA REGRESIVA + BOTÓN DE CALLAR -->
+        <div id="preproCorrBanner" style="display:none; margin-top:8px; padding:7px 10px; border-radius:8px; background:rgba(167,139,250,0.16); border:1px solid #A78BFA; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+          <span id="preproCorrBannerText" style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#EDE9FE; font-weight:700;">🎙️ SONANDO CRÓNICA AL AIRE...</span>
+          <button class="btn" style="padding:4px 10px; font-size:0.7rem; background:#DC2626; border-color:#F87171; color:#fff;" onclick="stopPreproCorrespondentNow()">⏹️ Callar Crónica</button>
+        </div>
+
+        <!-- REPRODUCTOR MOBY GRATIS + FADE 3s Y PARAR SÍ O SÍ INTEGRADO EN MONITOR -->
+        <div style="margin-top:8px; padding:9px 10px; border-radius:9px; background:#0b0b12; border:1px solid rgba(212,168,83,0.38);">
+          <audio id="preproMobyAudio" preload="auto"></audio>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:6px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.67rem; color:var(--gold); font-weight:700;">🎵 MÚSICA MOBY GRATIS EN PRE-PRO (CERO PARAR EN SECO)</span>
+            <span id="preproMobyStatus" style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--green);">Listo (68%)</span>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+            <select id="preproMobySelect" onchange="changePreproMobyTrack()" style="flex:1; min-width:170px; background:#06060a; border:1px solid var(--border); color:var(--cream); padding:5px 8px; border-radius:6px; font-size:0.72rem;">
+              <option value="audio/fast_05_falling-out-of-love.m4a">falling out of love (Moby · 124 BPM)</option>
+              <option value="audio/fast_01_hollywood.m4a">hollywood (Moby · 120 BPM)</option>
+              <option value="audio/fast_02_get-it.m4a">get it (Moby · 100 BPM)</option>
+              <option value="audio/fast_03_fail-safe-audio.m4a">fail safe audio (Moby · 108 BPM)</option>
+              <option value="audio/fast_04_great-weight-lifted.m4a">great weight lifted (Moby · 132 BPM)</option>
+              <option value="audio/fast_06_friday-heretic.m4a">friday heretic (Moby · 126 BPM)</option>
+              <option value="audio/fast_07_1983.m4a">1983 (Moby · 145 BPM)</option>
+              <option value="audio/fast_08_out-stands.m4a">out stands (Moby · 102 BPM)</option>
+            </select>
+            <select id="preproCorrGenderSelect" title="Voz para escuchar Crónicas" style="background:#06060a; border:1px solid var(--border); color:#DDD6FE; padding:5px 7px; border-radius:6px; font-size:0.7rem;">
+              <option value="fem">🗣️ Voz Mujer Jaffa</option>
+              <option value="male">🗣️ Voz Varón Estudio</option>
+            </select>
+            <button class="btn green" id="btnPreproMobyPlay" style="padding:5px 10px; font-size:0.71rem;" onclick="togglePreproMobyPlay()">▶️ Play Moby</button>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:7px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--muted);">VOL: <strong id="preproMobyVolLabel" style="color:var(--cream);">68%</strong></span>
+            <input type="range" id="preproMobyVolSlider" min="0" max="100" value="68" oninput="setPreproMobyVolume(this.value)" style="flex:1; min-width:95px; accent-color:var(--gold);">
+            <button class="btn" id="btnPreproDuck" style="padding:4px 8px; font-size:0.69rem;" onclick="togglePreproMobyDuck()">🔉 Pisar 18%</button>
+            <button class="btn" style="padding:5px 10px; font-size:0.71rem; background:rgba(220,38,38,0.22); border-color:#F87171; color:#FCA5A5; font-weight:700;" onclick="fadeAndStopPreproMobyDefinitely()">📉 Fade 3s y Parar SÍ O SÍ</button>
+          </div>
         </div>
       </div>
 
@@ -1096,9 +1267,10 @@
             <button class="btn primary" style="justify-content:center; padding:9px; font-size:0.74rem;" onclick="projectMonitorCinemaFromLightbox('16x9')">🍿 Monitor al Aire 16:9 (Solo Mosca + Graph Izq)</button>
             <button class="btn gold" style="justify-content:center; padding:9px; font-size:0.74rem;" onclick="projectMonitorCinemaFromLightbox('9x16')">📱 Modo Smart 9:16 (Encuadre p/Shorts)</button>
           </div>
-          <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:8px;">
-            <button class="btn" style="justify-content:center; padding:8px; font-size:0.73rem; border-color:#A78BFA; color:#DDD6FE;" onclick="triggerCardCorrespondentStory(lbCurrentCardId)">🎙️ Crónica del Lanzamiento (Voz Jaffa/Varón)</button>
-            <button class="btn" style="justify-content:center; padding:8px; font-size:0.73rem;" onclick="stopCinemaModeFromPrepro()">🛑 Volver Cabina a 3 Columnas</button>
+          <div style="display:grid; grid-template-columns: 1.3fr 0.7fr 1fr; gap:8px;">
+            <button class="btn" style="justify-content:center; padding:8px; font-size:0.73rem; border-color:#A78BFA; color:#DDD6FE;" onclick="triggerCardCorrespondentStory(lbCurrentCardId)">🎙️ Escuchar Crónica ahora</button>
+            <button class="btn" style="justify-content:center; padding:8px; font-size:0.71rem; background:rgba(220,38,38,0.22); border-color:#F87171; color:#FCA5A5;" onclick="stopPreproCorrespondentNow()">⏹️ Callar</button>
+            <button class="btn" style="justify-content:center; padding:8px; font-size:0.73rem;" onclick="stopCinemaModeFromPrepro()">🛑 Volver a 3 Columnas</button>
           </div>
           <div style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--gold); margin-top:4px;">¿O ENVIAR A LAS COLUMNAS HABITUALES DE LA CABINA?</div>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
@@ -1106,8 +1278,8 @@
             <button class="btn" style="justify-content:center; padding:8px; font-size:0.73rem;" onclick="projectFromLightbox('center')">📱 Mandar a Centro (9:16)</button>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:2px;">
-            <button class="btn gold" style="flex:1; justify-content:center; font-size:0.72rem;" id="lbOpenSourceBtn" onclick="">🪟 Abrir web original en Ventana Limpia</button>
-            <a href="" target="_blank" id="lbOpenTabLink" class="btn" style="justify-content:center; font-size:0.72rem;">🔗 Abrir URL ↗</a>
+            <a href="" target="_blank" rel="noopener noreferrer" class="btn gold" style="flex:1; justify-content:center; font-size:0.72rem; text-decoration:none;" id="lbOpenSourceBtn">🌐 Abrir web original afuera ↗</a>
+            <a href="" target="_blank" rel="noopener noreferrer" id="lbOpenTabLink" class="btn" style="justify-content:center; font-size:0.72rem; text-decoration:none;">🔗 Abrir URL ↗</a>
           </div>
         </div>
       </div>
@@ -1132,6 +1304,10 @@
     "correspondentStory": "Crónica documental desde Okinawa, Japón, sobre la fotografía que le cambió la vida al fotógrafo de naturaleza Shawn Miller. Caminando al amanecer por una playa de Okinawa, Miller encontró a un cangrejo ermitaño azul eléctrico de la especie Coenobita purpureus viviendo adentro de una tapa blanca de botella de plástico porque los turistas habían vaciado la orilla de caracoles reales. Poco después fotografió a otro ejemplar sobreviviendo adentro de la rosca metálica y el vidrio roto de una lámpara incandescente tirada en la arena, al que bautizó Edison. Cuando la imagen dio la vuelta al mundo en National Geographic y en museos de ciencias naturales de Europa, Miller decidió no quedarse en la queja estética: creó el proyecto Make the Switch, dejando caracoles naturales marcados en las playas de Okinawa junto a las tapas plásticas para documentar cómo los cangrejos abandonan la basura apenas encuentran una arquitectura verdadera donde habitar.",
     "extraSources": [
       {
+        "label": "💡 Galería oficial «Crabs with Beach Trash Homes» (Aquí está «Edison» en la bombilla)",
+        "url": "https://www.okinawanaturephotography.com/crabs-with-beach-trash-homes/"
+      },
+      {
         "label": "🦀 Sitio oficial de Shawn Miller · Proyecto «Make the Switch» (Okinawa)",
         "url": "https://www.okinawanaturephotography.com/make-the-switch/"
       },
@@ -1145,26 +1321,36 @@
       }
     ],
     "title": "El cangrejo azul de Okinawa adentro de una tapa de plástico y de una bombilla rota («Edison»): la foto que le cambió la vida a Shawn Miller",
-    "summary": "De tus Guardados de Instagram a la fuente primaria real en Okinawa, Japón: el fotógrafo Shawn Miller (@okinawanaturephotography) retrató a un Coenobita purpureus azul eléctrico usando una tapa de botella y una bombilla rota como caparazón, y lanzó «Make the Switch» devolviendo caracoles reales a la playa.",
-    "longDossier": "1. LA INVESTIGACIÓN COMPLETA DETRÁS DE TU GUARDADO DE INSTAGRAM (QUIÉN ES, DÓNDE FUE Y QUÉ PASÓ DE VERDAD):\n• El protagonista real: Es el fotógrafo de vida silvestre estadounidense radicado en Okinawa (Japón) Shawn Miller (@okinawanaturephotography).\n• La especie real (ese azul y violeta no tiene filtro): Es el cangrejo ermitaño terrestre de Okinawa (Coenobita purpureus), famoso por su pigmentación azul cobalto y violeta intensa.\n• Las dos fotos que le cambiaron la vida: Primero encontró en una playa de Okinawa al cangrejo azul metido adentro de una tapa blanca roscada de botella plástica a la luz del amanecer (`shawn_miller_7.jpg`). Tiempo después encontró a otro cangrejo viviendo adentro del culote metálico de una lámpara incandescente rota, al que llamó «Edison». La imagen llegó a National Geographic (`shawn_miller_2.jpg`) y a grandes muestras de museos en Roma y Tokio (`shawn_miller_6.jpg`).\n• Del golpe visual a la solución material («Make the Switch»): En vez de quedarse en la postal triste del Antropoceno, Shawn empezó a recolectar caracoles naturales vacíos y a dejarlos en las mismas rocas donde veía cangrejos con tapas de plástico. Los cangrejos inspeccionan el caracol real y en minutos mudan de casa y sueltan el plástico (`okinawa_crab_blue_2.jpg`).\n\n2. CÓMO INTERACTÚA CON LOS RELOJES DEL PROGRAMA Y TU DISPOSITIVO «PÁGINA EN BLANCO»:\n• Reloj activo en Cabina: 🇯🇵 TOKIO / OKINAWA (cuando vos salís a las 06:30 o 18:30 en Punta del Este / Buenos Aires, en las playas de Okinawa ya es la otra punta del día: le hablás directamente a esa hora del reloj).\n• Cruce Polifónico (Arte + Biología + Arquitectura + Open Innovation): Qué pasa cuando a una especie (o a una cultura) le vacían la orilla de refugios reales y empieza a habitar envases descartables.",
-    "dossiersTips": "💡 Abajo tenés listas las 2 Cartas para Shawn Miller (en inglés y español) para copiar en 1 clic: 1) Antes del programa pidiéndole permiso y 1 frase en audio de 40s desde Okinawa, y 2) Después del programa avisándole que le dedicaste un bloque entero en Whimsy POV.",
+    "summary": "De tus Guardados de Instagram a la fuente primaria real en Okinawa, Japón: el fotógrafo Shawn Miller (@okinawanaturephotography) retrató a un Coenobita purpureus azul eléctrico usando una bombilla incandescente rota («Edison») y tapas de plástico como caparazón, y lanzó «Make the Switch» devolviendo caracoles reales a la playa.",
+    "longDossier": "1. LA INVESTIGACIÓN COMPLETA DETRÁS DE TU GUARDADO DE INSTAGRAM (QUIÉN ES, DÓNDE FUE Y QUÉ PASÓ DE VERDAD):\n• El protagonista real: Es el fotógrafo de vida silvestre estadounidense radicado en Okinawa (Japón) Shawn Miller (@okinawanaturephotography).\n• La especie real (ese azul y violeta no tiene filtro): Es el cangrejo ermitaño terrestre de Okinawa (Coenobita purpureus), famoso por su pigmentación azul cobalto y violeta intensa.\n• Las fotos exactas que le cambiaron la vida: Primero encontró a «Edison» usando la rosca metálica de una bombilla eléctrica rota como caparazón (`shawn_miller_edison_1.jpg` y `shawn_miller_edison_2.jpg`), además de cangrejos ermitaños dentro de una tapa blanca de plástico al amanecer (`shawn_miller_7.jpg`) y en el pico de una botella de vidrio (`shawn_miller_glass_bottle.jpg`). La serie llegó a National Geographic (`shawn_miller_2.jpg`) y a muestras internacionales.\n• Del golpe visual a la solución material («Make the Switch»): En vez de quedarse en la postal triste del Antropoceno, Shawn empezó a recolectar caracoles naturales vacíos y a dejarlos en las mismas rocas donde veía cangrejos con basura. Los cangrejos inspeccionan el caracol real y en minutos mudan de casa y sueltan el plástico (`okinawa_crab_blue_2.jpg`).\n\n2. CÓMO INTERACTÚA CON LOS RELOJES DEL PROGRAMA Y TU DISPOSITIVO «PÁGINA EN BLANCO»:\n• Reloj activo en Cabina: 🇯🇵 TOKIO / OKINAWA (cuando vos salís a las 06:30 o 18:30 en Punta del Este / Buenos Aires, en las playas de Okinawa ya es la otra punta del día: le hablás directamente a esa hora del reloj).\n• Cruce Polifónico (Arte + Biología + Arquitectura + Open Innovation): Qué pasa cuando a una especie (o a una cultura) le vacían la orilla de refugios reales y empieza a habitar envases descartables.",
+    "dossiersTips": "💡 Arriba en el álbum tenés como Foto 1 y Foto 2 las imágenes originales de «Edison» dentro de la bombilla eléctrica rota. Tocá cualquier foto para proyectarla en vivo en tu Monitor o en 9:16.",
     "coachPersonalAngle": "🎯 BAJADA PARA TU IG PERSONAL (@arianawajntraub) Y LINKEDIN (CERO CONSEJO TRUCHO DE EMPRENDEDOR): En vez de dar una moraleja de autoayuda, mostrás cómo mirás vos un problema complejo en tus consultoras y mesas estratégicas: «En Okinawa los cangrejos ermitaños azules empezaron a vivir adentro de tapas de gaseosa y bombillas rotas porque nos llevamos todos los caracoles de la costa. Shawn Miller hizo algo que en diseño de sistemas e innovación abierta nos cuesta horrores: en vez de gritarle al cangrejo por usar plástico, volvió a poner arquitectura real al alcance de su mano. Nadie abandona un envase tóxico hasta que tiene una estructura mejor donde mudarse.»",
     "outreachPre": "Subject / DM to @okinawanaturephotography (Shawn Miller — Pre-Show Invitation):\n\nHi Shawn! I’m Ariana Wajntraub, host of Whimsy POV & La Minuta W (from Punta del Este / Buenos Aires). Your photographs of the blue Okinawa hermit crab inside the plastic bottle cap—and 'Edison' inside the broken lightbulb—along with your 'Make the Switch' project deeply moved our editorial table.\n\nWe are dedicating a special segment of our upcoming live episode to your work, connecting visual art, marine biology, and how a single photograph can trigger a real material solution. With your permission, we would love to project your photographs on air (crediting @okinawanaturephotography and okinawanaturephotography.com on screen). And if you happen to have 40 seconds to send us a short voice note from Okinawa answering one question—'What went through your mind the exact morning you saw the first crab actually switch from plastic back into a real shell?'—we will play your voice live on the show. Thank you for what you do!\n\n---\n[Versión en Español para referencia]: Hola Shawn, soy Ariana Wajntraub (conductora de Whimsy POV y La Minuta W). Vamos a dedicarle un bloque especial de nuestro próximo programa en vivo a tu foto del cangrejo azul de Okinawa, a 'Edison' en la bombilla rota y a tu proyecto 'Make the Switch', acreditando tu cuenta y tu web en pantalla. Si tenés 40 segundos para mandarnos un audio contando qué sentiste la mañana en que viste al primer cangrejo abandonar el plástico por un caracol real, lo pasamos al aire.",
     "outreachPost": "Subject / DM to @okinawanaturephotography (Shawn Miller — Post-Show Segment Live):\n\nHi Shawn! Just wanted to share that today on Whimsy POV we aired our full segment dedicated to your Okinawa blueberry hermit crab photographs and your 'Make the Switch' initiative. Your website (okinawanaturephotography.com/make-the-switch) and @okinawanaturephotography are featured on screen and in all our show notes across YouTube, Substack (La Minuta W), and Instagram.\n\nHere is the link to the episode and the cut where we talk about your work: https://www.youtube.com/@whimsyPOV — Feel free to share or repost it anytime. Huge admiration from South America!",
     "album": [
       {
+        "url": "evidencias/prepro/shawn_miller_edison_1.jpg",
+        "caption": "FOTO ORIGINAL DE «EDISON» (Shawn Miller · Okinawa): El cangrejo ermitaño usando la rosca metálica y el vidrio de una bombilla rota como caparazón",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/shawn_miller_edison_2.jpg",
+        "caption": "Segundo plano macro de «Edison» caminando por Okinawa con la lámpara incandescente a cuestas (© Shawn M Miller)",
+        "checked": true
+      },
+      {
         "url": "evidencias/prepro/shawn_miller_7.jpg",
-        "caption": "FOTO ORIGINAL DE SHAWN MILLER (Okinawa, 2016): El cangrejo ermitaño azul (Coenobita purpureus) adentro de una tapa plástica al amanecer",
+        "caption": "El cangrejo ermitaño azul (Coenobita purpureus) adentro de una tapa blanca de botella plástica al amanecer",
+        "checked": true
+      },
+      {
+        "url": "evidencias/prepro/shawn_miller_glass_bottle.jpg",
+        "caption": "Cangrejo ermitaño azul en Okinawa habitando el pico y tapa de una botella de vidrio (© Shawn M Miller)",
         "checked": true
       },
       {
         "url": "evidencias/prepro/shawn_miller_2.jpg",
         "caption": "La foto de Shawn Miller publicada en la edición histórica «Planet or Plastic?» de National Geographic",
-        "checked": true
-      },
-      {
-        "url": "evidencias/prepro/shawn_miller_6.jpg",
-        "caption": "Exhibición de museo con la obra de Shawn Miller sobre los cangrejos ermitaños de Okinawa",
         "checked": true
       },
       {
@@ -1205,7 +1391,7 @@
       },
       {
         "label": "📄 Paper en Biomedical Optics Express (Aguja óptica OCT para tejido mamario en Columbia)",
-        "url": "https://opg.optica.org/boe/ home.cfm"
+        "url": "https://opg.optica.org/boe/home.cfm"
       }
     ],
     "title": "La investigadora de la Universidad de Columbia y la «aguja contra el cáncer»: cómo desarmar el titular viral y contar la ciencia real en vivo",
@@ -2137,6 +2323,7 @@
             <button class="btn primary" style="font-size:0.73rem; padding:7px 11px;" onclick="triggerCinemaFromCard('${card.id}', '16x9')">🍿 Mandar Video al Aire 16:9 (Solo Mosca + Graph Izq)</button>
             <button class="btn gold" style="font-size:0.73rem; padding:7px 11px;" onclick="triggerCinemaFromCard('${card.id}', '9x16')">📱 Mandar en Modo Smart 9:16 (Encuadre p/Shorts)</button>
             <button class="btn" style="font-size:0.73rem; padding:7px 11px; border-color:#A78BFA; color:#DDD6FE;" onclick="triggerCardCorrespondentStory('${card.id}')">🎙️ Crónica del Lanzamiento y Reportaje (Voz Jaffa/Varón)</button>
+            <button class="btn" style="font-size:0.73rem; padding:7px 11px; background:rgba(220,38,38,0.22); border-color:#F87171; color:#FCA5A5;" onclick="stopPreproCorrespondentNow()">⏹️ Callar</button>
             <button class="btn" style="font-size:0.73rem; padding:7px 11px;" onclick="stopCinemaModeFromPrepro()">🛑 Volver Cabina a 3 Columnas</button>
           </div>
         </div>
@@ -2147,6 +2334,7 @@
             <button class="btn primary" style="font-size:0.7rem; padding:5px 9px;" onclick="triggerCinemaFromCard('${card.id}', '16x9')">🍿 Monitor 16:9 (Solo Mosca + Graph Izq)</button>
             <button class="btn gold" style="font-size:0.7rem; padding:5px 9px;" onclick="triggerCinemaFromCard('${card.id}', '9x16')">📱 Smart 9:16 (p/Shorts)</button>
             <button class="btn" style="font-size:0.7rem; padding:5px 9px; border-color:#A78BFA; color:#DDD6FE;" onclick="triggerCardCorrespondentStory('${card.id}')">🎙️ Crónica del Lanzamiento / Detrás de escena</button>
+            <button class="btn" style="font-size:0.7rem; padding:5px 9px; background:rgba(220,38,38,0.22); border-color:#F87171; color:#FCA5A5;" onclick="stopPreproCorrespondentNow()">⏹️ Callar</button>
           </div>
         </div>
       `;
@@ -2381,7 +2569,8 @@
 
     document.getElementById('lbCardTitle').textContent = card.title;
     document.getElementById('lbDossierExcerpt').textContent = card.longDossier || card.summary;
-    document.getElementById('lbOpenSourceBtn').onclick = () => openCleanReaderWindow(card.sourceUrl);
+    const lbSrcBtn = document.getElementById('lbOpenSourceBtn');
+    if (lbSrcBtn) lbSrcBtn.href = card.sourceUrl;
     document.getElementById('lbOpenTabLink').href = card.sourceUrl;
     document.getElementById('lbStatusMsg').style.display = 'none';
   }
@@ -2429,6 +2618,44 @@
     } catch (e) {}
   }
 
+  function updateMiniMonitorCinema(mode, mediaType, mediaSrc, mg) {
+    const overlay = document.getElementById('miniCinemaOverlay');
+    const cImg = document.getElementById('miniCinemaImg');
+    const cIfr = document.getElementById('miniCinemaIframe');
+    const kEl = document.getElementById('miniCinemaGraphKicker');
+    const tEl = document.getElementById('miniCinemaGraphText');
+    const monBox = document.getElementById('liveMiniMonitorBox');
+    if (monBox) {
+      monBox.classList.add('flash');
+      setTimeout(() => monBox.classList.remove('flash'), 900);
+    }
+    if (!overlay) return;
+    if (mode === 'off') {
+      overlay.classList.remove('active', 'mode-9x16');
+      if (cIfr) { cIfr.src = 'about:blank'; cIfr.style.display = 'none'; }
+      if (cImg) cImg.style.display = 'none';
+      return;
+    }
+    overlay.classList.add('active');
+    overlay.classList.toggle('mode-9x16', mode === '9x16');
+    if (kEl && mg) kEl.textContent = mg.kicker || '🎬 EN PANTALLA';
+    if (tEl && mg) tEl.textContent = mg.text || '';
+    if (mediaType === 'vimeo') {
+      if (cImg) cImg.style.display = 'none';
+      if (cIfr) {
+        cIfr.style.display = 'block';
+        let finalSrc = mediaSrc || '';
+        if (/vimeo\.com/i.test(finalSrc) && !/autoplay=/i.test(finalSrc)) {
+          finalSrc += (finalSrc.includes('?') ? '&' : '?') + 'autoplay=1&muted=1';
+        }
+        if (cIfr.src !== finalSrc) cIfr.src = finalSrc;
+      }
+    } else {
+      if (cIfr) { cIfr.src = 'about:blank'; cIfr.style.display = 'none'; }
+      if (cImg) { cImg.src = mediaSrc || ''; cImg.style.display = 'block'; }
+    }
+  }
+
   function triggerCinemaFromCard(cardId, mode) {
     const card = allCards.find(c => c.id === cardId) || allCards[0];
     if (!card) return;
@@ -2437,13 +2664,26 @@
     const hasVimeo = !!card.embedVimeo;
     const firstPhoto = (card.album && card.album[0]) ? card.album[0] : { url: 'evidencias/prepro/excel_film_1.gif', caption: card.title };
     const mg = buildCardMiniGraph(card, hasVimeo ? card.miniGraphText : firstPhoto.caption);
+    const mediaType = hasVimeo ? 'vimeo' : 'image';
+    const mediaSrc = hasVimeo ? card.embedVimeo : firstPhoto.url;
+
+    // Si lanzamos un video en Modo Cine, bajamos Moby con Fade de 3s y paramos sí o sí
+    if (hasVimeo && typeof fadeAndStopPreproMobyDefinitely === 'function') {
+      fadeAndStopPreproMobyDefinitely();
+    }
 
     const pushMsg = {
       type: 'PREPRO_PUSH',
       payload: {
         cinemaMode: mode,
-        cinemaMediaType: hasVimeo ? 'vimeo' : 'image',
-        cinemaMediaSrc: hasVimeo ? card.embedVimeo : firstPhoto.url,
+        cinemaMediaType: mediaType,
+        cinemaMediaSrc: mediaSrc,
+        headline: card.title,
+        kicker: mg.kicker,
+        fact: mg.text,
+        newRightImage: firstPhoto.url,
+        newRightTag: card.catLabel,
+        newRightLabel: firstPhoto.caption,
         moscaMiniGraphKicker: mg.kicker,
         moscaMiniGraphText: mg.text,
         customCorrespondentText: buildCardCorrespondentText(card),
@@ -2457,12 +2697,20 @@
     localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
     if (preproChannel) preproChannel.postMessage(pushMsg);
 
+    updateMiniMonitorCinema(mode, mediaType, mediaSrc, mg);
+
     const badgeEl = document.getElementById('liveSyncBadge');
     if (badgeEl) {
       badgeEl.textContent = mode === '16x9'
         ? '🍿 Al Aire: Cine 16:9 (Solo Mosca + Graph Izq)'
         : '📱 Al Aire: Cine Smart 9:16 (p/Shorts)';
     }
+    const rImg = document.getElementById('miniRightImg');
+    const rCap = document.getElementById('miniRightCaption');
+    if (rImg && firstPhoto.url) rImg.src = firstPhoto.url;
+    if (rCap) rCap.textContent = '➡️ DERECHA: ' + firstPhoto.caption.slice(0, 42);
+    const lTxt = document.getElementById('miniLeftText');
+    if (lTxt) lTxt.textContent = card.title.slice(0, 46);
     const cImg = document.getElementById('miniCenterImg');
     const cCap = document.getElementById('miniCenterCaption');
     if (cImg && firstPhoto.url) {
@@ -2483,13 +2731,25 @@
     const photo = (card.album && card.album[lbCurrentPhotoIdx]) ? card.album[lbCurrentPhotoIdx] : (card.album && card.album[0]);
     const useVimeo = lbShowingVideo && !!card.embedVimeo;
     const mg = buildCardMiniGraph(card, useVimeo ? card.miniGraphText : (photo ? photo.caption : card.title));
+    const mediaType = useVimeo ? 'vimeo' : 'image';
+    const mediaSrc = useVimeo ? card.embedVimeo : (photo ? photo.url : 'evidencias/prepro/excel_film_1.gif');
+
+    if (useVimeo && typeof fadeAndStopPreproMobyDefinitely === 'function') {
+      fadeAndStopPreproMobyDefinitely();
+    }
 
     const pushMsg = {
       type: 'PREPRO_PUSH',
       payload: {
         cinemaMode: mode,
-        cinemaMediaType: useVimeo ? 'vimeo' : 'image',
-        cinemaMediaSrc: useVimeo ? card.embedVimeo : (photo ? photo.url : 'evidencias/prepro/excel_film_1.gif'),
+        cinemaMediaType: mediaType,
+        cinemaMediaSrc: mediaSrc,
+        headline: card.title,
+        kicker: mg.kicker,
+        fact: mg.text,
+        newRightImage: photo ? photo.url : mediaSrc,
+        newRightTag: card.catLabel,
+        newRightLabel: photo ? photo.caption : card.title,
         moscaMiniGraphKicker: mg.kicker,
         moscaMiniGraphText: mg.text,
         customCorrespondentText: buildCardCorrespondentText(card),
@@ -2503,6 +2763,8 @@
     localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
     if (preproChannel) preproChannel.postMessage(pushMsg);
 
+    updateMiniMonitorCinema(mode, mediaType, mediaSrc, mg);
+
     const msg = document.getElementById('lbStatusMsg');
     msg.style.display = 'block';
     msg.textContent = mode === '16x9'
@@ -2512,6 +2774,7 @@
 
   function stopCinemaModeFromPrepro() {
     lbActiveCinemaMode = 'off';
+    updateMiniMonitorCinema('off', '', '', null);
     const pushMsg = {
       type: 'PREPRO_PUSH',
       payload: {
@@ -2523,38 +2786,129 @@
     localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
     if (preproChannel) preproChannel.postMessage(pushMsg);
     const badgeEl = document.getElementById('liveSyncBadge');
-    if (badgeEl) badgeEl.textContent = '✅ Cabina en 3 Columnas habituales';
+    if (badgeEl) badgeEl.textContent = '✅ Monitor en 3 Columnas habituales';
     const msg = document.getElementById('lbStatusMsg');
     if (msg) {
       msg.style.display = 'block';
-      msg.textContent = '🛑 Modo Cine desactivado: la Cabina volvió a las 3 columnas habituales.';
+      msg.textContent = '🛑 Modo Cine desactivado: la pantalla volvió a las 3 columnas habituales.';
     }
+  }
+
+  let preproCorrTimer = null;
+  let preproCorrWasMusicPlaying = false;
+  let preproCorrPrevVol = 68;
+
+  function stopPreproCorrespondentNow() {
+    try {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    } catch (e) {}
+    if (preproCorrTimer) {
+      clearInterval(preproCorrTimer);
+      preproCorrTimer = null;
+    }
+    const banner = document.getElementById('preproCorrBanner');
+    if (banner) banner.style.display = 'none';
+    const badgeEl = document.getElementById('liveSyncBadge');
+    if (badgeEl) badgeEl.textContent = '⏹️ Crónica detenida';
+    const audio = document.getElementById('preproMobyAudio');
+    if (audio && preproCorrWasMusicPlaying && !audio.paused) {
+      setPreproMobyVolume(preproCorrPrevVol || 68);
+      preproCorrWasMusicPlaying = false;
+    }
+    const remoteMsg = { type: 'REMOTE_ACTION', action: 'stopCorr', ts: Date.now() };
+    localStorage.setItem('whimsy_remote_action_v8', JSON.stringify(remoteMsg));
+    if (preproChannel) preproChannel.postMessage(remoteMsg);
   }
 
   function triggerCardCorrespondentStory(cardId) {
     const card = allCards.find(c => c.id === cardId) || allCards[0];
     if (!card) return;
     const text = buildCardCorrespondentText(card);
-    const label = '🎙️ Crónica del lanzamiento: ' + card.sourceName.slice(0, 36);
+    const label = '🎙️ Crónica: ' + card.sourceName.slice(0, 34);
+
+    // 1. Avisar también a Cabina por si está abierta
     const pushMsg = {
       type: 'PREPRO_PUSH',
       payload: {
         customCorrespondentText: text,
         customCorrespondentLabel: label,
         speakCorrespondentNow: true,
-        pntMsg: '🎙️ Corresponsal al aire contando el lanzamiento de ' + card.sourceName,
+        pntMsg: '🎙️ Corresponsal al aire contando ' + card.sourceName,
         ts: Date.now()
       }
     };
     localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
     if (preproChannel) preproChannel.postMessage(pushMsg);
 
+    // 2. REPRODUCIR INMEDIATAMENTE EN ESTA MISMA PESTAÑA PARA QUE SUENE SÍ O SÍ AHORA MISMO
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      if (preproCorrTimer) {
+        clearInterval(preproCorrTimer);
+        preproCorrTimer = null;
+      }
+      const audio = document.getElementById('preproMobyAudio');
+      if (audio && !audio.paused) {
+        preproCorrWasMusicPlaying = true;
+        preproCorrPrevVol = Number(document.getElementById('preproMobyVolSlider')?.value || 68);
+        setPreproMobyVolume(18);
+      } else {
+        preproCorrWasMusicPlaying = false;
+      }
+
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'es-ES';
+      const gender = document.getElementById('preproCorrGenderSelect')?.value || 'fem';
+      const voices = window.speechSynthesis.getVoices();
+      if (gender === 'male') {
+        const mVoice = voices.find(v => /jorge|diego|carlos|juan|alvaro|male/i.test(v.name) && /es/i.test(v.lang)) || voices.find(v => /es/i.test(v.lang));
+        if (mVoice) u.voice = mVoice;
+        u.pitch = 0.94;
+        u.rate = 0.97;
+      } else {
+        const fVoice = voices.find(v => /paulina|monica|helena|paloma|lucia|sofia|female/i.test(v.name) && /es/i.test(v.lang)) || voices.find(v => /es/i.test(v.lang));
+        if (fVoice) u.voice = fVoice;
+        u.pitch = 1.02;
+        u.rate = 0.98;
+      }
+
+      let remaining = Math.max(8, Math.round(text.split(/\s+/).length / 2.4));
+      const banner = document.getElementById('preproCorrBanner');
+      const bTxt = document.getElementById('preproCorrBannerText');
+      if (banner) banner.style.display = 'flex';
+      const updateBannerCountdown = () => {
+        const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
+        const ss = String(remaining % 60).padStart(2, '0');
+        if (bTxt) bTxt.textContent = `🎙️ SONANDO CRÓNICA (${gender === 'male' ? 'Varón Estudio' : 'Mujer Jaffa'}): ${card.sourceName.slice(0, 26)} · FALTAN -${mm}:${ss}`;
+      };
+      updateBannerCountdown();
+      preproCorrTimer = setInterval(() => {
+        if (remaining > 0) remaining--;
+        updateBannerCountdown();
+      }, 1000);
+
+      u.onend = () => {
+        if (preproCorrTimer) {
+          clearInterval(preproCorrTimer);
+          preproCorrTimer = null;
+        }
+        if (banner) banner.style.display = 'none';
+        if (audio && preproCorrWasMusicPlaying && !audio.paused) {
+          setPreproMobyVolume(preproCorrPrevVol || 68);
+          preproCorrWasMusicPlaying = false;
+        }
+        const b = document.getElementById('liveSyncBadge');
+        if (b) b.textContent = '✅ Crónica finalizada';
+      };
+      window.speechSynthesis.speak(u);
+    }
+
     const badgeEl = document.getElementById('liveSyncBadge');
-    if (badgeEl) badgeEl.textContent = '🎙️ Sonando Crónica del Lanzamiento en Cabina';
+    if (badgeEl) badgeEl.textContent = '🎙️ Sonando Crónica AL AIRE acá';
     const msg = document.getElementById('lbStatusMsg');
     if (msg) {
       msg.style.display = 'block';
-      msg.textContent = '🎙️ ¡Disparada la Crónica del Lanzamiento y Reportaje en la voz de corresponsal de tu Cabina!';
+      msg.textContent = '🎙️ ¡Crónica sonando ahora mismo acá (y sincronizada con tu Cabina)!';
     }
   }
 
@@ -2568,12 +2922,16 @@
   }
 
   function openMonitorFullPreview(zone) {
-    const imgSrc = zone === 'center'
-      ? document.getElementById('miniCenterImg').src
-      : document.getElementById('miniRightImg').src;
-    const cap = zone === 'center'
-      ? document.getElementById('miniCenterCaption').textContent
-      : document.getElementById('miniRightCaption').textContent;
+    let imgSrc = document.getElementById('miniRightImg').src;
+    let cap = document.getElementById('miniRightCaption').textContent;
+    if (zone === 'center') {
+      imgSrc = document.getElementById('miniCenterImg').src;
+      cap = document.getElementById('miniCenterCaption').textContent;
+    } else if (zone === 'cinema') {
+      const cImg = document.getElementById('miniCinemaImg');
+      if (cImg && cImg.src) imgSrc = cImg.src;
+      cap = (document.getElementById('miniCinemaGraphText')?.textContent) || cap;
+    }
     document.getElementById('lbImage').src = imgSrc;
     document.getElementById('lbCatBadge').textContent = 'VISTA AMPLIADA DE TU MONITOR EN VIVO';
     document.getElementById('lbCardTitle').textContent = cap;
@@ -2608,15 +2966,18 @@
   }
 
   let currentRightPhoto = {
-    img: 'evidencias/prepro/excel_film_1.gif',
-    title: 'GIF Película en Excel (Maria Tomazou)',
-    badge: '🚦 Tránsito Cultural · Colossal'
+    img: 'evidencias/prepro/shawn_miller_edison_1.jpg',
+    title: 'Cangrejo «Edison» en bombilla rota (Okinawa · Shawn Miller)',
+    badge: '🌦️ Guardado IG Investigado · Okinawa'
   };
 
   function projectPhotoNow(cardId, photoIdx, targetZone, btnEl) {
     const card = allCards.find(c => c.id === cardId);
     if (!card || !card.album || !card.album[photoIdx]) return;
     const photo = card.album[photoIdx];
+
+    // Al proyectar una foto a la columna derecha o centro, salir del overlay cine para ver las 3 columnas en vivo
+    updateMiniMonitorCinema('off', '', '', null);
 
     const badgeEl = document.getElementById('liveSyncBadge');
     const monBox = document.getElementById('liveMiniMonitorBox');
@@ -2652,9 +3013,13 @@
       if (badgeEl) badgeEl.textContent = '✅ Proyectado en Panel Derecho';
     }
 
+    const lTxt = document.getElementById('miniLeftText');
+    if (lTxt) lTxt.textContent = card.title.slice(0, 46);
+
     const pushMsg = {
       type: 'PREPRO_PUSH',
       payload: targetZone === 'center' ? {
+        cinemaMode: 'off',
         headline: card.title,
         kicker: card.catLabel,
         fact: photo.caption,
@@ -2662,6 +3027,8 @@
         pntMsg: 'Proyectando en Centro 9:16: ' + photo.caption,
         ts: Date.now()
       } : {
+        cinemaMode: 'off',
+        headline: card.title,
         newRightImage: photo.url,
         newRightTag: card.catLabel,
         newRightLabel: photo.caption,
@@ -2678,6 +3045,7 @@
   let isPreproPunched = false;
   function punchRightToCenterFromPrepro() {
     isPreproPunched = !isPreproPunched;
+    updateMiniMonitorCinema('off', '', '', null);
     const cImg = document.getElementById('miniCenterImg');
     const cCap = document.getElementById('miniCenterCaption');
     if (isPreproPunched) {
@@ -2688,6 +3056,7 @@
       const pushMsg = {
         type: 'PREPRO_PUSH',
         payload: {
+          cinemaMode: 'off',
           newCenterImage: currentRightPhoto.img,
           fact: currentRightPhoto.title,
           ts: Date.now()
@@ -2700,22 +3069,21 @@
       cImg.style.objectFit = 'contain';
       cImg.style.padding = '14px';
       cCap.textContent = '📱 CENTRO 9:16: Tu cámara / Placa central';
+      const pushMsg = {
+        type: 'PREPRO_PUSH',
+        payload: {
+          cinemaMode: 'off',
+          screenMode: 'clean',
+          ts: Date.now()
+        }
+      };
+      localStorage.setItem('whimsy_prepro_push_v8', JSON.stringify(pushMsg));
+      if (preproChannel) preproChannel.postMessage(pushMsg);
     }
   }
 
   function openCleanReaderWindow(url) {
-    const w = 540;
-    const h = 920;
-    const left = Math.max(0, window.screen.availWidth - w - 20);
-    window.open(
-      url,
-      'whimsy_clean_source_reader',
-      `width=${w},height=${h},left=${left},top=30,menubar=no,toolbar=no,location=yes,status=no,resizable=yes,scrollbars=yes`
-    );
-    const badgeEl = document.getElementById('liveSyncBadge');
-    if (badgeEl) {
-      badgeEl.textContent = '🪟 Fuente abierta al lado (tocá 🎥 Capturar si querés proyectarla)';
-    }
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   let preproScreenStream = null;
@@ -3549,8 +3917,8 @@
     { name: 'The Public Domain Review', url: 'https://publicdomainreview.org/rss.xml' },
     { name: 'Victoria & Albert Museum (Londres)', url: 'https://collections.vam.ac.uk/' },
     { name: 'Arkivism CC0 (4M Imágenes)', url: 'https://arkivism.com/' },
-    { name: 'Quanta Magazine (Física / Matemática)', url: 'https://api.quantamagazine.org/v1/rss' },
-    { name: 'Smithsonian Open Access', url: 'https://www.si.edu/openaccess' },
+    { name: 'Quanta Magazine (Física / Matemática)', url: 'https://www.quantamagazine.org/feed/' },
+    { name: 'Smithsonian Smart News', url: 'https://www.smithsonianmag.com/rss/smart-news/' },
     { name: 'CONICET Ciencia (@conicetdialoga)', url: 'https://www.conicet.gov.ar/categorias/noticias/' },
     { name: 'Substack · La Minuta W (Ariana)', url: 'https://arianawajntraub.substack.com/feed' }
   ];
@@ -3713,10 +4081,373 @@
     }, 1000);
   }
 
+  /* === REPRODUCTOR MOBY GRATIS EN PRE-PRO CON FADE 3s Y PARAR SÍ O SÍ + SINCRONÍA CABINA === */
+  let preproMobyFadeTimer = null;
+  let preproMobyIsDucked = false;
+  let preproMobyNormalVol = 68;
+
+  function setPreproMobyVolume(val) {
+    const num = Math.max(0, Math.min(100, Number(val) || 0));
+    const audio = document.getElementById('preproMobyAudio');
+    if (audio) audio.volume = num / 100;
+    const lbl = document.getElementById('preproMobyVolLabel');
+    const sld = document.getElementById('preproMobyVolSlider');
+    const st = document.getElementById('preproMobyStatus');
+    if (lbl) lbl.textContent = num + '%';
+    if (sld) sld.value = num;
+    preproMobyIsDucked = num <= 24;
+    if (num > 24) preproMobyNormalVol = num;
+    const duckBtn = document.getElementById('btnPreproDuck');
+    if (duckBtn) duckBtn.textContent = preproMobyIsDucked ? '🔊 Subir a ' + preproMobyNormalVol + '%' : '🔉 Pisar 18%';
+    if (st && audio && !audio.paused) st.textContent = '🔊 Sonando (' + num + '%)';
+  }
+
+  function changePreproMobyTrack() {
+    const sel = document.getElementById('preproMobySelect');
+    const audio = document.getElementById('preproMobyAudio');
+    if (!sel || !audio) return;
+    const wasPlaying = !audio.paused;
+    audio.src = sel.value;
+    if (wasPlaying) {
+      audio.volume = (Number(document.getElementById('preproMobyVolSlider')?.value || 68)) / 100;
+      audio.play().catch(() => {});
+    }
+  }
+
+  function togglePreproMobyPlay() {
+    const audio = document.getElementById('preproMobyAudio');
+    const sel = document.getElementById('preproMobySelect');
+    const btn = document.getElementById('btnPreproMobyPlay');
+    const st = document.getElementById('preproMobyStatus');
+    if (!audio || !sel) return;
+    if (preproMobyFadeTimer) {
+      clearInterval(preproMobyFadeTimer);
+      preproMobyFadeTimer = null;
+    }
+    if (!audio.src) audio.src = sel.value;
+    if (audio.paused) {
+      const vol = Number(document.getElementById('preproMobyVolSlider')?.value || 68) || 68;
+      if (vol === 0) setPreproMobyVolume(68);
+      else audio.volume = vol / 100;
+      audio.play().then(() => {
+        if (btn) btn.textContent = '⏸️ Pausa';
+        if (st) { st.style.color = 'var(--green)'; st.textContent = '🔊 Sonando (' + Math.round(audio.volume * 100) + '%)'; }
+      }).catch(() => {});
+    } else {
+      audio.pause();
+      if (btn) btn.textContent = '▶️ Play Moby';
+      if (st) { st.style.color = 'var(--muted)'; st.textContent = '⏸️ En pausa'; }
+    }
+  }
+
+  function togglePreproMobyDuck() {
+    if (preproMobyIsDucked) setPreproMobyVolume(preproMobyNormalVol || 68);
+    else setPreproMobyVolume(18);
+  }
+
+  function fadeAndStopPreproMobyDefinitely() {
+    const audio = document.getElementById('preproMobyAudio');
+    const btn = document.getElementById('btnPreproMobyPlay');
+    const st = document.getElementById('preproMobyStatus');
+
+    // Mandar orden simultánea a Cabina si está abierta para que allá también haga el Fade 3s y pare sí o sí
+    const remoteMsg = { type: 'REMOTE_ACTION', action: 'fadeStopMoby', ts: Date.now() };
+    localStorage.setItem('whimsy_remote_action_v8', JSON.stringify(remoteMsg));
+    if (preproChannel) preproChannel.postMessage(remoteMsg);
+
+    if (!audio || audio.paused) {
+      if (st) { st.style.color = '#FCA5A5'; st.textContent = '⏹ Música frenada con Fade 3s (SÍ O SÍ)'; }
+      if (btn) btn.textContent = '▶️ Play Moby';
+      return;
+    }
+    if (preproMobyFadeTimer) {
+      clearInterval(preproMobyFadeTimer);
+      preproMobyFadeTimer = null;
+    }
+    const startVol = audio.volume;
+    let step = 0;
+    const totalSteps = 30; // 3.0 segundos exactos (30 * 100ms)
+    preproMobyFadeTimer = setInterval(() => {
+      step++;
+      const factor = Math.max(0, 1 - (step / totalSteps));
+      audio.volume = startVol * factor;
+      const pct = Math.round(audio.volume * 100);
+      const lbl = document.getElementById('preproMobyVolLabel');
+      const sld = document.getElementById('preproMobyVolSlider');
+      if (lbl) lbl.textContent = pct + '%';
+      if (sld) sld.value = pct;
+      if (st) {
+        st.style.color = 'var(--gold)';
+        st.textContent = '📉 Bajando ' + pct + '% → 0%...';
+      }
+      if (step >= totalSteps) {
+        clearInterval(preproMobyFadeTimer);
+        preproMobyFadeTimer = null;
+        audio.pause();
+        audio.currentTime = 0;
+        if (btn) btn.textContent = '▶️ Play Moby';
+        if (st) {
+          st.style.color = '#FCA5A5';
+          st.textContent = '0% · ⏹ Música frenada SÍ O SÍ';
+        }
+      }
+    }, 100);
+  }
+
+  /* === LECTOR RSS EN VIVO (TRAE ENTRADAS NUEVAS DESDE LOS FEEDS REALES + FALLBACK LOCAL) === */
+  const LIVE_RSS_SOURCES = [
+    { key: 'colossal', name: 'Colossal', url: 'https://www.thisiscolossal.com/feed/', cat: 'transito', clock: '🇺🇸 CHICAGO / MUNDO', handle: '@thisiscolossal' },
+    { key: 'pdr', name: 'Public Domain Review', url: 'https://publicdomainreview.org/rss.xml', cat: 'transito', clock: '🇬🇧 LONDRES (GMT)', handle: '@publicdomainrev' },
+    { key: 'quanta', name: 'Quanta Magazine', url: 'https://www.quantamagazine.org/feed/', cat: 'clima', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@quantamagazine' },
+    { key: 'smithsonian', name: 'Smithsonian Smart News', url: 'https://www.smithsonianmag.com/rss/smart-news/', cat: 'clima', clock: '🇺🇸 WASHINGTON / MUNDO', handle: '@smithsonianmag' },
+    { key: 'okinawa', name: 'Okinawa Nature (Shawn Miller)', url: 'https://www.okinawanaturephotography.com/feed/', cat: 'clima', clock: '🇯🇵 TOKIO / OKINAWA (JST)', handle: '@okinawanaturephotography' },
+    { key: 'substack', name: 'La Minuta W (Substack)', url: 'https://arianawajntraub.substack.com/feed', cat: 'hilo', clock: '🇺🇾 PUNTA DEL ESTE', handle: '@arianawajntraub' }
+  ];
+
+  let liveRssItemsCache = [];
+
+  function extractFirstImgFromHtml(htmlStr) {
+    if (!htmlStr) return '';
+    const m = String(htmlStr).match(/<img[^>]+src=["']([^"']+)["']/i);
+    return m ? m[1] : '';
+  }
+
+  function stripHtmlText(htmlStr) {
+    return String(htmlStr || '')
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&#8217;/g, '’')
+      .replace(/&#8220;|&#8221;/g, '"')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  async function fetchSingleFeedViaProxy(src) {
+    // 1. Intentar api.rss2json.com
+    try {
+      const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(src.url);
+      const res = await fetch(apiUrl);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.status === 'ok' && Array.isArray(data.items) && data.items.length) {
+          return data.items.slice(0, 4).map(it => ({
+            sourceKey: src.key,
+            sourceName: src.name,
+            cat: src.cat,
+            clock: src.clock,
+            handle: src.handle,
+            title: stripHtmlText(it.title),
+            link: it.link || it.guid || src.url,
+            pubDate: it.pubDate || '',
+            summary: stripHtmlText(it.description || it.content).slice(0, 220),
+            thumb: it.thumbnail || (it.enclosure && it.enclosure.link) || extractFirstImgFromHtml(it.content || it.description) || ''
+          }));
+        }
+      }
+    } catch (e) {}
+
+    // 2. Fallback XML directo vía allorigins.win + DOMParser
+    try {
+      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(src.url);
+      const res2 = await fetch(proxyUrl);
+      if (res2.ok) {
+        const xmlText = await res2.text();
+        const doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+        const nodes = Array.from(doc.querySelectorAll('item, entry')).slice(0, 4);
+        if (nodes.length) {
+          return nodes.map(node => {
+            const t = node.querySelector('title')?.textContent || 'Artículo sin título';
+            const linkEl = node.querySelector('link');
+            const l = (linkEl && (linkEl.getAttribute('href') || linkEl.textContent)) || src.url;
+            const d = node.querySelector('pubDate, updated, published')?.textContent || '';
+            const desc = node.querySelector('content\\:encoded, description, summary, content')?.textContent || '';
+            const enc = node.querySelector('enclosure, media\\:content, media\\:thumbnail')?.getAttribute('url') || '';
+            return {
+              sourceKey: src.key,
+              sourceName: src.name,
+              cat: src.cat,
+              clock: src.clock,
+              handle: src.handle,
+              title: stripHtmlText(t),
+              link: l.trim(),
+              pubDate: d,
+              summary: stripHtmlText(desc).slice(0, 220),
+              thumb: enc || extractFirstImgFromHtml(desc) || ''
+            };
+          });
+        }
+      }
+    } catch (e) {}
+
+    return [];
+  }
+
+  function formatRssDateShort(dateStr) {
+    if (!dateStr) return 'Reciente';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return String(dateStr).slice(0, 16);
+    return d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function renderLiveRssGrid(items) {
+    const grid = document.getElementById('liveRssArticlesGrid');
+    if (!grid) return;
+    if (!items.length) {
+      grid.innerHTML = '<div style="font-size:0.78rem; color:var(--muted); padding:8px;">No se pudieron cargar artículos nuevos en este intento. Probá con «🔄 Actualizar RSS Ahora».</div>';
+      return;
+    }
+    grid.innerHTML = items.map((it, idx) => `
+      <div class="live-rss-item">
+        <div>
+          ${it.thumb ? `<a href="${it.link}" target="_blank" rel="noopener noreferrer"><img class="live-rss-thumb" src="${it.thumb}" alt="${it.title.replace(/"/g, '&quot;')}" loading="lazy" onerror="this.style.display='none'"></a>` : ''}
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.64rem; color:var(--green); margin:${it.thumb ? '6px' : '0'} 0 4px;">
+            🆕 NUEVO EN RSS · ${it.sourceName.toUpperCase()} · ${formatRssDateShort(it.pubDate)}
+          </div>
+          <a href="${it.link}" target="_blank" rel="noopener noreferrer" style="color:var(--cream); font-family:'Newsreader',serif; font-size:1.02rem; font-weight:600; line-height:1.28; text-decoration:none; display:block; margin-bottom:5px;">
+            ${it.title} <span style="color:var(--gold); font-family:'JetBrains Mono',monospace; font-size:0.78rem;">↗</span>
+          </a>
+          <div style="font-size:0.74rem; color:#cfc7bb; line-height:1.42;">${it.summary || 'Artículo nuevo detectado desde tu feed RSS.'}${(it.summary || '').length >= 210 ? '...' : ''}</div>
+        </div>
+        <div style="display:flex; gap:5px; flex-wrap:wrap; padding-top:6px; border-top:1px solid rgba(255,255,255,0.06);">
+          <a href="${it.link}" target="_blank" rel="noopener noreferrer" class="btn gold" style="padding:4px 8px; font-size:0.68rem; text-decoration:none;">↗ Abrir artículo original afuera</a>
+          <button class="btn green" style="padding:4px 8px; font-size:0.68rem;" onclick="promoteLiveRssItemToCard(${idx}, 'hoy')">🟢 Traer a mi Mesa (Va HOY)</button>
+          <button class="btn" style="padding:4px 8px; font-size:0.68rem;" onclick="promoteLiveRssItemToCard(${idx}, 'gateras')">🟡 Mandar a Gateras</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function fetchLiveRssFeedsNow(feedKey = 'all', forceRefresh = false) {
+    const status = document.getElementById('liveRssStatusLine');
+    const targets = feedKey === 'all' ? LIVE_RSS_SOURCES : LIVE_RSS_SOURCES.filter(f => f.key === feedKey);
+    if (status) status.textContent = '⏳ Consultando feeds RSS en vivo (' + targets.map(t => t.name).join(', ') + ')...';
+
+    let collected = [];
+    // Consulta escalonada para evitar rate-limit 429 en rss2json
+    for (const src of targets) {
+      const items = await fetchSingleFeedViaProxy(src);
+      collected.push(...items);
+      if (collected.length) {
+        liveRssItemsCache = collected.slice().sort((a, b) => (new Date(b.pubDate || 0)) - (new Date(a.pubDate || 0)));
+        renderLiveRssGrid(liveRssItemsCache);
+      }
+    }
+
+    // Respaldo complementario desde el radar diario en el repositorio (cero CORS) si faltó alguna fuente
+    try {
+      const radarRes = await fetch('rss-inbox-live.json?v=' + (forceRefresh ? Date.now() : 'latest'));
+      if (radarRes.ok) {
+        const radarJson = await radarRes.json();
+        const rawItems = Array.isArray(radarJson.items) ? radarJson.items : [];
+        rawItems.forEach(r => {
+          const matchKey = (r.feedId || '').toLowerCase();
+          if (feedKey !== 'all') {
+            if (feedKey === 'smithsonian' && !matchKey.includes('smithsonian')) return;
+            if (feedKey === 'colossal' && !matchKey.includes('colossal')) return;
+            if (feedKey === 'quanta' && !matchKey.includes('quanta')) return;
+            if (feedKey === 'pdr' && !matchKey.includes('public')) return;
+            if (feedKey === 'substack' && !matchKey.includes('minuta')) return;
+          }
+          if (!collected.some(x => x.link === r.link || x.title === r.title)) {
+            collected.push({
+              sourceKey: matchKey || 'radar',
+              sourceName: r.feedName || 'Radar RSS',
+              cat: r.defaultCat || 'transito',
+              clock: r.clock || '🌍 MUNDO',
+              handle: r.handle || '@whimsypov',
+              title: r.title,
+              link: r.link,
+              pubDate: r.publishedAt || '',
+              summary: stripHtmlText(r.summary || '').slice(0, 220),
+              thumb: (r.images && r.images[0] && r.images[0].url) ? r.images[0].url : ''
+            });
+          }
+        });
+      }
+    } catch (e) {}
+
+    liveRssItemsCache = collected
+      .filter(it => it && it.title && it.link)
+      .sort((a, b) => (new Date(b.pubDate || 0)) - (new Date(a.pubDate || 0)))
+      .slice(0, 24);
+
+    renderLiveRssGrid(liveRssItemsCache);
+    if (status) {
+      status.textContent = `✅ ${liveRssItemsCache.length} artículos nuevos reales cargados desde tus feeds RSS (${new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}). Tocá cualquier titular para abrirlo afuera.`;
+    }
+  }
+
+  function promoteLiveRssItemToCard(idx, bucket) {
+    const it = liveRssItemsCache[idx];
+    if (!it) return;
+    const newId = 'rss-live-' + Date.now();
+    const statusTarget = bucket === 'gateras' ? 'gateras' : 'hoy';
+    const newCard = {
+      id: newId,
+      cat: it.cat || 'transito',
+      catLabel: `📡 Nuevo en RSS · ${it.sourceName} (${it.clock || 'Mundo'})`,
+      worldClockCity: it.clock || '',
+      rssFeedAdded: `${it.sourceName} · ${it.link}`,
+      sourceName: `${it.sourceName} (${formatRssDateShort(it.pubDate)})`,
+      sourceUrl: it.link,
+      heroNum: String(new Date().getFullYear()),
+      miniGraphKicker: `📡 EN PANTALLA · ${it.sourceName.toUpperCase()}`,
+      miniGraphText: it.title.slice(0, 74),
+      correspondentStory: `Crónica rápida sobre esta nueva publicación de ${it.sourceName}: ${it.title}. ${it.summary}`,
+      extraSources: [
+        { label: `↗ Abrir artículo original en ${it.sourceName}`, url: it.link }
+      ],
+      title: it.title,
+      summary: it.summary || `Nueva entrada en vivo desde ${it.sourceName}.`,
+      longDossier: `1. ARTÍCULO REAL TRAÍDO DESDE TU FEED RSS (${it.sourceName} · ${formatRssDateShort(it.pubDate)}):\n${it.summary}\n\n2. LINK ORIGINAL VERIFICADO:\n${it.link}`,
+      dossiersTips: '💡 Podés abrir el artículo original afuera o tocar «🔎 Buscar más info» para sumar contexto y fotos CC0.',
+      album: [
+        {
+          url: it.thumb || 'evidencias/aris_flores_macro.jpg',
+          caption: `Imagen del feed RSS ${it.sourceName}: ${it.title.slice(0, 60)}`,
+          checked: true
+        }
+      ],
+      handles: [it.handle || '@whimsypov', '@whimsypov', '@arianawajntraub'],
+      hiloRojo: `Hilo Rojo desde RSS (${it.sourceName}): Conectado con tu mesa de hoy y tus 19 Minutas W.`
+    };
+
+    let custom = [];
+    try { custom = JSON.parse(localStorage.getItem('whimsy_custom_rss_cards_v13') || '[]'); } catch(e) {}
+    custom.unshift(newCard);
+    localStorage.setItem('whimsy_custom_rss_cards_v13', JSON.stringify(custom));
+
+    allCards = loadAllCards();
+    cardMetaMap[newId] = {
+      status: statusTarget,
+      rotulo: `RSS ${it.sourceName}`,
+      vencimiento: '',
+      withCorr: true
+    };
+    openDossierIds[newId] = true;
+    syncSelectedFromMeta();
+    saveCardMetaMap();
+    activeFilter = 'all';
+    renderFeedGrid();
+    renderBasketAndWeave();
+    const status = document.getElementById('liveSearchStatus');
+    if (status) {
+      status.style.display = 'block';
+      status.textContent = statusTarget === 'hoy'
+        ? `✅ «${it.title.slice(0, 48)}...» sumada arriba del todo como 🟢 Va HOY.`
+        : `🟡 «${it.title.slice(0, 48)}...» enviada a tu banco En Gateras (Plan B).`;
+    }
+  }
+
   renderRssFeedsPills();
   renderFeedGrid();
   renderBasketAndWeave();
   renderSentBlocksHistory();
+  fetchLiveRssFeedsNow('all');
 </script>
 </body>
 </html>

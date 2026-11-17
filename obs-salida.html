@@ -186,6 +186,41 @@
     object-fit: cover;
     z-index: 0;
   }
+  .corridor-evidence-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.55s ease;
+    background: #08080c;
+  }
+  .corridor-evidence-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.06);
+    display: block;
+  }
+  .safe-zone-9x16.mode-split .corridor-evidence-layer {
+    opacity: 1;
+    top: 14%;
+    bottom: auto;
+    height: 42%;
+    border-top: 1.5px solid var(--pink, #F29CA3);
+    border-bottom: 1.5px solid var(--pink, #F29CA3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.65);
+  }
+  .safe-zone-9x16.mode-full .corridor-evidence-layer {
+    opacity: 1;
+    top: 0;
+    height: 100%;
+  }
+  .obs-canvas-16x9.cinema-mode-16x9 .corridor-evidence-layer {
+    opacity: 0 !important;
+  }
   .corridor-overlay {
     position: absolute;
     inset: 0;
@@ -465,6 +500,9 @@
 
   <div class="safe-zone-9x16" id="safeZone9x16">
     <video id="corridorBgVideo" class="corridor-bg-video" src="loops/micro_fibra_lente.mp4" autoplay loop muted playsinline></video>
+    <div class="corridor-evidence-layer" id="corridorEvidenceLayer">
+      <img id="szImage" src="" alt="Evidencia Central">
+    </div>
     <video id="corridorLiveCam" class="live-cam-feed" autoplay muted playsinline></video>
     <div class="corridor-overlay"></div>
 
@@ -616,6 +654,17 @@ function applyState(s) {
   setTxt('bumperKicker', s.bumperKicker);
   setTxt('bumperTitle', s.bumperTitle);
 
+  const sz = document.getElementById('safeZone9x16');
+  const szImg = document.getElementById('szImage');
+  if (szImg && s.szImageSrc !== undefined) {
+    if (s.szImageSrc) szImg.src = s.szImageSrc;
+    else szImg.removeAttribute('src');
+  }
+  if (sz && s.screenMode !== undefined) {
+    sz.classList.remove('mode-split', 'mode-full');
+    if (s.screenMode === 'split') sz.classList.add('mode-split');
+    else if (s.screenMode === 'full') sz.classList.add('mode-full');
+  }
   if (s.comingUpHtml) document.getElementById('wingComingUpList').innerHTML = s.comingUpHtml;
   if (s.wingRightImgSrc) document.getElementById('wingRightImg').src = s.wingRightImgSrc;
   if (s.bgVideoSrc) {
@@ -691,22 +740,118 @@ function handleCinemaCmd(msg) {
   }
 }
 
+function applyPreproPushDirectly(d) {
+  if (!d || typeof d !== 'object') return;
+  let baseState = {};
+  try {
+    const saved = localStorage.getItem('whimsy_live_state_v8');
+    if (saved) baseState = JSON.parse(saved) || {};
+  } catch (e) {}
+
+  if (d.cinemaMode !== undefined || d.cinemaMediaSrc !== undefined || d.moscaMiniGraphKicker !== undefined || d.moscaMiniGraphText !== undefined || d.newCenterImage !== undefined || d.screenMode !== undefined) {
+    const nextState = {
+      ...baseState,
+      cinemaMode: d.cinemaMode !== undefined ? d.cinemaMode : (baseState.cinemaMode || 'off'),
+      cinemaMediaType: d.cinemaMediaType !== undefined ? d.cinemaMediaType : baseState.cinemaMediaType,
+      cinemaMediaSrc: d.cinemaMediaSrc !== undefined ? d.cinemaMediaSrc : baseState.cinemaMediaSrc,
+      moscaMiniGraphKicker: d.moscaMiniGraphKicker !== undefined ? d.moscaMiniGraphKicker : baseState.moscaMiniGraphKicker,
+      moscaMiniGraphText: d.moscaMiniGraphText !== undefined ? d.moscaMiniGraphText : baseState.moscaMiniGraphText,
+      szImageSrc: d.newCenterImage !== undefined ? d.newCenterImage : baseState.szImageSrc,
+      screenMode: d.newCenterImage ? (d.screenMode || 'split') : (d.screenMode !== undefined ? d.screenMode : baseState.screenMode),
+      wingRightImgSrc: d.newRightImage || baseState.wingRightImgSrc
+    };
+    if (Array.isArray(d.comingUpItems) && d.comingUpItems.length && !d.comingUpHtml) {
+      delete nextState.comingUpHtml;
+    }
+    applyState(nextState);
+  }
+
+  const setText = (id, val) => {
+    const el = document.getElementById(id);
+    if (el && val !== undefined && val !== null) el.textContent = String(val);
+  };
+  if (d.heroNumber !== undefined) setText('wingHeroNumValue', d.heroNumber);
+  if (d.headline !== undefined) {
+    setText('szHeadline', d.headline);
+    setText('wingTitle', d.headline);
+  }
+  if (d.kicker !== undefined) setText('szKicker', d.kicker);
+  if (d.fact !== undefined) setText('szFact', d.fact);
+
+  const cuEl = document.getElementById('wingComingUpList');
+  if (cuEl) {
+    if (d.comingUpHtml) {
+      cuEl.innerHTML = d.comingUpHtml;
+    } else if (Array.isArray(d.comingUpItems) && d.comingUpItems.length) {
+      const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      cuEl.innerHTML = d.comingUpItems.map((it, idx) => {
+        const label = typeof it === 'string' ? it : (it.title || it.headline || it.label || '');
+        const prefix = idx === 0 ? '• AHORA: ' : (idx === 1 ? '→ VIENE: ' : '→ LUEGO: ');
+        return '<div style="padding:2px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + prefix + esc(label) + '</div>';
+      }).join('');
+    }
+  }
+
+  if (d.newRightImage) {
+    const rImg = document.getElementById('wingRightImg');
+    if (rImg) rImg.src = d.newRightImage;
+  }
+  if (d.newRightTag !== undefined) setText('wingRightTopTag', d.newRightTag);
+  if (d.newRightLabel !== undefined) setText('szRefLabel', d.newRightLabel);
+
+  const sz = document.getElementById('safeZone9x16');
+  const szImg = document.getElementById('szImage');
+  if (d.newCenterImage) {
+    if (szImg) szImg.src = d.newCenterImage;
+    if (sz) {
+      sz.classList.remove('mode-split', 'mode-full');
+      const mode = d.screenMode || 'split';
+      if (mode === 'split') sz.classList.add('mode-split');
+      else if (mode === 'full') sz.classList.add('mode-full');
+    }
+  } else if (d.screenMode !== undefined && sz) {
+    sz.classList.remove('mode-split', 'mode-full');
+    if (d.screenMode === 'split') sz.classList.add('mode-split');
+    else if (d.screenMode === 'full') sz.classList.add('mode-full');
+  }
+}
+
 const bus = new BroadcastChannel('whimsy_studio_v8');
 bus.onmessage = (ev) => {
   if (ev.data?.type === 'STUDIO_STATE') applyState(ev.data.payload);
   else if (ev.data?.type === 'CINEMA_VIDEO_CMD') handleCinemaCmd(ev.data);
+  else if (ev.data?.type === 'PREPRO_PUSH' && ev.data?.payload) applyPreproPushDirectly(ev.data.payload);
 };
 window.addEventListener('storage', (ev) => {
   if (ev.key === 'whimsy_live_state_v8' && ev.newValue) {
     try { applyState(JSON.parse(ev.newValue)); } catch(e) {}
   } else if (ev.key === 'whimsy_cinema_cmd_v8' && ev.newValue) {
     try { handleCinemaCmd(JSON.parse(ev.newValue)); } catch(e) {}
+  } else if (ev.key === 'whimsy_prepro_push_v8' && ev.newValue) {
+    try {
+      const msg = JSON.parse(ev.newValue);
+      applyPreproPushDirectly(msg?.payload || msg);
+    } catch(e) {}
   }
 });
 
 try {
   const saved = localStorage.getItem('whimsy_live_state_v8');
-  if (saved) applyState(JSON.parse(saved));
+  let liveTs = 0;
+  if (saved) {
+    const parsedLive = JSON.parse(saved);
+    liveTs = Number(parsedLive?.ts || 0);
+    applyState(parsedLive);
+  }
+  const savedPrepro = localStorage.getItem('whimsy_prepro_push_v8');
+  if (savedPrepro) {
+    const parsedPrepro = JSON.parse(savedPrepro);
+    const p = parsedPrepro?.payload || parsedPrepro;
+    const preproTs = Number(p?.ts || parsedPrepro?.ts || 0);
+    if (!saved || preproTs > liveTs) {
+      applyPreproPushDirectly(p);
+    }
+  }
   if (window.Peer) {
     const p = new Peer();
     p.on('open', () => {
