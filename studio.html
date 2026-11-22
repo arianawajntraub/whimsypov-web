@@ -24,9 +24,9 @@
       <span class="tb-sep"></span>
       <select id="programSelect" class="tb-select" title="Programa activo"></select>
       <button type="button" id="btnNewProgram" class="btn btn-sm" title="Crear nuevo programa">+</button>
-      <div class="license-switch" title="Cambiar modo legal de emisión">
-        <button type="button" id="btnLicensePilot" class="active-pilot">Piloto</button>
-        <button type="button" id="btnLicenseCommercial">Comercial / Radio</button>
+      <div class="license-switch" title="Cambiar según tengas o no auspiciante en el episodio">
+        <button type="button" id="btnLicensePilot" class="active-pilot" title="Episodio gratuito sin auspiciantes ni monetización: podés usar tus pistas de mobygratis">Sin sponsor (mobygratis)</button>
+        <button type="button" id="btnLicenseCommercial" title="Episodio con auspiciante, monetización o radio comercial: bloquea pistas gratuitas no comerciales">Con sponsor / Radio</button>
       </div>
     </div>
 
@@ -160,7 +160,7 @@
               <input type="text" id="mesaYtTitleInput" class="field" maxlength="100">
             </div>
             <div id="mecenasFieldWrap">
-              <span class="label-xs">Mecenazgo al aire (solo Modo Comercial · 1 línea sobria)</span>
+              <span class="label-xs">Mecenazgo al aire (solo Con sponsor / Radio · 1 línea sobria)</span>
               <input type="text" id="mesaMecenasInput" class="field" placeholder="Ej. Fundación / Museo / Marca cultural">
             </div>
           </div>
@@ -197,7 +197,7 @@
       <div class="cabin-col left">
         <div class="cabin-panel" style="padding:7px;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:5px;flex-wrap:wrap;">
-            <span style="font-size:0.68rem;font-weight:800;letter-spacing:0.06em;color:var(--sand);">SALIDA AL AIRE · <span id="cabinLicLabel">PILOTO</span></span>
+            <span style="font-size:0.68rem;font-weight:800;letter-spacing:0.06em;color:var(--sand);">SALIDA AL AIRE · <span id="cabinLicLabel">SIN SPONSOR</span></span>
             <div style="display:flex;gap:4px;">
               <button type="button" id="btnToggleGhostGuide" class="btn btn-sm active">Guía 9:16</button>
               <button type="button" id="btnOpenObsMonitor" class="btn btn-sm">📺 Ventana OBS</button>
@@ -262,6 +262,7 @@
           <div>
             <div style="font-size:0.68rem;font-weight:800;color:var(--coral);" id="airNextLabel">BLOQUE ACTUAL</div>
             <div style="font-size:0.78rem;font-weight:700;" id="airBlockTitle">—</div>
+            <div style="font-size:0.68rem;font-weight:700;color:var(--sand);margin-top:2px;" id="airBlockSoundDesign"></div>
           </div>
           <div style="display:flex;align-items:center;gap:6px;">
             <span class="tabular" id="airClockPde" style="font-size:0.86rem;font-weight:800;color:var(--cream);">--:--</span>

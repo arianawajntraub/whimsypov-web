@@ -216,11 +216,11 @@
     if (licenseMode === 'commercial' && currentTrack && currentTrack.license === 'mobygratis_noncommercial') {
       fadeStop(0.5);
       currentTrack = null;
-      emitStatus('Modo Comercial activo: pista no comercial detenida automáticamente.', 'warn');
+      emitStatus('Con sponsor / Radio activo: pista gratuita no comercial detenida automáticamente.', 'warn');
     } else if (licenseMode === 'pilot') {
-      emitStatus('Modo Piloto activo (solo no comercial). Crédito automático habilitado.', 'info');
+      emitStatus('Sin sponsor (mobygratis habilitado). Crédito oficial activo.', 'info');
     } else {
-      emitStatus('Modo Comercial / Radio activo: banco no comercial bloqueado.', 'ok');
+      emitStatus('Con sponsor / Radio activo: pistas gratuitas no comerciales bloqueadas.', 'ok');
     }
     emitTelemetry();
     return licenseMode;
@@ -233,7 +233,7 @@
   async function crossfadeToTrack(track, fadeSec = 3.0) {
     if (!track) return;
     if (licenseMode === 'commercial' && track.license === 'mobygratis_noncommercial') {
-      emitStatus('Bloqueado: no podés disparar pistas de piloto en Modo Comercial/Radio.', 'error');
+      emitStatus('Bloqueado en Con sponsor / Radio: cargá una cortina propia o pista comercial.', 'error');
       return;
     }
     ensureAudioContext();
@@ -291,7 +291,7 @@
     if (!currentTrack) {
       const list = getEpisodeTracks();
       if (list[0]) return crossfadeToTrack(list[0], 0.4);
-      emitStatus('Cargá al menos 1 pista comercial en Mi Mediateca o pasá a Modo Piloto.', 'warn');
+      emitStatus('Cargá una pista comercial en Mi Mediateca o cambiá a Sin sponsor (mobygratis).', 'warn');
       return;
     }
     if (d.paused) {
@@ -364,7 +364,7 @@
 
   function playCart(slot, onEnded) {
     if (slot === 'F6' && licenseMode === 'pilot') {
-      emitStatus('Cart F6 (Mecenazgo/PNT) bloqueado en Modo Piloto no comercial.', 'error');
+      emitStatus('Cart F6 (Mecenazgo) habilitado únicamente en Con sponsor / Radio.', 'error');
       return false;
     }
     const entry = cartBuffers[slot];
@@ -724,7 +724,7 @@
     return {
       trackId: currentTrack?.id || '',
       trackTitle: currentTrack?.title || 'Sin música cargada',
-      trackCredit: currentTrack ? currentTrack.credit : (licenseMode === 'pilot' ? 'Banco libre no comercial listo' : 'Modo Comercial activo'),
+      trackCredit: currentTrack ? currentTrack.credit : (licenseMode === 'pilot' ? 'Sin sponsor (mobygratis) listo' : 'Con sponsor / Radio activo'),
       trackLicense: currentTrack?.license || '',
       elapsed: cur,
       remaining: rem,

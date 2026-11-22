@@ -289,6 +289,19 @@
     return { es, en };
   }
 
+  const DEFAULT_SOUND_DESIGN_BY_TYPE = {
+    apertura: 'Ambiente costero 3s → voz en seco → Barrida F1 → cama suave',
+    reloj: 'Cama serena -22 dB → fade out 2s',
+    lente_ciencia: 'Entrada en seco → cama rítmica -24 dB desde el seg 15 → fade out 2s',
+    barrida: 'Silencio 1,5s → subida musical 3,5s → Barrida F2',
+    lente_cultura: 'Cama textura -22 dB → si entra video con audio, música a 0 dB',
+    ventana_interludio: 'Subida musical 78% como interludio 15s → retorno suave a -20 dB',
+    nota_al_margen: 'Música a 0 en 800ms → silencio 1,5s → Barrida F3 → voz a capella → silencio 1,5s',
+    evidencia: 'Pulso medio -20 dB → fade out suave 3s',
+    vitrina: 'Barrida F4 → cama groove corta -18 dB',
+    cierre: 'Silencio 1,5s → haiku casi a capella → subida tras firma F5 + fade 3s'
+  };
+
   function createPilotProgram() {
     return {
       episodioId: 'whimsy-piloto-01-piel',
@@ -309,6 +322,7 @@
           genderRef: 'mujer',
           pistaId: 'A-7',
           barridaSlot: 'F1',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.apertura,
           guion: 'Tres segundos de viento costero sobre el agua fría de Maldonado antes de decir la palabra de hoy.\n\nLa palabra de hoy es PIEL. No como superficie cosmética sino como archivo químico que guarda el viaje de un cuerpo por el océano, el desprendimiento de un muro pintado y el filo del pergamino donde alguna vez se escribió una historia entera.',
           medios: [
             { id: 'seed-loop-rambla', url: 'loops/sol_rambla_pajaros.mp4', kind: 'video', name: 'Rambla PDE (Video limpio)', target: 'center', rights: 'own_cc0', credit: 'Grabación propia Punta del Este', noDerivatives: false }
@@ -323,6 +337,7 @@
           genderRef: null,
           pistaId: 'B-4',
           barridaSlot: '',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.reloj,
           guion: 'A esta hora frente a la costa de Maldonado el Atlántico Sur marca dieciséis grados cuatro en superficie y olas lentas cada nueve segundos.\n\nMientras la estación de primavera empuja las corrientes costeras hacia el este, frente a esta misma ventana pasan cada año las ballenas francas australes sin dejar marca visible para quienes miramos desde la orilla.',
           medios: [
             { id: 'seed-loop-olas', url: 'loops/teloleo_olas_orilla.mp4', kind: 'video', name: 'Olas orilla PDE', target: 'right', rights: 'own_cc0', credit: 'Grabación propia costa', noDerivatives: false }
@@ -337,6 +352,7 @@
           genderRef: 'mujer',
           pistaId: 'A-2',
           barridaSlot: '',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.lente_ciencia,
           guion: 'En el Centro Universitario Regional del Este en Maldonado, la bióloga marina Emilia D’Amado estudia qué quedó registrado dentro de un fragmento mínimo de epidermis de ballena franca austral.\n\nLo que cabe en la punta de un dedo alcanza para leer dónde comió ese animal durante los últimos meses de migración y qué cambios atravesaron el mar abierto antes de llegar a la costa uruguaya.',
           medios: [
             { id: 'seed-edison-1', url: 'evidencias/prepro/shawn_miller_edison_1.jpg', kind: 'image', name: 'Cangrejo en caparazón prestado (Shawn Miller)', target: 'right', rights: 'permission', permissionRef: 'PERM-001 · Shawn Miller', credit: 'Foto: Shawn Miller (@okinawanaturephotography)', noDerivatives: false }
@@ -351,6 +367,7 @@
           genderRef: null,
           pistaId: 'B-2',
           barridaSlot: 'F2',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.barrida,
           guion: '[SILENCIO 1,5s → DISPARAR F2 «Cambio de Lente»]',
           medios: []
         },
@@ -363,6 +380,7 @@
           genderRef: 'mujer',
           pistaId: 'B-2',
           barridaSlot: '',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.lente_cultura,
           guion: 'Al mismo tiempo, en el pabellón uruguayo de la Bienal de Venecia 2026 curado por Patricia Bentancur, las esculturas blandas de Margaret Whyte cosen telas usadas alrededor de placas descartadas de chatarra electrónica.\n\nUn tejido donado pasa a funcionar como epidermis sobre circuitos en desuso, exactamente igual que los antiguos pergaminos de piel estirada guardados en los archivos abiertos del Victoria and Albert Museum donde el raspado dejaba leer un texto anterior debajo del nuevo.',
           medios: [
             { id: 'seed-aris-cuaderno', url: 'evidencias/aris_cuaderno_boceto.jpg', kind: 'image', name: 'Cuaderno boceto propio', target: 'right', rights: 'own_cc0', credit: 'Archivo Whimsy POV', noDerivatives: false },
@@ -378,6 +396,7 @@
           genderRef: null,
           pistaId: 'B-7',
           barridaSlot: '',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.ventana_interludio,
           guion: '[TECLA W: En vivo mira la ventana frente al mar durante 15 segundos mientras la música sube a primer plano como interludio radial.]',
           medios: [
             { id: 'seed-loop-ventana-sol', url: 'loops/ventana_mar_sol.mp4', kind: 'video', name: 'Ventana al mar PDE', target: 'center', rights: 'own_cc0', credit: 'Ventana Punta del Este', noDerivatives: false }
@@ -392,6 +411,7 @@
           genderRef: 'mujer',
           pistaId: 'B-4',
           barridaSlot: 'F3',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.nota_al_margen,
           guion: 'Abrimos el cuaderno al costado de la página para escuchar desde su laboratorio en Maldonado a la bióloga marina Emilia D’Amado.\n\n[DISPARAR TECLA P: Silencio 1,5s → Barrida F3 → Audio Nota al Margen a capella → Silencio 1,5s → Retomar tomando 1 sola palabra suya sin felicitar ni resumir.]',
           notaAlMargen: {
             nombre: "Emilia D'Amado",
@@ -417,6 +437,7 @@
           genderRef: null,
           pistaId: 'B-4',
           barridaSlot: '',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.evidencia,
           guion: 'En hebreo bíblico las palabras piel y luz suenan igual al oído y se distinguen apenas por la primera letra silenciosa al escribirlas en el rollo.\n\nLa tradición exegética antigua notó que lo que recubre al cuerpo y lo que permite mirar desde afuera comparten casi la misma grafía sonora, mientras la película Les Plages d’Agnès de Agnès Varda disponía espejos directamente sobre la arena húmeda para reflejar el cielo en el borde mismo del mar.',
           medios: [
             { id: 'seed-aris-varda', url: 'evidencias/aris_agnes_varda_jr.jpg', kind: 'image', name: 'Agnès Varda y JR', target: 'right', rights: 'own_cc0', credit: 'Archivo Whimsy POV', noDerivatives: false }
@@ -431,6 +452,7 @@
           genderRef: 'mujer',
           pistaId: 'A-7',
           barridaSlot: 'F4',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.vitrina,
           guion: '[DISPARAR F4 «La Vitrina»]\n\nTres cosas nuevas para cuando apagues la pantalla: en Leer, el ensayo ilustrado sobre tatuajes marinos del siglo XIX en The Public Domain Review; en Ver, los espejos en la playa de Les Plages d’Agnès dirigidos por Agnès Varda; y en Escuchar, los registros hidroacústicos de ballenas australes liberados en dominio público por NOAA. Todo queda enlazado debajo de Arena y del Episodio 5 de Whimsy POV en Substack.',
           medios: []
         },
@@ -443,6 +465,7 @@
           genderRef: 'mujer',
           pistaId: 'B-9',
           barridaSlot: 'F5',
+          disenoSonoro: DEFAULT_SOUND_DESIGN_BY_TYPE.cierre,
           guion: 'Volvemos a esos tres segundos frente a la arena húmeda de Maldonado antes de que suba la marea.\n\n[SILENCIO 1,5s]\n\n«Todo lo que toca la orilla deja una marca invisible hasta que alguien se inclina a leerla.» (Lectura breve de Circe Maia o Ida Vitale a confirmar sobre edición en mano).\n\nLa práctica nº 20: hoy mirá la palma de tu mano o el lomo gastado de un libro que abrió otra persona hace treinta años sin sacarle foto.\n\n¿Qué cosa que estás sosteniendo todos los días ya lleva escrito tu recorrido entero y todavía no leíste de cerca?\n\nLa edición de hoy de Whimsy POV no concluye nada. No concluye, nada.\n\n[DISPARAR F5 + FADE MUSICAL 3s]',
           medios: []
         }
@@ -611,6 +634,7 @@
   window.WhimsyStudio.Editorial = {
     BARRIDA_SCRIPTS,
     BLOCK_TYPES,
+    DEFAULT_SOUND_DESIGN_BY_TYPE,
     CURATED_GUESTS_80_20,
     lintText,
     estimateSpeechSec,

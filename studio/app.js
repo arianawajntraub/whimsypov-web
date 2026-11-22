@@ -75,6 +75,7 @@
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && Array.isArray(parsed.programs) && parsed.programs.length) {
+          parsed.trackCuration = parsed.trackCuration || { 'A-7': 'top3', 'A-2': 'top3', 'B-4': 'top3', 'B-9': 'cortina' };
           return parsed;
         }
       }
@@ -89,7 +90,8 @@
       chosenNotes: [], // { id, title, sourceName, quote, url, lenses, createdAt }
       chosenMedia: [], // { id, url, vaultId, kind, name, rights, noDerivatives, credit, sourceUrl, permissionRef }
       gateras: [], // { id, title, sourceName, summary, url, media }
-      rightsOverrides: {} // mediaKey -> { rights, noDerivatives, credit }
+      rightsOverrides: {}, // mediaKey -> { rights, noDerivatives, credit }
+      trackCuration: { 'A-7': 'top3', 'A-2': 'top3', 'B-4': 'top3', 'B-9': 'cortina' }
     };
   }
 
@@ -674,7 +676,7 @@
     const mecIn = document.getElementById('mesaMecenasInput');
     mecIn.value = prog.mecenasNombre || '';
     mecIn.disabled = !prog.modoComercial;
-    mecIn.placeholder = prog.modoComercial ? 'Nombre del mecenas / museo / institución' : 'Bloqueado en Modo Piloto no comercial';
+    mecIn.placeholder = prog.modoComercial ? 'Nombre del mecenas / museo / institución' : 'Bloqueado en Sin sponsor (mobygratis)';
 
     renderBankAndGateras();
     renderRhythmAndBadges();
@@ -867,6 +869,10 @@
             </div>
           </div>
           <div>
+            <span class="label-xs">Diseño sonoro de esta instancia (barrida, cama, silencio, fade)</span>
+            <input type="text" class="field" data-b-field="disenoSonoro" data-bid="${esc(b.id)}" value="${esc(b.disenoSonoro || '')}" placeholder="Ej. Silencio 1,5s → Barrida → Cama rítmica -22 dB → Fade 3s">
+          </div>
+          <div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
               <span class="label-xs" style="margin:0;">Guion hablado (140 PPM ≈ ${Editorial.formatMMSS(speechSec)})</span>
               <span style="font-size:0.65rem;font-weight:700;color:${lint.ok ? 'var(--sage)' : 'var(--coral)'};">${lint.ok ? '● Estilo limpio' : '⚠ ' + esc(lint.warnings[0])}</span>
@@ -894,6 +900,16 @@
 
     if (inspTab === 'preview') {
       const selB = prog.bloques.find(b => b.id === selectedBlockId) || prog.bloques[0];
+      const tracksAll = AudioEngine.getCatalogForMode(prog.modoComercial ? 'commercial' : 'pilot');
+      const curMap = state.trackCuration || {};
+      const orderRank = { cortina: 0, top3: 1, rotacion: 2 };
+      const sortedTracks = [...tracksAll].sort((a, b) => (orderRank[curMap[a.id] || 'rotacion'] ?? 2) - (orderRank[curMap[b.id] || 'rotacion'] ?? 2));
+      const epSet = new Set(prog.episodeTrackIds || []);
+      const curLabel = {
+        cortina: '📌 Cortina fija',
+        top3: '⭐ Top 3 (queda)',
+        rotacion: '↻ Rotación'
+      };
       el.innerHTML = `
         <div class="preview-16x9-frame" id="inspPreviewWrap">
           <iframe id="inspPreviewIframe" src="obs-salida.html?preview=1"></iframe>
@@ -903,7 +919,24 @@
           <span class="label-xs">Checklist pre-aire</span>
           <div class="muted-note">1. Bloque seleccionado: <strong>${esc(selB?.titulo || '—')}</strong></div>
           <div class="muted-note">2. Medios habilitados (🟢/🟡): <strong>${(selB?.medios || []).filter(m => RIGHTS_META[m.rights]?.canAir).length}</strong></div>
-          <div class="muted-note">3. Modo licencia: <strong>${prog.modoComercial ? 'COMERCIAL / RADIO' : 'PILOTO NO COMERCIAL'}</strong></div>
+          <div class="muted-note">3. Modo música: <strong>${prog.modoComercial ? 'Con sponsor / Radio' : 'Sin sponsor (mobygratis)'}</strong></div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:6px;">
+          <span class="label-xs">Curación musical semanal (📌 Fijas · ⭐ Top 3 · ↻ Rotación)</span>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            ${sortedTracks.map(t => {
+              const st = curMap[t.id] || 'rotacion';
+              const inEp = epSet.has(t.id);
+              return `<div style="display:flex;align-items:center;justify-content:space-between;gap:5px;padding:5px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);">
+                <div style="min-width:0;flex:1;">
+                  <div style="font-size:0.7rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(t.title)}</div>
+                  <div style="font-size:0.62rem;color:var(--muted);">${esc(t.bpm)} BPM</div>
+                </div>
+                <button type="button" class="btn btn-sm ${st === 'cortina' ? 'btn-coral' : (st === 'top3' ? 'btn-sand' : '')}" data-cycle-curation="${esc(t.id)}" title="Clic para cambiar entre Rotación, Top 3 semanal y Cortina fija">${curLabel[st]}</button>
+                <button type="button" class="btn btn-sm ${inEp ? 'btn-sage active' : ''}" data-toggle-ep-track="${esc(t.id)}" title="Incluir en las 6 pistas de la Cabina">${inEp ? '✓ En Deck' : '+ Deck'}</button>
+              </div>`;
+            }).join('')}
+          </div>
         </div>
       `;
       scaleIframeInside(document.getElementById('inspPreviewWrap'));
@@ -962,7 +995,7 @@
   // ==========================================================
   function renderCabina() {
     const prog = getActiveProgram();
-    document.getElementById('cabinLicLabel').textContent = prog.modoComercial ? 'COMERCIAL / RADIO' : 'PILOTO NO COMERCIAL';
+    document.getElementById('cabinLicLabel').textContent = prog.modoComercial ? 'CON SPONSOR / RADIO' : 'SIN SPONSOR';
     document.getElementById('airDot').classList.toggle('is-air', recTimerRunning);
 
     const blkIdx = Math.max(0, Math.min(cabinBlockIdx, prog.bloques.length - 1));
@@ -971,6 +1004,8 @@
     const nextBlk = prog.bloques[blkIdx + 1];
 
     document.getElementById('airBlockTitle').textContent = curBlk ? curBlk.titulo : '—';
+    const sdEl = document.getElementById('airBlockSoundDesign');
+    if (sdEl) sdEl.textContent = curBlk?.disenoSonoro ? `🎛️ ${curBlk.disenoSonoro}` : '';
     document.getElementById('airNextLabel').textContent = nextBlk
       ? `EN AIRE ${String(blkIdx + 1).padStart(2, '0')} · SIGUIENTE: ${nextBlk.titulo.slice(0, 32)}`
       : `BLOQUE FINAL ${String(blkIdx + 1).padStart(2, '0')}`;
@@ -985,12 +1020,15 @@
 
     document.getElementById('clipCountLabel').textContent = String(clipMarkers.length);
 
-    // 6 pistas curadas del episodio
+    // 6 pistas curadas del episodio con distintivo Cortina / Top 3
     const six = AudioEngine.getEpisodeTracks();
     const curSnap = AudioEngine.getTelemetrySnapshot();
-    document.getElementById('deckTracks6').innerHTML = six.map(t => (
-      `<button type="button" class="track-slot-btn ${curSnap.trackId === t.id ? 'active' : ''}" data-play-track="${esc(t.id)}" title="${esc(t.title)}">${esc(t.title)}</button>`
-    )).join('');
+    const curMap = state.trackCuration || {};
+    document.getElementById('deckTracks6').innerHTML = six.map(t => {
+      const st = curMap[t.id] || 'rotacion';
+      const pref = st === 'cortina' ? '📌 ' : (st === 'top3' ? '⭐ ' : '');
+      return `<button type="button" class="track-slot-btn ${curSnap.trackId === t.id ? 'active' : ''}" data-play-track="${esc(t.id)}" title="${esc(t.title)}">${pref}${esc(t.title)}</button>`;
+    }).join('');
 
     // Cartwall F1..F6
     const carts = Editorial.BARRIDA_SCRIPTS;
@@ -1125,7 +1163,7 @@
       kicker: overrides.kicker ?? `${prog.palabraRectora || 'WHIMSY'} · EN AIRE`,
       headline: overrides.headline ?? b?.titulo ?? prog.tituloYoutube,
       fact: overrides.fact ?? ((b?.guion || '').split('\n')[0].slice(0, 120)),
-      blockMeta: `BLOQUE ${String(cabinBlockIdx + 1).padStart(2, '0')} / ${String(prog.bloques.length).padStart(2, '0')} · ${prog.modoComercial ? 'COMERCIAL' : 'PILOTO'}`,
+      blockMeta: `BLOQUE ${String(cabinBlockIdx + 1).padStart(2, '0')} / ${String(prog.bloques.length).padStart(2, '0')} · ${prog.modoComercial ? 'CON SPONSOR' : 'SIN SPONSOR'}`,
       comingUp,
       licenseMode: prog.modoComercial ? 'commercial' : 'pilot',
       mecenasNombre: prog.modoComercial ? (prog.mecenasNombre || '') : '',
@@ -1324,7 +1362,7 @@
       p.modoComercial = false;
       AudioEngine.setLicenseMode('pilot');
       syncLicenseSwitchUI();
-      saveState('Modo Piloto activo');
+      saveState('Sin sponsor (mobygratis) activo');
       renderAll();
       pushToObs();
     });
@@ -1334,7 +1372,7 @@
       p.modoComercial = true;
       AudioEngine.setLicenseMode('commercial');
       syncLicenseSwitchUI();
-      saveState('Modo Comercial / Radio activo');
+      saveState('Con sponsor / Radio activo');
       renderAll();
       pushToObs();
     });
@@ -1721,6 +1759,34 @@
         toast('✓ Invitación EN copiada');
         return;
       }
+      const cycleCur = e.target.closest('[data-cycle-curation]');
+      if (cycleCur) {
+        const tid = cycleCur.dataset.cycleCuration;
+        state.trackCuration = state.trackCuration || {};
+        const seq = ['rotacion', 'top3', 'cortina'];
+        const cur = state.trackCuration[tid] || 'rotacion';
+        const next = seq[(seq.indexOf(cur) + 1) % seq.length];
+        state.trackCuration[tid] = next;
+        saveState(next === 'cortina' ? '📌 Guardada como Cortina fija para siempre' : (next === 'top3' ? '⭐ Guardada en Top 3 semanal' : '↻ Puesta en rotación'));
+        renderInspector();
+        return;
+      }
+      const togEp = e.target.closest('[data-toggle-ep-track]');
+      if (togEp) {
+        const tid = togEp.dataset.toggleEpTrack;
+        prog.episodeTrackIds = Array.isArray(prog.episodeTrackIds) ? [...prog.episodeTrackIds] : [];
+        const pos = prog.episodeTrackIds.indexOf(tid);
+        if (pos >= 0) {
+          prog.episodeTrackIds.splice(pos, 1);
+        } else {
+          if (prog.episodeTrackIds.length >= 6) prog.episodeTrackIds.pop();
+          prog.episodeTrackIds.unshift(tid);
+        }
+        AudioEngine.setEpisodeTracks(prog.episodeTrackIds);
+        saveState(`Deck del episodio actualizado (${prog.episodeTrackIds.length}/6)`);
+        renderInspector();
+        return;
+      }
       if (e.target.id === 'btnInspPushPreview') {
         const blk = prog.bloques.find(b => b.id === selectedBlockId);
         pushToObsFromBlock(blk);
@@ -1773,6 +1839,7 @@
         cifraMonumental: prog.palabraRectora || '—',
         genderRef: null,
         pistaId: prog.episodeTrackIds[0] || '',
+        disenoSonoro: Editorial.DEFAULT_SOUND_DESIGN_BY_TYPE?.[meta.id] || '',
         guion: '',
         medios: [],
         notaAlMargen: meta.id === 'nota_al_margen' ? { nombre: '', oficio: '', ciudad: '', handle: '', gender: 'mujer', audioVaultId: '', audioName: '', permisoOk: false } : undefined
