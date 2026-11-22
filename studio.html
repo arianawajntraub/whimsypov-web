@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Whimsy Studio · Radar, Mesa de Producción y Cabina de Aire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="studio/studio.css">
+  <script src="studio/vault.js" defer></script>
+  <script src="studio/audio-engine.js" defer></script>
+  <script src="studio/editorial.js" defer></script>
+  <script src="studio/app.js" defer></script>
+</head>
+<body>
+  <!-- TOPBAR UNIFICADA (48px) -->
+  <header class="topbar">
+    <div class="tb-left">
+      <img src="logo-whimsy-rosa.png" alt="Whimsy POV" class="tb-logo">
+      <span class="tb-brand-name">Whimsy Studio</span>
+      <span class="tb-sep"></span>
+      <select id="programSelect" class="tb-select" title="Programa activo"></select>
+      <button type="button" id="btnNewProgram" class="btn btn-sm" title="Crear nuevo programa">+</button>
+      <div class="license-switch" title="Cambiar modo legal de emisión">
+        <button type="button" id="btnLicensePilot" class="active-pilot">Piloto</button>
+        <button type="button" id="btnLicenseCommercial">Comercial / Radio</button>
+      </div>
+    </div>
+
+    <nav class="mode-tabs" role="tablist">
+      <button type="button" class="mode-tab active" data-mode="radar">1. Radar & Lectura</button>
+      <button type="button" class="mode-tab" data-mode="mesa">2. Mesa de Producción <span class="mode-badge tabular" id="mesaCountBadge">0</span></button>
+      <button type="button" class="mode-tab" data-mode="cabina"><span class="live-dot" id="airDot"></span> 3. Cabina de Aire</button>
+    </nav>
+
+    <div class="tb-right">
+      <button type="button" id="btnOpenSumar" class="btn btn-sand btn-sm">+ Sumar</button>
+      <button type="button" id="btnOpenSetup" class="btn btn-sm">⚙️ Setup</button>
+      <button type="button" id="btnOpenObs" class="btn btn-coral btn-sm">📺 OBS</button>
+      <span id="saveStatus" class="save-status">✓</span>
+    </div>
+  </header>
+
+  <main class="studio-main">
+    <!-- ===================================================
+         MODO 1: RADAR & LECTURA + MI MEDIATECA
+         =================================================== -->
+    <section id="viewRadar" class="mode-view mode1-grid active">
+      <!-- Rail Izquierdo -->
+      <aside class="rail-pane" id="railPane">
+        <div class="rail-head">
+          <span class="rail-title rail-full">Fuentes y Base</span>
+          <button type="button" id="btnToggleRail" class="btn btn-ghost btn-sm" title="Colapsar panel">◀</button>
+        </div>
+
+        <div class="rail-full" id="railNovedadesGroup">
+          <button type="button" class="rail-btn active" data-filter="all"><span class="lbl">Todo el radar</span><span class="pill-cnt tabular" id="cntAll">0</span></button>
+          <button type="button" class="rail-btn" data-filter="unread"><span class="lbl">Sin leer</span><span class="pill-cnt tabular" id="cntUnread">0</span></button>
+          <button type="button" class="rail-btn" data-filter="saved"><span class="lbl">★ Guardados</span><span class="pill-cnt tabular" id="cntSaved">0</span></button>
+          <button type="button" class="rail-btn" data-filter="with_video"><span class="lbl">Con video</span><span class="pill-cnt tabular" id="cntVideo">0</span></button>
+        </div>
+
+        <div class="rail-full">
+          <div class="rail-head">
+            <span class="rail-title">Mi Mediateca (propia)</span>
+            <button type="button" id="btnNewFolder" class="btn btn-ghost btn-sm" title="Nueva carpeta">+</button>
+          </div>
+          <button type="button" class="rail-btn" data-vault="ALL"><span class="lbl">Todo lo propio</span><span class="pill-cnt tabular" id="cntVaultAll">0</span></button>
+          <div id="railVaultFolders"></div>
+          <div id="dropVaultBox" class="drop-vault-box" style="margin-top:6px;">
+            Arrastrá fotos/videos/audios<br>o pegá captura con <strong>Cmd+V</strong>
+          </div>
+          <input type="file" id="vaultFileInput" multiple accept="image/*,video/*,audio/*" style="display:none;">
+        </div>
+
+        <div class="rail-full">
+          <div class="rail-head"><span class="rail-title">18 Lentes Whimsy</span></div>
+          <div id="railLensesList"></div>
+        </div>
+
+        <div class="rail-full">
+          <div class="rail-head"><span class="rail-title">Fuentes RSS</span></div>
+          <div id="railFeedsList"></div>
+        </div>
+      </aside>
+
+      <!-- Listado / Grilla Central -->
+      <section class="list-pane">
+        <div class="list-toolbar">
+          <div class="search-line">
+            <input type="search" id="radarSearch" class="field" placeholder="Buscar por palabra, autor, lente o fuente...">
+            <button type="button" id="btnToggleGrid" class="btn btn-sm" title="Cambiar vista Lista / Grilla">Grilla</button>
+            <button type="button" id="btnRefreshRss" class="btn btn-sm" title="Recargar bandeja RSS">↻</button>
+          </div>
+          <div class="word-candidates" id="wordCandidatesRow"></div>
+        </div>
+        <div id="radarListScroll" class="items-scroll"></div>
+      </section>
+
+      <!-- Visor Limpio de Lectura & Medios -->
+      <section class="reader-pane" id="readerPane">
+        <div class="reader-head" id="readerHead">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button type="button" id="btnReaderPrev" class="btn btn-sm">← Ant</button>
+            <button type="button" id="btnReaderNext" class="btn btn-sm">Sig →</button>
+            <button type="button" id="btnOpenZoom" class="btn btn-coral btn-sm">⤢ Agrandar (F)</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <button type="button" id="btnSaveToggle" class="btn btn-sm">★ Guardar</button>
+            <button type="button" id="btnAddToGateras" class="btn btn-sand btn-sm">🟡 A Gateras</button>
+            <button type="button" id="btnPickToMesa" class="btn btn-sage btn-sm">+ Pasar a Mesa</button>
+            <a id="btnExternalOpen" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm">Abrir fuente ↗</a>
+          </div>
+        </div>
+        <div class="reader-body" id="readerBody"></div>
+      </section>
+    </section>
+
+    <!-- ===================================================
+         MODO 2: MESA DE PRODUCCIÓN / ESCALETA
+         =================================================== -->
+    <section id="viewMesa" class="mode-view mode2-grid">
+      <!-- Banco Elegido + Gateras -->
+      <aside class="bank-pane">
+        <div class="pane-subtabs">
+          <button type="button" class="pane-subtab active" data-bank-tab="notes">Notas y citas</button>
+          <button type="button" class="pane-subtab" data-bank-tab="media">Medios elegidos</button>
+        </div>
+        <div id="bankList" class="bank-scroll"></div>
+        <div class="gateras-box">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span class="label-xs" style="margin:0;color:var(--sand);">🟡 En Gateras (Plan B)</span>
+            <span class="tabular" id="gaterasCountLabel" style="font-size:0.66rem;color:var(--muted);">0</span>
+          </div>
+          <div id="gaterasList" style="display:flex;flex-direction:column;gap:5px;"></div>
+        </div>
+      </aside>
+
+      <!-- Escaleta Dinesat + Barra de Ritmo -->
+      <section class="escaleta-pane">
+        <div class="escaleta-header">
+          <div class="escaleta-top-row">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <label class="label-xs" style="margin:0;">Palabra rectora</label>
+              <input type="text" id="mesaWordInput" class="field" style="width:130px;font-weight:800;text-transform:uppercase;">
+              <div style="display:flex;gap:4px;" id="mesaWordPresets"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span id="parityBadge" class="r-badge r-own_cc0 tabular">Paridad 80/20</span>
+              <span id="linterBadge" class="r-badge r-own_cc0">Linter 13 reglas OK</span>
+              <span id="rhythmTotalLabel" class="tabular" style="font-size:0.78rem;font-weight:800;color:var(--cream);">24:00 / 24:00</span>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div>
+              <span class="label-xs">Título YouTube (español · máx. 100 car. · actual <span id="ytTitleLen" class="tabular">0</span>)</span>
+              <input type="text" id="mesaYtTitleInput" class="field" maxlength="100">
+            </div>
+            <div id="mecenasFieldWrap">
+              <span class="label-xs">Mecenazgo al aire (solo Modo Comercial · 1 línea sobria)</span>
+              <input type="text" id="mesaMecenasInput" class="field" placeholder="Ej. Fundación / Museo / Marca cultural">
+            </div>
+          </div>
+          <div id="rhythmBar" class="rhythm-bar" title="Ritmo visual del programa"></div>
+        </div>
+
+        <div id="blocksList" class="blocks-scroll"></div>
+
+        <div style="padding:8px 14px;border-top:1px solid var(--border);background:var(--bg-deep);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <select id="addBlockTypeSelect" class="tb-select"></select>
+            <button type="button" id="btnAddBlock" class="btn btn-sm">+ Agregar bloque</button>
+          </div>
+          <button type="button" id="btnGoCabina" class="btn btn-coral">🎛️ Cargar en Cabina de Aire →</button>
+        </div>
+      </section>
+
+      <!-- Inspector Derecho -->
+      <aside class="inspector-pane">
+        <div class="pane-subtabs">
+          <button type="button" class="pane-subtab active" data-insp-tab="preview">Previa</button>
+          <button type="button" class="pane-subtab" data-insp-tab="guests">@Arrobas</button>
+          <button type="button" class="pane-subtab" data-insp-tab="pack">Pack Producto</button>
+        </div>
+        <div id="inspectorContent" class="inspector-scroll"></div>
+      </aside>
+    </section>
+
+    <!-- ===================================================
+         MODO 3: CABINA DE AIRE / AUTOCONTROL (DINESAT + WINAMP)
+         =================================================== -->
+    <section id="viewCabina" class="mode-view mode3-grid">
+      <!-- Columna Izquierda: Monitor + Deck Winamp + Cartwall Dinesat -->
+      <div class="cabin-col left">
+        <div class="cabin-panel" style="padding:7px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:5px;flex-wrap:wrap;">
+            <span style="font-size:0.68rem;font-weight:800;letter-spacing:0.06em;color:var(--sand);">SALIDA AL AIRE · <span id="cabinLicLabel">PILOTO</span></span>
+            <div style="display:flex;gap:4px;">
+              <button type="button" id="btnToggleGhostGuide" class="btn btn-sm active">Guía 9:16</button>
+              <button type="button" id="btnOpenObsMonitor" class="btn btn-sm">📺 Ventana OBS</button>
+            </div>
+          </div>
+          <div class="cabin-monitor-wrap" id="cabinMonitorWrap">
+            <iframe id="cabinMonitorIframe" src="obs-salida.html?preview=1"></iframe>
+            <div id="ghost9x16Guide" class="ghost-9x16-guide on"></div>
+          </div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;">
+            <button type="button" class="btn btn-sm cam-mode-btn" data-cam="loop">Fondo Loop</button>
+            <button type="button" class="btn btn-sm cam-mode-btn" data-cam="obs-alpha">Cámara OBS 1080p</button>
+            <button type="button" class="btn btn-sm cam-mode-btn" data-cam="split">Split 9:16</button>
+            <button type="button" class="btn btn-sm cam-mode-btn" data-cam="cine-16x9">Cine 16:9</button>
+            <button type="button" class="btn btn-sm cam-mode-btn" data-cam="nota">Tarjeta Nota</button>
+            <button type="button" id="btnToggleBumper" class="btn btn-sm">Placa ON/OFF</button>
+          </div>
+        </div>
+
+        <!-- Deck Música Winamp Único -->
+        <div class="cabin-panel">
+          <div class="deck-head">
+            <div style="min-width:0;">
+              <div style="font-size:0.74rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="deckTrackTitle">Sin pista activa</div>
+              <div style="font-size:0.63rem;color:var(--muted);" id="deckTrackCredit">Elegí una pista abajo</div>
+            </div>
+            <div class="deck-countdown tabular" id="deckCountdown">-00:00</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+            <button type="button" id="btnDeckPlay" class="btn btn-coral btn-sm">▶ / ⏸</button>
+            <button type="button" id="btnDeckDuck" class="btn btn-sm" title="Tecla D">D Pisar 18%</button>
+            <button type="button" id="btnDeckFade" class="btn btn-sm" title="Tecla F">F Fade 3s Stop</button>
+            <button type="button" id="btnDeckNext" class="btn btn-sm" title="Tecla N">N Next</button>
+            <button type="button" id="btnDeckLoop" class="btn btn-sage btn-sm">🔁 Loop</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:0.65rem;font-weight:800;color:var(--muted);">SOLO MÚSICA</span>
+            <input type="range" id="deckVolSlider" min="5" max="100" value="68" style="flex:1;accent-color:var(--coral);">
+            <span id="deckVolPct" class="tabular" style="font-size:0.68rem;font-weight:800;">68%</span>
+          </div>
+          <div class="deck-tracks-6" id="deckTracks6"></div>
+        </div>
+
+        <!-- Cartwall Dinesat + Nota al Margen -->
+        <div class="cabin-panel" style="flex:1;min-height:0;overflow-y:auto;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:0.66rem;font-weight:800;letter-spacing:0.06em;color:var(--sand);">CARTWALL DINESAT (F1–F6) + MACROS</span>
+            <button type="button" id="btnCancelMacros" class="btn btn-sm">Esc Stop</button>
+          </div>
+          <div class="cartwall-grid" id="cartwallGrid"></div>
+          <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">
+            <button type="button" id="btnMacroNota" class="btn btn-sand btn-sm" style="flex:1;">🎙️ P · Disparar Nota al Margen <span id="guestTimerLabel" class="tabular"></span></button>
+            <button type="button" id="btnGuestPause" class="btn btn-sm">⏸ Pausar Voz</button>
+            <button type="button" id="btnMacroVentana" class="btn btn-sm">🌊 W · Ventana 15s</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Centro: Escaleta + Teleprompter Limpio -->
+      <div class="cabin-col center">
+        <div class="prompter-top">
+          <div>
+            <div style="font-size:0.68rem;font-weight:800;color:var(--coral);" id="airNextLabel">BLOQUE ACTUAL</div>
+            <div style="font-size:0.78rem;font-weight:700;" id="airBlockTitle">—</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="tabular" id="airClockPde" style="font-size:0.86rem;font-weight:800;color:var(--cream);">--:--</span>
+            <button type="button" id="btnToggleRecTimer" class="btn btn-sm tabular">● AIRE 00:00</button>
+            <button type="button" id="btnPromptFontMinus" class="btn btn-sm">A-</button>
+            <button type="button" id="btnPromptFontPlus" class="btn btn-sm">A+</button>
+          </div>
+        </div>
+
+        <div class="prompter-steps" id="prompterSteps"></div>
+
+        <div class="prompter-stage">
+          <div class="prompter-text" id="prompterText"></div>
+        </div>
+
+        <div class="prompter-footer">
+          <button type="button" id="btnCabinPrev" class="btn">← Ant</button>
+          <button type="button" id="btnMarkClip" class="btn btn-sand" title="Tecla K">✂️ K · Marcar Clip 9:16 (<span id="clipCountLabel" class="tabular">0</span>)</button>
+          <button type="button" id="btnCabinNext" class="btn btn-coral">SIGUIENTE + PLACA (Espacio) →</button>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Banco Contextual + Gateras -->
+      <div class="cabin-col right">
+        <div class="pane-subtabs">
+          <button type="button" class="pane-subtab active" data-cab-tab="block">Medios del bloque</button>
+          <button type="button" class="pane-subtab" data-cab-tab="gateras">🟡 Plan B Gateras</button>
+        </div>
+        <div id="cabinContextList" class="context-media-list"></div>
+        <div class="cabin-panel" style="gap:4px;">
+          <span class="label-xs" style="margin:0;">Atajos: Espacio · D Duck · F Fade · N Next · P Nota · W Ventana · K Clip · F1–F6 · Esc</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOTÓN FLOTANTE PARA CITAR TEXTO SELECCIONADO -->
+  <button type="button" id="quoteFloatBtn" class="btn btn-coral quote-float-btn">❝ Guardar cita a Mesa</button>
+
+  <!-- OVERLAY ZOOM / RECORRIDO INMERSIVO -->
+  <div id="zoomOverlay" class="zoom-overlay">
+    <div class="zoom-head">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button type="button" id="zoomTabRead" class="btn btn-sm active">Lectura</button>
+        <button type="button" id="zoomTabVisual" class="btn btn-sm">Lupa medios</button>
+        <span class="tb-sep"></span>
+        <span id="zoomCounter" class="tabular" style="font-size:0.74rem;font-weight:700;color:var(--sand);">1 / 1</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;" id="zoomControlsBar">
+        <button type="button" class="btn btn-sm zoom-font-btn" data-size="16">A</button>
+        <button type="button" class="btn btn-sm zoom-font-btn" data-size="20">A+</button>
+        <button type="button" class="btn btn-sm zoom-font-btn" data-size="25">A++</button>
+        <button type="button" id="btnZoomTheme" class="btn btn-sm">Papel / Noche</button>
+        <span class="tb-sep"></span>
+        <button type="button" class="btn btn-sm zoom-scale-btn" data-scale="1">Ajustar</button>
+        <button type="button" class="btn btn-sm zoom-scale-btn" data-scale="1.5">150%</button>
+        <button type="button" class="btn btn-sm zoom-scale-btn" data-scale="2.25">225%</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span id="zoomRightsBadge" class="r-badge r-own_cc0">Propio</span>
+        <button type="button" id="btnZoomClose" class="btn btn-coral btn-sm">Cerrar (Esc)</button>
+      </div>
+    </div>
+
+    <div class="zoom-stage" id="zoomStage">
+      <button type="button" id="zoomPrevItem" class="zoom-nav-arrow prev" title="Anterior (←)">‹</button>
+      <div id="zoomReadBox" class="zoom-read-container"></div>
+      <div id="zoomVisualBox" class="zoom-visual-viewport" style="display:none;"></div>
+      <button type="button" id="zoomNextItem" class="zoom-nav-arrow next" title="Siguiente (→)">›</button>
+    </div>
+
+    <div class="zoom-thumbs" id="zoomThumbs"></div>
+
+    <div class="zoom-dock">
+      <div id="zoomRightsNote" class="muted-note" style="max-width:52%;"></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button type="button" id="btnZoomChooseMedia" class="btn btn-sage">✓ Elegir foto/video</button>
+        <button type="button" id="btnZoomSave" class="btn">★ Guardar</button>
+        <button type="button" id="btnZoomToMesa" class="btn btn-coral">→ Pasar a Mesa de Producción</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL + SUMAR (GUARDADOS IG / LINK / ARCHIVOS PROPIOS) -->
+  <div id="sumarModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <h2 style="font-size:1.05rem;font-weight:800;">Sumar hallazgo o archivo a Mi Mediateca</h2>
+        <button type="button" class="btn btn-sm" id="btnCloseSumar">✕</button>
+      </div>
+      <div class="grid-2">
+        <div>
+          <span class="label-xs">Título / Idea suelta</span>
+          <input type="text" id="sumarTitle" class="field" placeholder="Ej. Cangrejo en tapa de plástico (Okinawa)">
+        </div>
+        <div>
+          <span class="label-xs">Lente Whimsy</span>
+          <input type="text" id="sumarLens" class="field" placeholder="Arte / Ciencia / Libros / Botánica...">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <span class="label-xs">Enlace (IG, YouTube, diario, museo)</span>
+          <input type="url" id="sumarUrl" class="field" placeholder="https://...">
+        </div>
+        <div>
+          <span class="label-xs">Carpeta en Mi Mediateca</span>
+          <select id="sumarFolder" class="tb-select" style="width:100%;max-width:none;padding:6px 8px;"></select>
+        </div>
+      </div>
+      <div>
+        <span class="label-xs">Nota, cita o contexto breve</span>
+        <textarea id="sumarSummary" class="field" rows="3" placeholder="Qué te disparó esto o por qué entra a la mesa..."></textarea>
+      </div>
+      <div>
+        <span class="label-xs">Subir imágenes, videos o notas de voz (.jpg, .mp4, .ogg, .m4a) — quedan guardados en tu navegador</span>
+        <input type="file" id="sumarFilesInput" class="field" multiple accept="image/*,video/*,audio/*">
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;">
+        <button type="button" class="btn btn-coral" id="btnSubmitSumar">Guardar en Radar y Mediateca</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SETUP: SHURE MV51 + OBS + GRABADOR DE 5 BARRIDAS -->
+  <div id="setupModal" class="modal-backdrop">
+    <div class="modal-box" style="max-width:820px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <h2 style="font-size:1.05rem;font-weight:800;">Setup Shure MV51, OBS 31.0.2 y Grabador de 5 Barridas</h2>
+        <button type="button" class="btn btn-sm" id="btnCloseSetup">✕</button>
+      </div>
+
+      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--surface);display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <strong style="font-size:0.84rem;">1. Chequeo de micrófono Shure MV51 (0 acople)</strong>
+          <div style="display:flex;gap:6px;">
+            <button type="button" id="btnStartMicCheck" class="btn btn-sage btn-sm">Probar nivel MV51</button>
+            <button type="button" id="btnStopMicCheck" class="btn btn-sm">Detener mic</button>
+          </div>
+        </div>
+        <div style="height:10px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--border);">
+          <div id="setupMicBar" style="height:100%;width:0%;background:var(--sage);transition:width 0.08s linear;"></div>
+        </div>
+        <p class="muted-note">
+          <strong>Regla anti-acople:</strong> auriculares cerrados enchufados al jack 3.5 mm del Shure MV51 · Salida macOS en <strong>Shure MV51</strong> (nunca parlantes MacBook) · En OBS dejá <em>Audio de escritorio desactivado</em> y usá <em>Captura de audio de aplicación</em> apuntando a Chrome con <strong>Monitorización desactivada (Monitor Off)</strong>, grabando en <strong>.mkv (Pistas 1, 2 y 3)</strong>.
+        </p>
+      </div>
+
+      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--surface);display:flex;flex-direction:column;gap:8px;">
+        <strong style="font-size:0.84rem;">2. Tus 5 Barridas de Dial + Cart F6 (quedan guardadas permanentemente en el navegador)</strong>
+        <div id="setupBarridasList" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <button type="button" id="btnDownloadBackup" class="btn btn-sand btn-sm">💾 Descargar Backup Estudio (.json)</button>
+        <span class="muted-note">Para automatización post-vivo con cortes por tecla K en Fase 2: instalar ffmpeg en Mac con Homebrew.</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

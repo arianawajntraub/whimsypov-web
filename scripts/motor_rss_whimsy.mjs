@@ -27,28 +27,26 @@ const WEB_CONTENT_JSON = path.join(WEB_DIR, 'content.json');
 
 const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 WhimsyRSS/2.0';
 
-// Banco real de 20 pistas de música libre presentes en web/audio/ (espejo exacto de cabina-v8.html RACKS A y B)
+// Banco real de 18 pistas libres no comerciales en web/audio/ (solo Modo Piloto · prohibido nombrar artista fuera de crédito oficial)
 const FREE_MUSIC_BANK = [
-  { id: 'A-0', rack: 'A', trackIdx: 0, title: 'hollywood (Moby)', mood: 'Groove Sexy Driving', bpm: '120', duration: '04:28', file: 'audio/fast_01_hollywood.m4a', tags: ['apertura', 'arte', 'cine', 'ciudad'] },
-  { id: 'A-1', rack: 'A', trackIdx: 1, title: 'get it (Moby)', mood: 'Funky Driving Beat', bpm: '100', duration: '04:46', file: 'audio/fast_02_get-it.m4a', tags: ['social', 'innovación', 'educación'] },
-  { id: 'A-2', rack: 'A', trackIdx: 2, title: 'fail safe audio (Moby)', mood: 'Electro Hypnotic Groove', bpm: '108', duration: '05:54', file: 'audio/fast_03_fail-safe-audio.m4a', tags: ['ciencia', 'física', 'ia', 'tecnología'] },
-  { id: 'A-3', rack: 'A', trackIdx: 3, title: 'great weight lifted (Moby)', mood: 'Rock / Aggressive Driving', bpm: '132', duration: '03:55', file: 'audio/fast_04_great-weight-lifted.m4a', tags: ['urgente', 'movimientos', 'tension'] },
-  { id: 'A-4', rack: 'A', trackIdx: 4, title: 'falling out of love (Moby)', mood: 'Dark Post-Punk Driving', bpm: '124', duration: '02:58', file: 'audio/fast_05_falling-out-of-love.m4a', tags: ['filosofía', 'archivo', 'libros', 'editorial'] },
-  { id: 'A-5', rack: 'A', trackIdx: 5, title: 'friday heretic (Moby)', mood: 'Indie Electro Arriba', bpm: '126', duration: '05:38', file: 'audio/fast_06_friday-heretic.m4a', tags: ['colores', 'arte', 'textil', 'diseño'] },
-  { id: 'A-6', rack: 'A', trackIdx: 6, title: '1983 (Moby)', mood: 'Upbeat Synth 80s', bpm: '145', duration: '04:28', file: 'audio/fast_07_1983.m4a', tags: ['pop', 'idioma', 'retro'] },
-  { id: 'A-7', rack: 'A', trackIdx: 7, title: 'out stands (Moby)', mood: 'Pulso Hipnótico', bpm: '102', duration: '04:04', file: 'audio/fast_08_out-stands.m4a', tags: ['botánica', 'naturaleza', 'agua', 'micro'] },
-  { id: 'A-8', rack: 'A', trackIdx: 8, title: 'Vibe Centric (Kaelin Ellis · Groove Session)', mood: 'Neo-Soul / Beat con Onda', bpm: '98', duration: '00:40 Loop', file: 'audio/groove_09_kaelin-ellis-vibe-centric.m4a', tags: ['poesía', 'café', 'silencio', 'intimidad'] },
-  { id: 'A-9', rack: 'A', trackIdx: 9, title: '80s Synth Groove (Kaelin Ellis · Groove Session)', mood: 'Synth Funk / Radio Beat', bpm: '110', duration: '00:35 Loop', file: 'audio/groove_10_kaelin-ellis-80s-synth.m4a', tags: ['radio', 'vitrina', 'ritmo'] },
-  { id: 'B-0', rack: 'B', trackIdx: 0, title: 'fever dreams (Moby · Rack B)', mood: 'Pulso Nocturno', bpm: '106', duration: '04:18', file: 'audio/rackb_02.m4a', tags: ['noche', 'sombra', 'cine'] },
-  { id: 'B-1', rack: 'B', trackIdx: 1, title: 'clip show (Moby · Rack B)', mood: 'Beat Rítmico', bpm: '114', duration: '05:12', file: 'audio/rackb_04.m4a', tags: ['visual', 'archivo', 'fotografía'] },
-  { id: 'B-2', rack: 'B', trackIdx: 2, title: 'eight and eight (Moby · Rack B)', mood: 'Groove Medio', bpm: '96', duration: '03:32', file: 'audio/rackb_05.m4a', tags: ['moda', 'textil', 'oficio'] },
-  { id: 'B-3', rack: 'B', trackIdx: 3, title: 'idiots (Moby · Rack B)', mood: 'Tensión Cruda', bpm: '118', duration: '05:10', file: 'audio/rackb_10.m4a', tags: ['sesgos', 'crítica', 'política'] },
-  { id: 'B-4', rack: 'B', trackIdx: 4, title: 'out mid 1 (Moby · Rack B)', mood: 'Apertura Aire', bpm: '94', duration: '03:32', file: 'audio/rackb_01.m4a', tags: ['espiritualidad', 'biblia', 'silencio'] },
-  { id: 'B-5', rack: 'B', trackIdx: 5, title: 'it was so clear (Moby · Rack B)', mood: 'Crónica en Movimiento', bpm: '98', duration: '02:54', file: 'audio/rackb_03.m4a', tags: ['crónica', 'ancestral', 'territorio'] },
-  { id: 'B-6', rack: 'B', trackIdx: 6, title: 'inspire modulate (Moby · Rack B)', mood: 'Synth Textura', bpm: '92', duration: '02:45', file: 'audio/rackb_06.m4a', tags: ['microscopio', 'agua', 'materia'] },
-  { id: 'B-7', rack: 'B', trackIdx: 7, title: 'open (Moby · Rack B)', mood: 'Respiro Corto', bpm: '90', duration: '01:14', file: 'audio/rackb_07.m4a', tags: ['pausa', 'lectura'] },
-  { id: 'B-8', rack: 'B', trackIdx: 8, title: 'june 13 (Moby · Rack B)', mood: 'Fondo Largo', bpm: '100', duration: '07:50', file: 'audio/rackb_08.m4a', tags: ['ensayo', 'entrevista'] },
-  { id: 'B-9', rack: 'B', trackIdx: 9, title: 'dec 14 (Moby · Rack B)', mood: 'Cierre Instrumental', bpm: '95', duration: '03:50', file: 'audio/rackb_09.m4a', tags: ['cierre', 'pregunta'] }
+  { id: 'A-0', rack: 'A', trackIdx: 0, title: 'hollywood', mood: 'Groove Sexy Driving', bpm: '120', duration: '04:28', file: 'audio/fast_01_hollywood.m4a', license: 'mobygratis_noncommercial', credit: 'Music: hollywood provided by mobygratis', tags: ['apertura', 'arte', 'cine', 'ciudad'] },
+  { id: 'A-1', rack: 'A', trackIdx: 1, title: 'get it', mood: 'Funky Driving Beat', bpm: '100', duration: '04:46', file: 'audio/fast_02_get-it.m4a', license: 'mobygratis_noncommercial', credit: 'Music: get it provided by mobygratis', tags: ['social', 'innovación', 'educación'] },
+  { id: 'A-2', rack: 'A', trackIdx: 2, title: 'fail safe audio', mood: 'Electro Hypnotic Groove', bpm: '108', duration: '05:54', file: 'audio/fast_03_fail-safe-audio.m4a', license: 'mobygratis_noncommercial', credit: 'Music: fail safe audio provided by mobygratis', tags: ['ciencia', 'física', 'ia', 'tecnología'] },
+  { id: 'A-3', rack: 'A', trackIdx: 3, title: 'great weight lifted', mood: 'Rock / Aggressive Driving', bpm: '132', duration: '03:55', file: 'audio/fast_04_great-weight-lifted.m4a', license: 'mobygratis_noncommercial', credit: 'Music: great weight lifted provided by mobygratis', tags: ['urgente', 'movimientos', 'tension'] },
+  { id: 'A-4', rack: 'A', trackIdx: 4, title: 'falling out of love', mood: 'Dark Post-Punk Driving', bpm: '124', duration: '02:58', file: 'audio/fast_05_falling-out-of-love.m4a', license: 'mobygratis_noncommercial', credit: 'Music: falling out of love provided by mobygratis', tags: ['filosofía', 'archivo', 'libros', 'editorial'] },
+  { id: 'A-5', rack: 'A', trackIdx: 5, title: 'friday heretic', mood: 'Indie Electro Arriba', bpm: '126', duration: '05:38', file: 'audio/fast_06_friday-heretic.m4a', license: 'mobygratis_noncommercial', credit: 'Music: friday heretic provided by mobygratis', tags: ['colores', 'arte', 'textil', 'diseño'] },
+  { id: 'A-6', rack: 'A', trackIdx: 6, title: '1983', mood: 'Upbeat Synth 80s', bpm: '145', duration: '04:28', file: 'audio/fast_07_1983.m4a', license: 'mobygratis_noncommercial', credit: 'Music: 1983 provided by mobygratis', tags: ['pop', 'idioma', 'retro'] },
+  { id: 'A-7', rack: 'A', trackIdx: 7, title: 'out stands', mood: 'Pulso Hipnótico', bpm: '102', duration: '04:04', file: 'audio/fast_08_out-stands.m4a', license: 'mobygratis_noncommercial', credit: 'Music: out stands provided by mobygratis', tags: ['botánica', 'naturaleza', 'agua', 'micro'] },
+  { id: 'B-0', rack: 'B', trackIdx: 0, title: 'fever dreams', mood: 'Pulso Nocturno', bpm: '106', duration: '04:18', file: 'audio/rackb_02.m4a', license: 'mobygratis_noncommercial', credit: 'Music: fever dreams provided by mobygratis', tags: ['noche', 'sombra', 'cine'] },
+  { id: 'B-1', rack: 'B', trackIdx: 1, title: 'clip show', mood: 'Beat Rítmico', bpm: '114', duration: '05:12', file: 'audio/rackb_04.m4a', license: 'mobygratis_noncommercial', credit: 'Music: clip show provided by mobygratis', tags: ['visual', 'archivo', 'fotografía'] },
+  { id: 'B-2', rack: 'B', trackIdx: 2, title: 'eight and eight', mood: 'Groove Medio', bpm: '96', duration: '03:32', file: 'audio/rackb_05.m4a', license: 'mobygratis_noncommercial', credit: 'Music: eight and eight provided by mobygratis', tags: ['moda', 'textil', 'oficio'] },
+  { id: 'B-3', rack: 'B', trackIdx: 3, title: 'idiots', mood: 'Tensión Cruda', bpm: '118', duration: '05:10', file: 'audio/rackb_10.m4a', license: 'mobygratis_noncommercial', credit: 'Music: idiots provided by mobygratis', tags: ['sesgos', 'crítica', 'ideas'] },
+  { id: 'B-4', rack: 'B', trackIdx: 4, title: 'out mid 1', mood: 'Apertura Aire', bpm: '94', duration: '03:32', file: 'audio/rackb_01.m4a', license: 'mobygratis_noncommercial', credit: 'Music: out mid 1 provided by mobygratis', tags: ['espiritualidad', 'biblia', 'silencio'] },
+  { id: 'B-5', rack: 'B', trackIdx: 5, title: 'it was so clear', mood: 'Crónica en Movimiento', bpm: '98', duration: '02:54', file: 'audio/rackb_03.m4a', license: 'mobygratis_noncommercial', credit: 'Music: it was so clear provided by mobygratis', tags: ['crónica', 'ancestral', 'territorio'] },
+  { id: 'B-6', rack: 'B', trackIdx: 6, title: 'inspire modulate', mood: 'Synth Textura', bpm: '92', duration: '02:45', file: 'audio/rackb_06.m4a', license: 'mobygratis_noncommercial', credit: 'Music: inspire modulate provided by mobygratis', tags: ['microscopio', 'agua', 'materia'] },
+  { id: 'B-7', rack: 'B', trackIdx: 7, title: 'open', mood: 'Respiro Corto', bpm: '90', duration: '01:14', file: 'audio/rackb_07.m4a', license: 'mobygratis_noncommercial', credit: 'Music: open provided by mobygratis', tags: ['pausa', 'lectura', 'poesía'] },
+  { id: 'B-8', rack: 'B', trackIdx: 8, title: 'june 13', mood: 'Fondo Largo', bpm: '100', duration: '07:50', file: 'audio/rackb_08.m4a', license: 'mobygratis_noncommercial', credit: 'Music: june 13 provided by mobygratis', tags: ['ensayo', 'entrevista'] },
+  { id: 'B-9', rack: 'B', trackIdx: 9, title: 'dec 14', mood: 'Cierre Instrumental', bpm: '95', duration: '03:50', file: 'audio/rackb_09.m4a', license: 'mobygratis_noncommercial', credit: 'Music: dec 14 provided by mobygratis', tags: ['cierre', 'pregunta'] }
 ];
 
 // Paso 3: ADN curado basado en lo más visto/escuchado de @whimsyPOV y las 19 Minutas W
@@ -65,18 +63,34 @@ const TOP_WHIMSY_SIGNALS = [
 ];
 
 const CORE_FEEDS = [
-  { id: 'colossal', name: 'Colossal', url: 'https://www.thisiscolossal.com/feed/', siteUrl: 'https://www.thisiscolossal.com/', defaultCat: 'transito', defaultLens: 'Arte', clock: '🇬🇧 LONDRES (GMT)', handle: '@thisiscolossal' },
-  { id: 'pdr', name: 'The Public Domain Review', url: 'https://publicdomainreview.org/rss.xml', siteUrl: 'https://publicdomainreview.org/', defaultCat: 'transito', defaultLens: 'Libros', clock: '🇬🇧 LONDRES (GMT)', handle: '@publicdomainrev' },
-  { id: 'quanta', name: 'Quanta Magazine', url: 'https://www.quantamagazine.org/feed/', fallbackUrl: 'https://api.quantamagazine.org/feed/', siteUrl: 'https://www.quantamagazine.org/', defaultCat: 'clima', defaultLens: 'Física', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@quantamag' },
-  { id: 'smithsonian-smart', name: 'Smithsonian Smart News', url: 'https://www.smithsonianmag.com/rss/smart-news/', siteUrl: 'https://www.smithsonianmag.com/smart-news/', defaultCat: 'clima', defaultLens: 'Ciencia y buenas noticias científicas', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@smithsonianmag' },
-  { id: 'smithsonian-arts', name: 'Smithsonian Arts & Culture', url: 'https://www.smithsonianmag.com/rss/arts-culture/', siteUrl: 'https://www.smithsonianmag.com/arts-culture/', defaultCat: 'transito', defaultLens: 'Arte', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@smithsonianmag' },
-  { id: 'hyperallergic', name: 'Hyperallergic', url: 'https://hyperallergic.com/feed/', siteUrl: 'https://hyperallergic.com/', defaultCat: 'transito', defaultLens: 'Arte', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@hyperallergic' },
-  { id: 'aeon', name: 'Aeon Magazine', url: 'https://aeon.co/feed.rss', siteUrl: 'https://aeon.co/', defaultCat: 'arrobar', defaultLens: 'Grandes ideas y filosofía', clock: '🇬🇧 LONDRES (GMT)', handle: '@aeonmag' },
-  { id: 'openculture', name: 'Open Culture', url: 'https://www.openculture.com/feed', siteUrl: 'https://www.openculture.com/', defaultCat: 'transito', defaultLens: 'Cine', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@openculture' },
-  { id: 'nautilus', name: 'Nautilus', url: 'https://nautil.us/feed/', siteUrl: 'https://nautil.us/', defaultCat: 'clima', defaultLens: 'Ciencia y buenas noticias científicas', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@NautilusMag' },
-  { id: 'vam', name: 'Victoria & Albert Museum', url: 'https://www.vam.ac.uk/blog/feed', siteUrl: 'https://www.vam.ac.uk/blog', defaultCat: 'transito', defaultLens: 'Moda y cultura textil', clock: '🇬🇧 LONDRES (GMT)', handle: '@vamuseum' },
-  { id: 'bhl', name: 'Biodiversity Heritage Library', url: 'https://blog.biodiversitylibrary.org/feed', siteUrl: 'https://blog.biodiversitylibrary.org/', defaultCat: 'clima', defaultLens: 'Botánica', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@biodivlibrary' },
-  { id: 'minutaw', name: 'La Minuta W (Substack)', url: 'https://arianawajntraub.substack.com/feed', siteUrl: 'https://arianawajntraub.substack.com/', defaultCat: 'hilo', defaultLens: 'Libros', clock: '🇺🇾 PUNTA DEL ESTE / GARZÓN', handle: '@arianawajntraub' }
+  { id: 'colossal', name: 'Colossal', url: 'https://www.thisiscolossal.com/feed/', siteUrl: 'https://www.thisiscolossal.com/', defaultCat: 'transito', defaultLens: 'Arte', defaultRights: 'read_only', clock: '🇬🇧 LONDRES (GMT)', handle: '@thisiscolossal' },
+  { id: 'pdr', name: 'The Public Domain Review', url: 'https://publicdomainreview.org/rss.xml', siteUrl: 'https://publicdomainreview.org/', defaultCat: 'transito', defaultLens: 'Libros', defaultRights: 'check_cc0', clock: '🇬🇧 LONDRES (GMT)', handle: '@publicdomainrev' },
+  { id: 'quanta', name: 'Quanta Magazine', url: 'https://www.quantamagazine.org/feed/', fallbackUrl: 'https://api.quantamagazine.org/feed/', siteUrl: 'https://www.quantamagazine.org/', defaultCat: 'clima', defaultLens: 'Física', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@quantamag' },
+  { id: 'smithsonian-smart', name: 'Smithsonian Smart News', url: 'https://www.smithsonianmag.com/rss/smart-news/', siteUrl: 'https://www.smithsonianmag.com/smart-news/', defaultCat: 'clima', defaultLens: 'Ciencia y buenas noticias científicas', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@smithsonianmag' },
+  { id: 'smithsonian-arts', name: 'Smithsonian Arts & Culture', url: 'https://www.smithsonianmag.com/rss/arts-culture/', siteUrl: 'https://www.smithsonianmag.com/arts-culture/', defaultCat: 'transito', defaultLens: 'Arte', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@smithsonianmag' },
+  { id: 'hyperallergic', name: 'Hyperallergic', url: 'https://hyperallergic.com/feed/', siteUrl: 'https://hyperallergic.com/', defaultCat: 'transito', defaultLens: 'Arte', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@hyperallergic' },
+  { id: 'aeon', name: 'Aeon Magazine', url: 'https://aeon.co/feed.rss', siteUrl: 'https://aeon.co/', defaultCat: 'arrobar', defaultLens: 'Grandes ideas y filosofía', defaultRights: 'read_only', clock: '🇬🇧 LONDRES (GMT)', handle: '@aeonmag' },
+  { id: 'openculture', name: 'Open Culture', url: 'https://www.openculture.com/feed', siteUrl: 'https://www.openculture.com/', defaultCat: 'transito', defaultLens: 'Cine', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@openculture' },
+  { id: 'nautilus', name: 'Nautilus', url: 'https://nautil.us/feed/', siteUrl: 'https://nautil.us/', defaultCat: 'clima', defaultLens: 'Ciencia y buenas noticias científicas', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@NautilusMag' },
+  { id: 'vam', name: 'Victoria & Albert Museum', url: 'https://www.vam.ac.uk/blog/feed', siteUrl: 'https://www.vam.ac.uk/blog', defaultCat: 'transito', defaultLens: 'Moda y cultura textil', defaultRights: 'check_cc0', clock: '🇬🇧 LONDRES (GMT)', handle: '@vamuseum' },
+  { id: 'bhl', name: 'Biodiversity Heritage Library', url: 'https://blog.biodiversitylibrary.org/feed', siteUrl: 'https://blog.biodiversitylibrary.org/', defaultCat: 'clima', defaultLens: 'Botánica', defaultRights: 'check_cc0', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@biodivlibrary' },
+  { id: 'minutaw', name: 'La Minuta W (Substack)', url: 'https://arianawajntraub.substack.com/feed', siteUrl: 'https://arianawajntraub.substack.com/', defaultCat: 'hilo', defaultLens: 'Libros', defaultRights: 'own_cc0', clock: '🇺🇾 PUNTA DEL ESTE / GARZÓN', handle: '@arianawajntraub' },
+  { id: 'emergence', name: 'Emergence Magazine', url: 'https://emergencemagazine.org/feed/', siteUrl: 'https://emergencemagazine.org/', defaultCat: 'arrobar', defaultLens: 'Espiritualidad (cero autoayuda)', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@emergencemag' },
+  { id: 'thetorah', name: 'TheTorah.com', url: 'https://www.thetorah.com/rss', siteUrl: 'https://www.thetorah.com/', defaultCat: 'hilo', defaultLens: 'La Biblia y filología antigua', defaultRights: 'read_only', clock: '🇮🇱 JAFFA / JERUSALÉN', handle: '@thetorah_com' },
+  { id: 'marginalia-rev', name: 'Marginalia Review of Books', url: 'https://themarginaliareview.com/feed/', siteUrl: 'https://themarginaliareview.com/', defaultCat: 'hilo', defaultLens: 'La Biblia y filología antigua', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@marginaliarb' },
+  { id: 'creativecommons', name: 'Creative Commons Blog', url: 'https://creativecommons.org/blog/feed/', siteUrl: 'https://creativecommons.org/blog/', defaultCat: 'clima', defaultLens: 'Innovación abierta (Open Innovation)', defaultRights: 'check_cc0', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@creativecommons' },
+  { id: 'mit-medialab', name: 'MIT Media Lab', url: 'https://www.media.mit.edu/feed/', siteUrl: 'https://www.media.mit.edu/', defaultCat: 'clima', defaultLens: 'Innovación en la educación', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@medialab' },
+  { id: 'restofworld', name: 'Rest of World', url: 'https://restofworld.org/feed/latest/rss', siteUrl: 'https://restofworld.org/', defaultCat: 'clima', defaultLens: 'IA y tecnología', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@restofworld' },
+  { id: 'mit-tech', name: 'MIT Technology Review', url: 'https://www.technologyreview.com/feed/', siteUrl: 'https://www.technologyreview.com/', defaultCat: 'clima', defaultLens: 'IA y tecnología', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@techreview' },
+  { id: 'mubi', name: 'MUBI Notebook', url: 'https://mubi.com/en/notebook/posts.rss', siteUrl: 'https://mubi.com/en/notebook', defaultCat: 'transito', defaultLens: 'Cine', defaultRights: 'read_only', clock: '🇬🇧 LONDRES (GMT)', handle: '@mubinotebook' },
+  { id: 'marginalian', name: 'The Marginalian', url: 'https://www.themarginalian.org/feed/', siteUrl: 'https://www.themarginalian.org/', defaultCat: 'arrobar', defaultLens: 'Poesía', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@brainpickings' },
+  { id: 'sapiens', name: 'SAPIENS Anthropology', url: 'https://www.sapiens.org/feed/', siteUrl: 'https://www.sapiens.org/', defaultCat: 'transito', defaultLens: 'Conocimiento aborigen y ancestral', defaultRights: 'read_only', clock: '🇺🇸 NUEVA YORK (EST)', handle: '@sapiens_org' },
+  { id: 'conversation-es', name: 'The Conversation (ES)', url: 'https://theconversation.com/es/articles.atom', siteUrl: 'https://theconversation.com/es', defaultCat: 'clima', defaultLens: 'Movimientos sociales', defaultRights: 'read_only', clock: '🇪🇸 MADRID / LATAM', handle: '@conversation_es' },
+  { id: 'elpais-cultura', name: 'El País Cultura', url: 'https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/cultura/portada', siteUrl: 'https://elpais.com/cultura/', defaultCat: 'arrobar', defaultLens: 'Percepción del idioma', defaultRights: 'read_only', clock: '🇪🇸 MADRID', handle: '@el_pais' },
+  { id: 'sobreciencia-uy', name: 'SobreCiencia Uruguay', url: 'https://sobreciencia.uy/feed/', siteUrl: 'https://sobreciencia.uy/', defaultCat: 'arrobar', defaultLens: 'Ciencia y buenas noticias científicas', defaultRights: 'read_only', clock: '🇺🇾 PUNTA DEL ESTE / MONTEVIDEO', handle: '@sobreciencia' },
+  { id: 'nexciencia-uba', name: 'NEXciencia (Exactas UBA)', url: 'https://nexciencia.exactas.uba.ar/feed/', siteUrl: 'https://nexciencia.exactas.uba.ar/', defaultCat: 'arrobar', defaultLens: 'Ciencia y buenas noticias científicas', defaultRights: 'read_only', clock: '🇦🇷 BUENOS AIRES', handle: '@Exactas_UBA' },
+  { id: 'ladiaria-cultura', name: 'La Diaria Cultura (UY)', url: 'https://ladiaria.com.uy/feeds/articulos/?seccion=cultura', siteUrl: 'https://ladiaria.com.uy/cultura/', defaultCat: 'arrobar', defaultLens: 'Arte', defaultRights: 'read_only', clock: '🇺🇾 MONTEVIDEO / PDE', handle: '@ladigitaluy' },
+  { id: 'eternacadencia', name: 'Eterna Cadencia Blog', url: 'https://www.eternacadencia.com.ar/blog/feed', siteUrl: 'https://www.eternacadencia.com.ar/blog', defaultCat: 'hilo', defaultLens: 'Libros', defaultRights: 'read_only', clock: '🇦🇷 BUENOS AIRES', handle: '@eternacadencia' }
 ];
 
 const WEEKLY_SUGGESTED_FEEDS = [
@@ -509,6 +523,7 @@ function parseFeedXml(xmlText, feedMeta) {
       handle: feedMeta.handle,
       defaultCat: feedMeta.defaultCat,
       defaultLens: feedMeta.defaultLens,
+      defaultRights: feedMeta.defaultRights || 'read_only',
       clock: feedMeta.clock,
       title,
       link,
@@ -591,7 +606,7 @@ function suggestMusicForItem(item, primaryLens) {
   } else if (lensLower.includes('botánica')) {
     rack = 'A'; trackIdx = 7; // out stands
   } else if (lensLower.includes('poesía')) {
-    rack = 'A'; trackIdx = 8; // Vibe Centric
+    rack = 'B'; trackIdx = 7; // open
   } else if (lensLower.includes('libros') || lensLower.includes('filosofía')) {
     rack = 'A'; trackIdx = 4; // falling out of love
   } else if (lensLower.includes('colores')) {
@@ -638,11 +653,11 @@ function buildProtagonistData(item, pageExtracted) {
   ])).slice(0, 6);
 
   const primaryHandle = pageSocial[0] || bodyHandles[0] || item.handle || '@whimsypov';
-  const shortTitle = item.title.slice(0, 64);
+  const shortTitle = item.title.slice(0, 68);
 
-  const inviteEs = `¡Hola ${cleanName} (${primaryHandle})! Soy Ariana Wajntraub, conductora de Whimsy POV y La Minuta W. Estamos armando una entrega sobre «${shortTitle}» y vamos a proyectar tu material acreditando fuente y arroba en pantalla. Si querés enviar una nota de voz de 40 segundos contando el detrás de escena para pasar al aire, te leo.`;
-  const inviteEn = `Hi ${cleanName} (${primaryHandle})! I am Ariana Wajntraub, host of Whimsy POV & La Minuta W. We are featuring "${shortTitle}" in our upcoming live broadcast, crediting your source and handle on screen. If you would like to send a 40-second voice note with the backstory to play on air, let me know!`;
-  const postAirEs = `¡Hola ${cleanName} (${primaryHandle})! Hoy en Whimsy POV salió el bloque dedicado a «${shortTitle}» con tu crédito y enlace en pantalla. Podés verlo en https://www.youtube.com/@whimsyPOV y en https://arianawajntraub.substack.com.`;
+  const inviteEs = `Hola ${cleanName} (${primaryHandle}), soy Ariana Wajntraub, locutora y conductora de Whimsy POV y La Minuta W desde Punta del Este. Estoy armando un episodio donde dialoga tu trabajo sobre «${shortTitle}» con otra lente cultural, y me gustaría sumar tu voz en nuestra sección Nota al Margen. Te pido una nota de voz de 45 a 75 segundos respondiendo qué detalle concreto de ese proceso todavía te intriga. A las 48 horas del estreno te entrego tu recorte vertical subtitulado con tus créditos y enlaces para tus redes. Para cuidar tu archivo y tu nombre con prolijidad, al responderme «Sí, autorizo» y mandarme el audio confirmás que podemos emitir tu voz y tu crédito en YouTube, podcast, Substack, redes y radios.`;
+  const inviteEn = `Hello ${cleanName} (${primaryHandle}), I am Ariana Wajntraub, a voice artist and host of Whimsy POV and La Minuta W from Uruguay. Each episode places science, archives, and art around a single word, and your work on "${shortTitle}" belongs in our table. Would you send a 45 to 75 second voice note on your phone sharing one specific material detail from behind this piece for our Margin Note segment? Within 48 hours of release I will send you a captioned vertical clip with full attribution ready for your channels. Replying "Yes, I authorize" along with your audio confirms permission to air your voice and credit on YouTube, podcast, Substack, social media, and radio.`;
+  const postAirEs = `Hola ${cleanName} (${primaryHandle}), ya salió al aire el episodio sobre «${shortTitle}» con tu Nota al Margen y crédito completo. Acá tenés el enlace a YouTube (https://www.youtube.com/@whimsyPOV) y a La Minuta W (https://arianawajntraub.substack.com), y te adjunto tu video vertical de un minuto subtitulado para que lo compartas donde quieras.`;
 
   return {
     name: cleanName,
@@ -839,6 +854,13 @@ async function main() {
     item.cleanReaderHtml = buildCleanReaderHtml(baseHtmlForReader, item.link, item.images, item.summary);
     item.lenses = detectLenses(item);
     item.hiloRojo = findHiloRojo(item, minutas, ytVideos);
+    item.defaultRights = item.defaultRights || (item.feedId === 'minutaw' ? 'own_cc0' : 'read_only');
+    item.images = item.images.map(im => ({
+      ...im,
+      rights: (im.isFallback || /CC0 Wikimedia/i.test(im.caption || '') || item.defaultRights === 'own_cc0')
+        ? 'own_cc0'
+        : (item.defaultRights === 'check_cc0' ? 'permission' : 'read_only')
+    }));
     item.broadcastPreset = {
       mode: item.videos.length > 0 ? 'video_sound' : 'images',
       zone: 'right',
@@ -848,6 +870,7 @@ async function main() {
     item.suggestedMusic = suggestMusicForItem(item, item.lenses[0]);
     const suggestion = suggestBucketAndAngle(item);
     item.suggestedBucket = suggestion.suggestedBucket;
+    item.suggestedWord = (suggestion.suggestedBucket || '').startsWith('tema:') ? suggestion.suggestedBucket.slice(5) : '';
     item.curatorialAngle = suggestion.curatorialAngle;
     item.id = 'rss-' + crypto.createHash('sha1').update(`${item.feedId}-${item.link}`).digest('hex').slice(0, 14);
     delete item.rawHtml;
@@ -860,9 +883,24 @@ async function main() {
 
   collected.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
+  // Detector de Palabra Rectora candidata (3+ ítems en distintas lentes)
+  const wordStats = new Map();
+  for (const it of collected) {
+    if (!it.suggestedWord) continue;
+    if (!wordStats.has(it.suggestedWord)) wordStats.set(it.suggestedWord, { word: it.suggestedWord, count: 0, lenses: new Set() });
+    const entry = wordStats.get(it.suggestedWord);
+    entry.count += 1;
+    for (const ln of it.lenses || []) entry.lenses.add(ln);
+  }
+  const suggestedWords = Array.from(wordStats.values())
+    .map(w => ({ word: w.word, count: w.count, lensesCount: w.lenses.size, lenses: Array.from(w.lenses) }))
+    .filter(w => w.count >= 2)
+    .sort((a, b) => (b.lensesCount * 2 + b.count) - (a.lensesCount * 2 + a.count));
+
   const output = {
     generatedAt: new Date().toISOString(),
     totalItems: collected.length,
+    suggestedWords,
     topWhimsySignals: TOP_WHIMSY_SIGNALS,
     weeklySuggestedFeeds: WEEKLY_SUGGESTED_FEEDS,
     freeMusicTracks: FREE_MUSIC_BANK,

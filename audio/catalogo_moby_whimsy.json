@@ -1,82 +1,218 @@
 [
   {
-    "id": "f905c629-2b67-42fe-9efd-8420c12b16d5",
-    "title": "hollywood (Moby)",
+    "id": "A-0",
+    "rack": "A",
+    "title": "hollywood",
     "mood": "Groove Sexy Driving",
     "bpm": "120",
     "duration": "04:28",
-    "file": "audio/groove_01_hollywood-moby.mp3"
+    "file": "audio/fast_01_hollywood.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: hollywood provided by mobygratis",
+    "tags": ["apertura", "arte", "cine", "ciudad"]
   },
   {
-    "id": "5d3eded3-5a07-4346-b453-af7aa2a15e1c",
-    "title": "get it (Moby)",
+    "id": "A-1",
+    "rack": "A",
+    "title": "get it",
     "mood": "Funky Driving Beat",
     "bpm": "100",
     "duration": "04:46",
-    "file": "audio/groove_02_get-it-moby.mp3"
+    "file": "audio/fast_02_get-it.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: get it provided by mobygratis",
+    "tags": ["social", "innovación", "educación"]
   },
   {
-    "id": "43cb10c5-f543-4e5e-bc9c-d01f9d1de8f0",
-    "title": "fail safe audio (Moby)",
+    "id": "A-2",
+    "rack": "A",
+    "title": "fail safe audio",
     "mood": "Electro Hypnotic Groove",
     "bpm": "108",
     "duration": "05:54",
-    "file": "audio/groove_03_fail-safe-audio-moby.mp3"
+    "file": "audio/fast_03_fail-safe-audio.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: fail safe audio provided by mobygratis",
+    "tags": ["ciencia", "física", "ia", "tecnología"]
   },
   {
-    "id": "80695875-dc3a-4dda-9ac0-6bff0063692c",
-    "title": "great weight lifted (Moby)",
+    "id": "A-3",
+    "rack": "A",
+    "title": "great weight lifted",
     "mood": "Rock / Aggressive Driving",
     "bpm": "132",
     "duration": "03:55",
-    "file": "audio/groove_04_great-weight-lifted-moby.mp3"
+    "file": "audio/fast_04_great-weight-lifted.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: great weight lifted provided by mobygratis",
+    "tags": ["urgente", "movimientos", "tension"]
   },
   {
-    "id": "2ffa1724-2c53-481b-8e12-5c3e0b88019c",
-    "title": "falling out of love (Moby)",
+    "id": "A-4",
+    "rack": "A",
+    "title": "falling out of love",
     "mood": "Dark Post-Punk Driving",
     "bpm": "124",
     "duration": "02:58",
-    "file": "audio/groove_05_falling-out-of-love-moby.mp3"
+    "file": "audio/fast_05_falling-out-of-love.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: falling out of love provided by mobygratis",
+    "tags": ["filosofía", "archivo", "libros", "editorial"]
   },
   {
-    "id": "0296be8d-794c-4067-af2b-cd1053129933",
-    "title": "friday heretic (Moby)",
+    "id": "A-5",
+    "rack": "A",
+    "title": "friday heretic",
     "mood": "Indie Electro Arriba",
     "bpm": "126",
     "duration": "05:38",
-    "file": "audio/groove_06_friday-heretic-moby.mp3"
+    "file": "audio/fast_06_friday-heretic.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: friday heretic provided by mobygratis",
+    "tags": ["colores", "arte", "textil", "diseño"]
   },
   {
-    "id": "2d2404ab-bfe2-4b46-a38e-5e8dd28d1ae8",
-    "title": "1983 (Moby)",
+    "id": "A-6",
+    "rack": "A",
+    "title": "1983",
     "mood": "Upbeat Synth 80s",
     "bpm": "145",
     "duration": "04:28",
-    "file": "audio/groove_07_1983-moby.mp3"
+    "file": "audio/fast_07_1983.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: 1983 provided by mobygratis",
+    "tags": ["pop", "idioma", "retro"]
   },
   {
-    "id": "b31d7b49-fe85-4114-83de-56a0f8460bd2",
-    "title": "out stands (Moby)",
+    "id": "A-7",
+    "rack": "A",
+    "title": "out stands",
     "mood": "Pulso Hipnótico",
     "bpm": "102",
     "duration": "04:04",
-    "file": "audio/groove_08_out-stands-moby.mp3"
+    "file": "audio/fast_08_out-stands.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: out stands provided by mobygratis",
+    "tags": ["botánica", "naturaleza", "agua", "micro"]
   },
   {
-    "id": "groove_09_kaelin-ellis-vibe-centric.m4a",
-    "title": "Vibe Centric (Kaelin Ellis · ARIS2)",
-    "mood": "Neo-Soul / Beat con Onda",
+    "id": "B-0",
+    "rack": "B",
+    "title": "fever dreams",
+    "mood": "Pulso Nocturno",
+    "bpm": "106",
+    "duration": "04:18",
+    "file": "audio/rackb_02.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: fever dreams provided by mobygratis",
+    "tags": ["noche", "sombra", "cine"]
+  },
+  {
+    "id": "B-1",
+    "rack": "B",
+    "title": "clip show",
+    "mood": "Beat Rítmico",
+    "bpm": "114",
+    "duration": "05:12",
+    "file": "audio/rackb_04.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: clip show provided by mobygratis",
+    "tags": ["visual", "archivo", "fotografía"]
+  },
+  {
+    "id": "B-2",
+    "rack": "B",
+    "title": "eight and eight",
+    "mood": "Groove Medio",
+    "bpm": "96",
+    "duration": "03:32",
+    "file": "audio/rackb_05.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: eight and eight provided by mobygratis",
+    "tags": ["moda", "textil", "oficio"]
+  },
+  {
+    "id": "B-3",
+    "rack": "B",
+    "title": "idiots",
+    "mood": "Tensión Cruda",
+    "bpm": "118",
+    "duration": "05:10",
+    "file": "audio/rackb_10.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: idiots provided by mobygratis",
+    "tags": ["sesgos", "crítica", "ideas"]
+  },
+  {
+    "id": "B-4",
+    "rack": "B",
+    "title": "out mid 1",
+    "mood": "Apertura Aire",
+    "bpm": "94",
+    "duration": "03:32",
+    "file": "audio/rackb_01.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: out mid 1 provided by mobygratis",
+    "tags": ["espiritualidad", "biblia", "silencio", "poesía"]
+  },
+  {
+    "id": "B-5",
+    "rack": "B",
+    "title": "it was so clear",
+    "mood": "Crónica en Movimiento",
     "bpm": "98",
-    "duration": "00:40 Loop",
-    "file": "audio/groove_09_kaelin-ellis-vibe-centric.m4a"
+    "duration": "02:54",
+    "file": "audio/rackb_03.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: it was so clear provided by mobygratis",
+    "tags": ["crónica", "ancestral", "territorio"]
   },
   {
-    "id": "groove_10_kaelin-ellis-80s-synth.m4a",
-    "title": "80s Synth Groove (Kaelin Ellis · ARIS2)",
-    "mood": "Synth Funk / Radio Beat",
-    "bpm": "110",
-    "duration": "00:35 Loop",
-    "file": "audio/groove_10_kaelin-ellis-80s-synth.m4a"
+    "id": "B-6",
+    "rack": "B",
+    "title": "inspire modulate",
+    "mood": "Synth Textura",
+    "bpm": "92",
+    "duration": "02:45",
+    "file": "audio/rackb_06.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: inspire modulate provided by mobygratis",
+    "tags": ["microscopio", "agua", "materia"]
+  },
+  {
+    "id": "B-7",
+    "rack": "B",
+    "title": "open",
+    "mood": "Respiro Corto",
+    "bpm": "90",
+    "duration": "01:14",
+    "file": "audio/rackb_07.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: open provided by mobygratis",
+    "tags": ["pausa", "lectura", "poesía"]
+  },
+  {
+    "id": "B-8",
+    "rack": "B",
+    "title": "june 13",
+    "mood": "Fondo Largo",
+    "bpm": "100",
+    "duration": "07:50",
+    "file": "audio/rackb_08.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: june 13 provided by mobygratis",
+    "tags": ["ensayo", "entrevista"]
+  },
+  {
+    "id": "B-9",
+    "rack": "B",
+    "title": "dec 14",
+    "mood": "Cierre Instrumental",
+    "bpm": "95",
+    "duration": "03:50",
+    "file": "audio/rackb_09.m4a",
+    "license": "mobygratis_noncommercial",
+    "credit": "Music: dec 14 provided by mobygratis",
+    "tags": ["cierre", "pregunta"]
   }
 ]
