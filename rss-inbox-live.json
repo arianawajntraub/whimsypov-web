@@ -665,6 +665,23 @@
       "count": 6
     },
     {
+      "id": "hyperallergic",
+      "name": "Hyperallergic",
+      "url": "https://hyperallergic.com/feed/",
+      "siteUrl": "https://hyperallergic.com/",
+      "ok": true,
+      "count": 6
+    },
+    {
+      "id": "minutaw",
+      "name": "La Minuta W (Substack)",
+      "url": "https://arianawajntraub.substack.com/feed",
+      "siteUrl": "https://arianawajntraub.substack.com/",
+      "ok": false,
+      "count": 0,
+      "error": "HTTP 403"
+    },
+    {
       "id": "pdr",
       "name": "The Public Domain Review",
       "url": "https://publicdomainreview.org/rss.xml",
@@ -3553,7 +3570,8 @@
         "name": "Phillip Pyle",
         "handle": "@hyperallergic",
         "foundHandles": [
-          "@hyperallergic",
+          "@sylvainlefebvre_artist",
+          "@thisiscolossal",
           "@whimsypov"
         ],
         "contactUrl": "https://hyperallergic.com/in-a-midtown-office-artists-sift-through-the-junkspace-of-capitalism/",
@@ -9521,6 +9539,14 @@
           "url": "https://images.aeonmedia.co/images/f6569bab-ec9d-4c43-b83d-aba8d9e34b4d/dreams-of-birds-cover.jpg?width=3840&quality=75&format=auto",
           "caption": "Imagen en alta resolución de la fuente",
           "rights": "read_only"
+        },
+        {
+          "url": "https://images.aeonmedia.co/images/764cf5a9-204d-4dff-9e60-f1771f9262c0/wunderkammer-cover.jpg?width=3840&quality=75&format=auto",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://images.aeonmedia.co/images/f6569bab-ec9d-4c43-b83d-aba8d9e34b4d/dreams-of-birds-cover.jpg?width=3840&quality=75&format=auto",
+          "caption": "Imagen en alta resolución de la fuente"
         },
         {
           "url": "https://images.aeonmedia.co/images/02c07749-78d1-493a-a9e1-7e47e869d59a/nyinuta-nora-abbott-landscape-2.jpg?width=3840&quality=75&format=auto",
