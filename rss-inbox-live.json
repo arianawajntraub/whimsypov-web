@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T16:17:20.989Z",
+  "generatedAt": "2026-11-22T16:30:27.579Z",
   "totalItems": 65,
   "topWhimsySignals": [
     {
@@ -557,15 +557,6 @@
       "count": 6
     },
     {
-      "id": "minutaw",
-      "name": "La Minuta W (Substack)",
-      "url": "https://arianawajntraub.substack.com/feed",
-      "siteUrl": "https://arianawajntraub.substack.com/",
-      "ok": false,
-      "count": 0,
-      "error": "HTTP 403"
-    },
-    {
       "id": "colossal",
       "name": "Colossal",
       "url": "https://www.thisiscolossal.com/feed/",
@@ -582,14 +573,6 @@
       "count": 6
     },
     {
-      "id": "hyperallergic",
-      "name": "Hyperallergic",
-      "url": "https://hyperallergic.com/feed/",
-      "siteUrl": "https://hyperallergic.com/",
-      "ok": true,
-      "count": 6
-    },
-    {
       "id": "nautilus",
       "name": "Nautilus",
       "url": "https://nautil.us/feed/",
@@ -598,10 +581,27 @@
       "count": 6
     },
     {
-      "id": "bhl",
-      "name": "Biodiversity Heritage Library",
-      "url": "https://blog.biodiversitylibrary.org/feed",
-      "siteUrl": "https://blog.biodiversitylibrary.org/",
+      "id": "hyperallergic",
+      "name": "Hyperallergic",
+      "url": "https://hyperallergic.com/feed/",
+      "siteUrl": "https://hyperallergic.com/",
+      "ok": true,
+      "count": 6
+    },
+    {
+      "id": "minutaw",
+      "name": "La Minuta W (Substack)",
+      "url": "https://arianawajntraub.substack.com/feed",
+      "siteUrl": "https://arianawajntraub.substack.com/",
+      "ok": false,
+      "count": 0,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "pdr",
+      "name": "The Public Domain Review",
+      "url": "https://publicdomainreview.org/rss.xml",
+      "siteUrl": "https://publicdomainreview.org/",
       "ok": true,
       "count": 6
     },
@@ -614,23 +614,214 @@
       "count": 6
     },
     {
-      "id": "pdr",
-      "name": "The Public Domain Review",
-      "url": "https://publicdomainreview.org/rss.xml",
-      "siteUrl": "https://publicdomainreview.org/",
-      "ok": true,
-      "count": 6
-    },
-    {
       "id": "vam",
       "name": "Victoria & Albert Museum",
       "url": "https://www.vam.ac.uk/blog/feed",
       "siteUrl": "https://www.vam.ac.uk/blog",
       "ok": true,
       "count": 6
+    },
+    {
+      "id": "bhl",
+      "name": "Biodiversity Heritage Library",
+      "url": "https://blog.biodiversitylibrary.org/feed",
+      "siteUrl": "https://blog.biodiversitylibrary.org/",
+      "ok": true,
+      "count": 6
     }
   ],
   "items": [
+    {
+      "feedId": "nautilus",
+      "feedName": "Nautilus",
+      "feedUrl": "https://nautil.us/feed/",
+      "siteUrl": "https://nautil.us/",
+      "handle": "@NautilusMag",
+      "defaultCat": "clima",
+      "defaultLens": "Ciencia y buenas noticias científicas",
+      "clock": "🇺🇸 NUEVA YORK (EST)",
+      "title": "The Fortunes of a Dim Sun",
+      "link": "https://nautil.us/the-fortunes-of-a-dim-sun-1286898/",
+      "author": "Sean Raymond",
+      "publishedAt": "2026-11-22T15:00:00.000Z",
+      "summary": "Bad news for habitable planets in the galaxy: It’s hard to both make an ocean and then keep it The post The Fortunes of a Dim Sun appeared first on Nautilus .",
+      "images": [
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Soft-Rains-HERO.jpg?w=564",
+          "caption": "Lámina de Nautilus"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Soft-Rains-BREAKER-2.jpg?w=1420&quality=75",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/55258362670_d43bd8e161_o.jpg?resize=2880%2C1920",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Artists_impression_of_Hayabusa2_touching_down_on_asteroid_1998_KY26_artists_impression_noirlab2527b.jpg?resize=2880%2C1920",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261020-50-nyb6ln.avif?resize=2880%2C1920",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261104-64-ktbpnd.avif?resize=2880%2C1920",
+          "caption": "Imagen en alta resolución de la fuente"
+        }
+      ],
+      "videos": [],
+      "cleanReaderHtml": "<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Soft-Rains-HERO.jpg?w=564\" alt=\"Lámina de Nautilus\" loading=\"lazy\"><figcaption>Lámina de Nautilus</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Soft-Rains-BREAKER-2.jpg?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/55258362670_d43bd8e161_o.jpg?resize=2880%2C1920\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Artists_impression_of_Hayabusa2_touching_down_on_asteroid_1998_KY26_artists_impression_noirlab2527b.jpg?resize=2880%2C1920\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<p>Bad news for habitable planets in the galaxy: It’s hard to both make an ocean and then keep it</p>\n<p>In a classic 1972 paper, astronomers Carl Sagan and George Mullen presented what became known as the Faint Young Sun paradox. Billions of years ago, the sun was a quarter to a third fainter than it is today, and the young Earth should have been completely frozen over. Yet there is geological evidence that there was already liquid water back then. Somehow Earth kept warm, and to this day it’s not entirely clear how it would have done so.</p>\n<p>This story is from “The Hot Issue,” the latest from Nautilus . To get it in print, join by Nov 30 .</p>\n<p>It turns out that we may have had this problem backward. Recent climate simulations find that Earth may have needed the young sun to be faint for its oceans to form in the first place.</p>\n<p>To see why, let’s compare the divergent fates of Venus and Earth. These two worlds formed as next-door neighbors. They grew from rocky material that collided and stuck together. They also had access to the same sources of water.</p>\n<p>Our understanding of the origins of Earth’s water has undergone a drastic rethinking in recent years. Scientists have been studying a type of meteorite known as enstatite chondrites, which match our planet’s isotopic composition and may therefore be a sample of the material from which it formed. These meteorites contain far more water than previously thought. That means Earth had water from the start as part of its raw material. And that, in turn, means Venus, though desiccated today, was originally wet, too. Consistent with this, the hydrogen in Venus’s atmosphere is predominantly in the form of its heavy isotope, deuterium. That indicates the planet’s water broke down into the constituent hydrogen and oxygen. Some of the hydrogen was ordinary hydrogen, which was lost to space, and some was deuterium, which, being heavier, stayed behind. In fact, the planet might once have had as much water as Earth.</p>\n<p>The difference between Earth and Venus was probably not what they formed from. Rather, it was what came next.</p>\n<p>The final phase of planet formation involved a handful of giant impacts between planetary embryos; one of those is thought to have formed the moon. Each impact produced a giant pulse of heat, melting the entire surface of the growing planets. Any surface water was boiled off into a thick steam atmosphere. The question becomes whether that steam could rain out to create oceans.</p>\n<p>One key element is rotation. Earth completes one spin in 24 hours. Venus takes 243 days. The planets’ spin rates were first set during their formation, mainly by the angular momentum imparted in the last one or two impacts. Earth’s spin was initially much faster—a day took just four hours—but gradually slowed under the moon’s gravitational pull. Venus’s slow spin is not fully understood. It’s thought to be a combination of several effects, including a giant impact that hit the planet in just the right way, and powerful tides that the sun raised in the planet’s thick atmosphere.</p>\n<p>On a slowly rotating planet, the side that faces the sun develops a persistent, thick cloud deck. Being white and puffy, these clouds have a big impact on the climate by reflecting a large fraction of the sun’s energy back into space. Because the clouds are located exactly where the planet is most strongly irradiated, they change the planet’s energy balance. A 2013 paper by climate modelers Jun Yang, Nicolas Cowan, and Dorian Abbot, who were all then at the University of Chicago, showed that the presence of these clouds can allow water to exist on a planet that otherwise seems too close to its star. The effect is fed by a stabilizing feedback loop: If the planet heats up a little, atmospheric convection is strengthened, which thickens the clouds and cools the planet off.</p>\n<p>In the parlance of astronomy, this mechanism of cloud formation alters our estimate of where the habitable zone lies—the Goldilocks belt around a star where conditions are neither too hot nor too cold but just right for liquid water to persist on a planet’s surface. Clouds push the inner edge of the habitable zone inward by about a third in distance. In 2016, a study led by Michael Way at NASA’s Goddard Institute for Space Studies in New York used a series of climate simulations to argue that, because Venus rotates slowly, it could have built a cooling cloud deck on its dayside and been habitable for billions of years.</p>\n<p>But Way and colleagues assumed that Venus started with oceans. In 2021, a study led by planetary astronomer Martin Turbet, now at the Institut Pierre-Simon Laplace in Paris, attacked the problem from the other side, asking whether oceans could ever have condensed out of Venus’s early, steam-dominated atmosphere. Their answer was no. Instead of building up on the dayside, where they would have cooled the planet, the clouds gathered on the night side. They blocked infrared cooling so efficiently and trapped so much heat that they kept the planet too hot for rain to ever reach the surface. Put simply, dayside clouds are parasols, but nightside clouds are patio heaters, and early Venus was dominated by the latter.</p>\n<p>Turbet and colleagues showed that forming an ocean requires sunlight to be subdued. The condensation limit is at about 95 percent of our current sunlight intensity. The young Earth got 70 to 75 percent as much, so its oceans were able to condense. The young Venus got about 135 percent, so it stayed a steam world. Had the young sun been as bright as today’s, Earth would have met the same fate.</p>\n<p>Today, Venus is shrouded in clouds, but they are a different beast. They are made of sulfuric acid, not water, and they float in a dry, carbon dioxide atmosphere. They reflect about three-quarters of incoming sunlight, so much that Venus actually absorbs less solar energy than Earth does. Yet its surface is a scorching 860 degrees Fahrenheit. The culprit is the greenhouse effect, so that the little sunlight that gets through to the surface is trapped as heat.</p>",
+      "lenses": [
+        "Ciencia y buenas noticias científicas",
+        "Los colores"
+      ],
+      "hiloRojo": {
+        "minutaTitle": "La verdad y nada más que la verdad (en tres segundos)",
+        "minutaUrl": "https://arianawajntraub.substack.com/p/la-verdad-y-nada-mas-que-la-verdad",
+        "videoTitle": "À Gisèle: El arte ante lo inconcebible | Whimsy POV",
+        "videoUrl": "https://www.youtube.com/watch?v=nVfw1EuRiDA",
+        "summaryLine": "Dialoga con tu Minuta W «La verdad y nada más que la verdad (en tres segundos)» y con «À Gisèle: El arte ante lo inconcebible | Whimsy POV» en @whimsyPOV."
+      },
+      "broadcastPreset": {
+        "mode": "images",
+        "zone": "right",
+        "withSound": true
+      },
+      "protagonist": {
+        "name": "Sean Raymond",
+        "handle": "@nautilusmag",
+        "foundHandles": [
+          "@nautilusmag",
+          "@NautilusMag",
+          "@whimsypov"
+        ],
+        "contactUrl": "https://nautil.us/the-fortunes-of-a-dim-sun-1286898/",
+        "contactEmail": "",
+        "inviteEs": "¡Hola Sean Raymond (@nautilusmag)! Soy Ariana Wajntraub, conductora de Whimsy POV y La Minuta W. Estamos armando una entrega sobre «The Fortunes of a Dim Sun» y vamos a proyectar tu material acreditando fuente y arroba en pantalla. Si querés enviar una nota de voz de 40 segundos contando el detrás de escena para pasar al aire, te leo.",
+        "inviteEn": "Hi Sean Raymond (@nautilusmag)! I am Ariana Wajntraub, host of Whimsy POV & La Minuta W. We are featuring \"The Fortunes of a Dim Sun\" in our upcoming live broadcast, crediting your source and handle on screen. If you would like to send a 40-second voice note with the backstory to play on air, let me know!",
+        "postAirEs": "¡Hola Sean Raymond (@nautilusmag)! Hoy en Whimsy POV salió el bloque dedicado a «The Fortunes of a Dim Sun» con tu crédito y enlace en pantalla. Podés verlo en https://www.youtube.com/@whimsyPOV y en https://arianawajntraub.substack.com."
+      },
+      "suggestedMusic": {
+        "id": "A-2",
+        "rack": "A",
+        "trackIdx": 2,
+        "title": "fail safe audio (Moby)",
+        "mood": "Electro Hypnotic Groove",
+        "bpm": "108",
+        "duration": "05:54",
+        "file": "audio/fast_03_fail-safe-audio.m4a",
+        "tags": [
+          "ciencia",
+          "física",
+          "ia",
+          "tecnología"
+        ]
+      },
+      "suggestedBucket": "tema:Color",
+      "curatorialAngle": "Desde la lente Ciencia y buenas noticias científicas, este hallazgo de Nautilus aporta 6 láminas extraídas desde la fuente original. Su Hilo Rojo dialoga con «La verdad y nada más que la verdad (en tres segundos)» para abrir una pregunta concreta al aire.",
+      "id": "rss-5a65b328ab094d"
+    },
+    {
+      "feedId": "nautilus",
+      "feedName": "Nautilus",
+      "feedUrl": "https://nautil.us/feed/",
+      "siteUrl": "https://nautil.us/",
+      "handle": "@NautilusMag",
+      "defaultCat": "clima",
+      "defaultLens": "Ciencia y buenas noticias científicas",
+      "clock": "🇺🇸 NUEVA YORK (EST)",
+      "title": "Oceans and Forests Have Absorbed Roughly Half Our Carbon Emissions for Decades, Slowing Climate Change. But Can They Keep It Up?",
+      "link": "https://nautil.us/oceans-and-forests-have-absorbed-roughly-half-our-carbon-emissions-for-decades-slowing-climate-change-but-can-they-keep-it-up-1286879/",
+      "author": "Eric J. Morgan",
+      "publishedAt": "2026-11-21T17:00:00.000Z",
+      "summary": "Oceans and land have been absorbing a lot of the carbon emissions humans create The post Oceans and Forests Have Absorbed Roughly Half Our Carbon Emissions for Decades, Slowing Climate Change. But Can They Keep It Up? appeared first on Nautilus .",
+      "images": [
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/AdobeStock_247676103.jpeg?w=564",
+          "caption": "Lámina de Nautilus"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261112-64-57erza.avif?w=1420&quality=75",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261112-64-rxrpiq.avif?w=1420&quality=75",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261112-64-fn8i18.avif?w=1420&quality=75",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261113-64-25a45m.avif?w=1420&quality=75",
+          "caption": "Imagen en alta resolución de la fuente"
+        },
+        {
+          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261112-64-npynsi.avif?w=1420&quality=75",
+          "caption": "Imagen en alta resolución de la fuente"
+        }
+      ],
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=dXBzFNEwoj8",
+          "embedUrl": "https://www.youtube.com/embed/dXBzFNEwoj8?autoplay=1&rel=0",
+          "type": "youtube",
+          "caption": "Reproductor audiovisual de la nota"
+        }
+      ],
+      "cleanReaderHtml": "<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/AdobeStock_247676103.jpeg?w=564\" alt=\"Lámina de Nautilus\" loading=\"lazy\"><figcaption>Lámina de Nautilus</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261112-64-57erza.avif?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261112-64-rxrpiq.avif?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/file-20261112-64-fn8i18.avif?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<p>Oceans and land have been absorbing a lot of the carbon emissions humans create</p>\n<p>Over the past two centuries, humans have pumped billions of tons of carbon dioxide into the atmosphere by burning fossil fuels , raising global temperatures in the process.</p>\n<p>Luckily for humanity, Earth has done what it could to soften the impact.</p>\n<p>The world’s oceans have absorbed 35% of carbon dioxide emissions from fossil fuels since 1990, our new research shows, and the forests and other plants of the world have absorbed another 13%.</p>\n<p>The importance of these two enormous natural carbon sinks cannot be overstated as global temperatures rise, fueling heat waves, fires, storms, floods and droughts around the world. Yet there is much that scientists do not understand about these carbon sinks – most importantly, how exactly they’ll behave in the future.</p>\n<p>If the oceans and forests keep absorbing the same amount of carbon dioxide, scientists will have a sense of what to expect in the future and what can be done to slow climate change. And governments will know their remaining carbon budgets – that is, how much carbon dioxide can still be emitted into the atmosphere while keeping global temperatures below agreed-to levels.</p>\n<p>We have been working on greenhouse gas measurements for decades. In a new study, published Nov. 12, 2026, in the journal Science, we describe an alternative method for measuring these crucial carbon sinks, and what it shows.</p>\n<p>We found that while the ocean sink has been expanding, meaning the oceans are taking in more carbon dioxide, that expansion might begin to slow down , leaving the oceans less effective at absorbing carbon in the coming decades. We found that the land sink has not been expanding, which was something of a surprise.</p>\n<p>Measuring how much carbon is being taken up by the world’s oceans and forests is devilishly difficult and prohibitively expensive.</p>\n<p>This is because many parts of the land and ocean don’t behave in the same ways. What occurs in one ocean region or forest can be very different from another; and the behavior in one year can be very different in the next, often for reasons scientists do not fully understand.</p>\n<p>Computer models can help overcome some of these complexities, but they too have limitations. Satellites can also help, but they cannot see through clouds, nor can they see what is happening in the soil or mid-to-deep ocean.</p>\n<p>As carbon cycle scientists, we set out to find a different way to measure these carbon sinks.</p>\n<p>Our new study approaches the problem from another angle. We used high-precision measurements of atmospheric oxygen (O₂), combined with atmospheric carbon dioxide (CO₂) measurements , to quantify how the ocean and land carbon sinks take up carbon dioxide.</p>\n<p>This works because land, oceans and burning fossil fuels have different effects on oxygen: When fossil fuels are burned, they not only produce CO₂, they consume O₂. On land, when plants take up CO₂ to grow, they simultaneously release O₂. When the oceans take up atmospheric CO₂, there is no corresponding release of O₂.</p>",
+      "lenses": [
+        "Ciencia y buenas noticias científicas",
+        "Botánica"
+      ],
+      "hiloRojo": {
+        "minutaTitle": "Loco un poco nada más.",
+        "minutaUrl": "https://arianawajntraub.substack.com/p/loco-un-poco-nada-mas",
+        "videoTitle": "À Gisèle: El arte ante lo inconcebible | Whimsy POV",
+        "videoUrl": "https://www.youtube.com/watch?v=nVfw1EuRiDA",
+        "summaryLine": "Dialoga con tu Minuta W «Loco un poco nada más.» y con «À Gisèle: El arte ante lo inconcebible | Whimsy POV» en @whimsyPOV."
+      },
+      "broadcastPreset": {
+        "mode": "video_sound",
+        "zone": "right",
+        "withSound": true
+      },
+      "protagonist": {
+        "name": "Eric J. Morgan",
+        "handle": "@nautilusmag",
+        "foundHandles": [
+          "@nautilusmag",
+          "@NautilusMag",
+          "@whimsypov"
+        ],
+        "contactUrl": "https://nautil.us/oceans-and-forests-have-absorbed-roughly-half-our-carbon-emissions-for-decades-slowing-climate-change-but-can-they-keep-it-up-1286879/",
+        "contactEmail": "",
+        "inviteEs": "¡Hola Eric J. Morgan (@nautilusmag)! Soy Ariana Wajntraub, conductora de Whimsy POV y La Minuta W. Estamos armando una entrega sobre «Oceans and Forests Have Absorbed Roughly Half Our Carbon Emissio» y vamos a proyectar tu material acreditando fuente y arroba en pantalla. Si querés enviar una nota de voz de 40 segundos contando el detrás de escena para pasar al aire, te leo.",
+        "inviteEn": "Hi Eric J. Morgan (@nautilusmag)! I am Ariana Wajntraub, host of Whimsy POV & La Minuta W. We are featuring \"Oceans and Forests Have Absorbed Roughly Half Our Carbon Emissio\" in our upcoming live broadcast, crediting your source and handle on screen. If you would like to send a 40-second voice note with the backstory to play on air, let me know!",
+        "postAirEs": "¡Hola Eric J. Morgan (@nautilusmag)! Hoy en Whimsy POV salió el bloque dedicado a «Oceans and Forests Have Absorbed Roughly Half Our Carbon Emissio» con tu crédito y enlace en pantalla. Podés verlo en https://www.youtube.com/@whimsyPOV y en https://arianawajntraub.substack.com."
+      },
+      "suggestedMusic": {
+        "id": "A-2",
+        "rack": "A",
+        "trackIdx": 2,
+        "title": "fail safe audio (Moby)",
+        "mood": "Electro Hypnotic Groove",
+        "bpm": "108",
+        "duration": "05:54",
+        "file": "audio/fast_03_fail-safe-audio.m4a",
+        "tags": [
+          "ciencia",
+          "física",
+          "ia",
+          "tecnología"
+        ]
+      },
+      "suggestedBucket": "hoy",
+      "curatorialAngle": "Desde la lente Ciencia y buenas noticias científicas, este hallazgo de Nautilus incluye material audiovisual y 6 imágenes listas para proyectar. Su Hilo Rojo dialoga con «Loco un poco nada más.» para abrir una pregunta concreta al aire.",
+      "id": "rss-2399775dad7f89"
+    },
     {
       "feedId": "nautilus",
       "feedName": "Nautilus",
@@ -672,7 +863,7 @@
         }
       ],
       "videos": [],
-      "cleanReaderHtml": "<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Polar-Bears-HERO.jpg?w=564\" alt=\"Lámina de Nautilus\" loading=\"lazy\"><figcaption>Lámina de Nautilus</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Polar-Bears-BREAKER-1.jpg?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Polar-Bears-BREAKER-2.jpg?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Polar-Bears-BREAKER-3.jpg?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<p>Our writer journeys to northern Canada to investigate an environmental paradox</p>\n<p>It was my turn to watch for polar bears, though I wasn’t entirely sure what watching for one on a hot beach in summer was supposed to look like. Around me, on a tiny island in James Bay in Quebec, Canada, the field team moved with practiced efficiency, unspooling barbed wire and setting up a camera trap. I found an elevated spot on the warm ground, and periodically glanced over my shoulder at the dense, low-slung pine forest behind us. Arctic terns darted like paper planes above our heads. Beluga whales crested against the horizon.</p>\n<p>“Don’t worry, the bears are probably asleep right now,” Harry Erless, squinting into the midday sun, assured me. Erless, gregarious as he is knowledgeable, is an experienced ranger and trapper of the Cree Nation of Waskaganish, an Indigenous community on the southeast shore of James Bay.</p>\n<p>The scene felt entirely upside-down, and not just because I have never seen a polar bear in the wild. I had trouble picturing one here in the first place. This area, known as the Eeyou Marine Region, lies at the southernmost fringe of the polar bears’ global range, at roughly the same latitude as London, England. By every standard ecological narrative, polar bears should be disappearing from here. With warming global temperatures, the Eeyou Marine Region is seeing a trend toward longer summers and earlier sea ice breakup in the bay. Yet what brought me here was news of a paradox: The polar bears appear to be thriving.</p>\n<p>In July 2026, I traveled to Waskaganish to learn more about this apparent contradiction. Since 2021, local Cree trappers and wildlife scientists have been building a partnership that pairs traditional Indigenous knowledge with Western field science. Their project offers a hopeful new framework for conservation in a rapidly changing Arctic.</p>\n<p>“Our main objective with this work is to prevent conflict,” Sanford Diamond, son of a former chief of the Cree Nation of Waskaganish, told me shortly before we set out. From the Cree perspective, the true peril of a warming bay is that polar bears, unable to hunt on ice, are forced to spend more time on shore and come into increasing contact with coastal communities.</p>\n<p>“Our people, we don’t harvest something when we don’t eat it. And we don’t eat the polar bear,” Diamond told me. But defense-of-life kills become unavoidable when a bear threatens human safety or property. The risk is highest during the annual spring goose hunt, when hunters and bears converge on the islands near the mainland.</p>\n<p>For the scientists, the central question is: What makes this southernmost population of polar bears appear so resilient?</p>\n<p>“It seems like there’s something special about James Bay that’s allowing bears to persist,” said Alexandra Langwieder, a doctoral researcher at McGill University who leads the scientific side of the project. Despite the diminishing ice, the bay and its small islands may offer the bears easy posts to prey on seals. They could also be feeding on terrestrial mammals like beavers and scavenging on carcasses of larger animals like caribou and belugas.</p>\n<p>I spent a whole day zipping around the bay with the project’s field team, deploying polar bear monitoring stations scattered across 250 miles of the Eeyou Marine Region. We crisscrossed the east side of the bay in two open fiberglass fishing boats, the sound of our engines bouncing across the still water. It was a stunning clear day, with deep-blue skies and the shallow bay lying open like a dish.</p>\n<p>I joined Eeyou Marine Region Wildlife Board scientist Manon Sorais in the boat captained by Erless, who navigated the vast expanse seamlessly by sight, reading water currents and subtle shifts in wind. His childhood friend and fellow trapper Bernard Diamond followed closely in the second boat with Sorais’ colleague, Félix Boulanger.</p>\n<p>I watched as Bernard Diamond collected driftwood while Erless unspooled a coil of barbed wire. Working in a 10-foot triangle, he strung the wire hip-high across three steel T-posts pounded into the tundra substrate. In the center, Diamond liberally coated the driftwood with a pungent mixture of commercial fish oil and fryer grease, stacking rocks over it so the summer rain wouldn’t wash the scent away. This is to lure the polar bears. A few feet off the perimeter, Sorais and Boulanger hammered a fourth post to mount a motion-activated Reconyx camera inside a steel security box.</p>\n<p>Such a design for monitoring polar bears is simple, elegant, and entirely noninvasive. When a curious bear steps into the triangle to sniff the lure, its flank brushes the wire, leaving behind a few strands of fur before it wanders off unharmed. Camera footage helps scientists identify the sex of the bear and provides a quick visual assessment of condition.</p>\n<p>For decades, polar bear research meant chasing animals in low-flying helicopters, shooting them with tranquilizer darts, and strapping on radio collars—a practice long opposed by northern Indigenous communities concerned about animal welfare. By contrast, this network of monitoring stations, co-designed by Cree trappers and Langwieder, offers a community-led alternative that respects Indigenous sovereignty while yielding precise scientific data.</p>",
+      "cleanReaderHtml": "<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Polar-Bears-HERO.jpg?w=564\" alt=\"Lámina de Nautilus\" loading=\"lazy\"><figcaption>Lámina de Nautilus</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Polar-Bears-BREAKER-1.jpg?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Polar-Bears-BREAKER-2.jpg?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Polar-Bears-BREAKER-3.jpg?w=1420&quality=75\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<p>Our writer journeys to northern Canada to investigate an environmental paradox</p>\n<p>It was my turn to watch for polar bears, though I wasn’t entirely sure what watching for one on a hot beach in summer was supposed to look like. Around me, on a tiny island in James Bay in Quebec, Canada, the field team moved with practiced efficiency, unspooling barbed wire and setting up a camera trap. I found an elevated spot on the warm ground, and periodically glanced over my shoulder at the dense, low-slung pine forest behind us. Arctic terns darted like paper planes above our heads. Beluga whales crested against the horizon.</p>\n<p>“Don’t worry, the bears are probably asleep right now,” Harry Erless, squinting into the midday sun, assured me. Erless, gregarious as he is knowledgeable, is an experienced ranger and trapper of the Cree Nation of Waskaganish, an Indigenous community on the southeast shore of James Bay.</p>\n<p>This story is from “The Hot Issue,” the latest from Nautilus . To get it in print, join by Nov 30 .</p>\n<p>The scene felt entirely upside-down, and not just because I have never seen a polar bear in the wild. I had trouble picturing one here in the first place. This area, known as the Eeyou Marine Region, lies at the southernmost fringe of the polar bears’ global range, at roughly the same latitude as London, England. By every standard ecological narrative, polar bears should be disappearing from here. With warming global temperatures, the Eeyou Marine Region is seeing a trend toward longer summers and earlier sea ice breakup in the bay. Yet what brought me here was news of a paradox: The polar bears appear to be thriving.</p>\n<p>In July 2026, I traveled to Waskaganish to learn more about this apparent contradiction. Since 2021, local Cree trappers and wildlife scientists have been building a partnership that pairs traditional Indigenous knowledge with Western field science. Their project offers a hopeful new framework for conservation in a rapidly changing Arctic.</p>\n<p>“Our main objective with this work is to prevent conflict,” Sanford Diamond, son of a former chief of the Cree Nation of Waskaganish, told me shortly before we set out. From the Cree perspective, the true peril of a warming bay is that polar bears, unable to hunt on ice, are forced to spend more time on shore and come into increasing contact with coastal communities.</p>\n<p>“Our people, we don’t harvest something when we don’t eat it. And we don’t eat the polar bear,” Diamond told me. But defense-of-life kills become unavoidable when a bear threatens human safety or property. The risk is highest during the annual spring goose hunt, when hunters and bears converge on the islands near the mainland.</p>\n<p>For the scientists, the central question is: What makes this southernmost population of polar bears appear so resilient?</p>\n<p>“It seems like there’s something special about James Bay that’s allowing bears to persist,” said Alexandra Langwieder, a doctoral researcher at McGill University who leads the scientific side of the project. Despite the diminishing ice, the bay and its small islands may offer the bears easy posts to prey on seals. They could also be feeding on terrestrial mammals like beavers and scavenging on carcasses of larger animals like caribou and belugas.</p>\n<p>I spent a whole day zipping around the bay with the project’s field team, deploying polar bear monitoring stations scattered across 250 miles of the Eeyou Marine Region. We crisscrossed the east side of the bay in two open fiberglass fishing boats, the sound of our engines bouncing across the still water. It was a stunning clear day, with deep-blue skies and the shallow bay lying open like a dish.</p>\n<p>I joined Eeyou Marine Region Wildlife Board scientist Manon Sorais in the boat captained by Erless, who navigated the vast expanse seamlessly by sight, reading water currents and subtle shifts in wind. His childhood friend and fellow trapper Bernard Diamond followed closely in the second boat with Sorais’ colleague, Félix Boulanger.</p>\n<p>I watched as Bernard Diamond collected driftwood while Erless unspooled a coil of barbed wire. Working in a 10-foot triangle, he strung the wire hip-high across three steel T-posts pounded into the tundra substrate. In the center, Diamond liberally coated the driftwood with a pungent mixture of commercial fish oil and fryer grease, stacking rocks over it so the summer rain wouldn’t wash the scent away. This is to lure the polar bears. A few feet off the perimeter, Sorais and Boulanger hammered a fourth post to mount a motion-activated Reconyx camera inside a steel security box.</p>\n<p>Such a design for monitoring polar bears is simple, elegant, and entirely noninvasive. When a curious bear steps into the triangle to sniff the lure, its flank brushes the wire, leaving behind a few strands of fur before it wanders off unharmed. Camera footage helps scientists identify the sex of the bear and provides a quick visual assessment of condition.</p>",
       "lenses": [
         "Los colores",
         "Ciencia y buenas noticias científicas"
@@ -1871,98 +2062,6 @@
       "id": "rss-20c74ec0110e46"
     },
     {
-      "feedId": "nautilus",
-      "feedName": "Nautilus",
-      "feedUrl": "https://nautil.us/feed/",
-      "siteUrl": "https://nautil.us/",
-      "handle": "@NautilusMag",
-      "defaultCat": "clima",
-      "defaultLens": "Ciencia y buenas noticias científicas",
-      "clock": "🇺🇸 NUEVA YORK (EST)",
-      "title": "Bees Make Better Dads Than We Thought",
-      "link": "https://nautil.us/bees-make-better-dads-than-we-thought-1286925/",
-      "author": "Jake Currie",
-      "publishedAt": "2026-11-20T20:00:00.000Z",
-      "summary": "So much for “flying bags of sperm” The post Bees Make Better Dads Than We Thought appeared first on Nautilus .",
-      "images": [
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Common_Eastern_Bumble_Bee_Bombus_impatiens_-_Guelph_Ontario_01.jpg?w=564",
-          "caption": "Lámina de Nautilus"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/01-bridge.jpg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/01-garter.jpg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/01-burbot.jpg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/American-Woodcock_20201229_1E3H8279_Cameron-Rutt_watermark.jpg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/01-sea-pig.jpg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        }
-      ],
-      "videos": [],
-      "cleanReaderHtml": "<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Common_Eastern_Bumble_Bee_Bombus_impatiens_-_Guelph_Ontario_01.jpg?w=564\" alt=\"Lámina de Nautilus\" loading=\"lazy\"><figcaption>Lámina de Nautilus</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/01-bridge.jpg?resize=2880%2C1920\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/01-garter.jpg?resize=2880%2C1920\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/01-burbot.jpg?resize=2880%2C1920\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<p>Queen bees control the fertilization of their eggs with diploid females becoming workers who gather food and the cheaper-to-produce haploid males becoming drones. Traditionally, these males were thought to only contribute the genetic material necessary to kickstart a new colony, earning them the dismissive nickname “flying sperm bags.” But now a new study published in Royal Society Open Science suggests they may be much more important.</p>\n<p>Prior to this study, just one other investigation (by Sydney Cameron, now at the University of Illinois), probed the role males play in bumblebee colonies and found they shared in the brood care of their siblings. It piqued the curiosity of a team of entomologists from the University of California, Riverside, so they snapped some thermal photos of bumblebee nests. The images showed males poised over the brood in an “incubation posture.” This allows them to make contact with eggs while they work their muscles, generating heat.</p>\n<p>“I was quite surprised to see them incubating,” study author Meghan Moore said in a statement . “In the literature, they say the males’ only purpose is to be ‘flying bags of sperm,’ that their only purpose is to mate with queens. But our research, and Sydney’s, shows this just isn’t true.”</p>\n<p>To investigate further, the team set up some artificial bumblebee colonies back in the lab. Each colony started with an already mated queen (as they do in the wild). To these the team added either one, three, five, or zero additional male bumblebees. Then they watched, for roughly a month, occasionally peeking inside with thermal cameras.</p>\n<p>They found that the males who went into incubation mode had hotter thoraxes (by as much as seven degrees Fahrenheit). Curiously, their incubation temp was still lower than the average queen’s, which the researchers think might be to protect their sperm cells.</p>\n<p>They also discovered that the presence of males ramped up bee production. “Queens with males in their nests began laying eggs twice as fast, and they end up with up to 1.5 times more brood,” Moore said. “This is an important result at a time when bumblebee populations are threatened by pollution and habitat loss.”</p>\n<p>There were a couple of caveats, however. In the wild, colonies start as a women’s only club, with queens and workers and no males. Additionally, the males in the lab-created colonies were prevented from leaving, which they tend to do under natural conditions.</p>\n<p>“It is possible these males helped as much as they did because there weren’t female workers in the nests we created for this study,” Moore explained. “Though we don’t think lack of females caused what we saw. In a smaller study we observed males doing some caring even in the presence of female workers.”</p>\n<p>In other words, we can probably stop calling them “flying bags of sperm.”</p>\n<p>They likely got odder after they “dropped off” onto islands</p>",
-      "lenses": [
-        "Grandes ideas y filosofía",
-        "Los colores"
-      ],
-      "hiloRojo": {
-        "minutaTitle": "Loco un poco nada más.",
-        "minutaUrl": "https://arianawajntraub.substack.com/p/loco-un-poco-nada-mas",
-        "videoTitle": "À Gisèle: El arte ante lo inconcebible | Whimsy POV",
-        "videoUrl": "https://www.youtube.com/watch?v=nVfw1EuRiDA",
-        "summaryLine": "Dialoga con tu Minuta W «Loco un poco nada más.» y con «À Gisèle: El arte ante lo inconcebible | Whimsy POV» en @whimsyPOV."
-      },
-      "broadcastPreset": {
-        "mode": "images",
-        "zone": "right",
-        "withSound": true
-      },
-      "protagonist": {
-        "name": "Jake Currie",
-        "handle": "@nautilusmag",
-        "foundHandles": [
-          "@nautilusmag",
-          "@NautilusMag",
-          "@whimsypov"
-        ],
-        "contactUrl": "https://nautil.us/bees-make-better-dads-than-we-thought-1286925/",
-        "contactEmail": "",
-        "inviteEs": "¡Hola Jake Currie (@nautilusmag)! Soy Ariana Wajntraub, conductora de Whimsy POV y La Minuta W. Estamos armando una entrega sobre «Bees Make Better Dads Than We Thought» y vamos a proyectar tu material acreditando fuente y arroba en pantalla. Si querés enviar una nota de voz de 40 segundos contando el detrás de escena para pasar al aire, te leo.",
-        "inviteEn": "Hi Jake Currie (@nautilusmag)! I am Ariana Wajntraub, host of Whimsy POV & La Minuta W. We are featuring \"Bees Make Better Dads Than We Thought\" in our upcoming live broadcast, crediting your source and handle on screen. If you would like to send a 40-second voice note with the backstory to play on air, let me know!",
-        "postAirEs": "¡Hola Jake Currie (@nautilusmag)! Hoy en Whimsy POV salió el bloque dedicado a «Bees Make Better Dads Than We Thought» con tu crédito y enlace en pantalla. Podés verlo en https://www.youtube.com/@whimsyPOV y en https://arianawajntraub.substack.com."
-      },
-      "suggestedMusic": {
-        "id": "A-4",
-        "rack": "A",
-        "trackIdx": 4,
-        "title": "falling out of love (Moby)",
-        "mood": "Dark Post-Punk Driving",
-        "bpm": "124",
-        "duration": "02:58",
-        "file": "audio/fast_05_falling-out-of-love.m4a",
-        "tags": [
-          "filosofía",
-          "archivo",
-          "libros",
-          "editorial"
-        ]
-      },
-      "suggestedBucket": "tema:Color",
-      "curatorialAngle": "Desde la lente Grandes ideas y filosofía, este hallazgo de Nautilus aporta 6 láminas extraídas desde la fuente original. Su Hilo Rojo dialoga con «Loco un poco nada más.» para abrir una pregunta concreta al aire.",
-      "id": "rss-49b51eace68cdb"
-    },
-    {
       "feedId": "smithsonian-smart",
       "feedName": "Smithsonian Smart News",
       "feedUrl": "https://www.smithsonianmag.com/rss/smart-news/",
@@ -2145,98 +2244,6 @@
       "suggestedBucket": "hoy",
       "curatorialAngle": "Desde la lente Ciencia y buenas noticias científicas, este hallazgo de Smithsonian Smart News aporta 6 láminas extraídas desde la fuente original. Su Hilo Rojo dialoga con «Loco un poco nada más.» para abrir una pregunta concreta al aire.",
       "id": "rss-ee168af4e4eb42"
-    },
-    {
-      "feedId": "nautilus",
-      "feedName": "Nautilus",
-      "feedUrl": "https://nautil.us/feed/",
-      "siteUrl": "https://nautil.us/",
-      "handle": "@NautilusMag",
-      "defaultCat": "clima",
-      "defaultLens": "Ciencia y buenas noticias científicas",
-      "clock": "🇺🇸 NUEVA YORK (EST)",
-      "title": "Can Psychedelics Improve Decision-making?",
-      "link": "https://nautil.us/can-psychedelics-improve-decision-making-1286863/",
-      "author": "Jake Currie",
-      "publishedAt": "2026-11-20T19:00:00.000Z",
-      "summary": "A new study suggests they free the mind from prior biases The post Can Psychedelics Improve Decision-making? appeared first on Nautilus .",
-      "images": [
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/shutterstock_2185467127.jpg?w=564",
-          "caption": "Lámina de Nautilus"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/shutterstock_2208505965.jpg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/AdobeStock_324852895.jpeg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Cat_Header.jpg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Screenshot-2026-11-12-at-1.17.39-PM.png?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        },
-        {
-          "url": "https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/shutterstock_85591537.jpg?resize=2880%2C1920",
-          "caption": "Imagen en alta resolución de la fuente"
-        }
-      ],
-      "videos": [],
-      "cleanReaderHtml": "<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/shutterstock_2185467127.jpg?w=564\" alt=\"Lámina de Nautilus\" loading=\"lazy\"><figcaption>Lámina de Nautilus</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/shutterstock_2208505965.jpg?resize=2880%2C1920\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/AdobeStock_324852895.jpeg?resize=2880%2C1920\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<figure><img src=\"https://lede-admin.nautil.us/wp-content/uploads/sites/70/2026/11/Cat_Header.jpg?resize=2880%2C1920\" alt=\"Imagen en alta resolución de la fuente\" loading=\"lazy\"><figcaption>Imagen en alta resolución de la fuente</figcaption></figure>\n<p>A new study suggests they free the mind from prior biases</p>\n<p>In 1972, Pittsburgh Pirates pitcher Dock Ellis pitched a no-hitter against the San Diego Padres. It’s an impressive feat on its own, but Ellis, under the mistaken assumption he had the day off, had taken a couple hits of LSD before the game. Completely zonked on acid, he managed to last through nine scoreless innings, leading his team to a 2-0 victory. Is it possible the drugs helped? Well, a new study published in Science Advances suggests psychedelics could lead to better decision-making (at least in mice).</p>\n<p>To investigate the link between psychedelic drugs and decision-making, a team of Boston University neuroscientists put laboratory mice through a simple test. The lab animals were offered three holes, poking their noses through the center one kicked the experiment off. The other two holes had blinking lights that flashed either quickly or slowly, a nose poke in the fast-flashing hole earned the rodents a sugary reward.</p>\n<p>Read more: “ The Promise and Peril of Toad Smoking, the Everest of Psychedelics ”</p>\n<p>Of course, the mice weren’t privy to the experimental design, so they had to learn which sensory cues led to the reward. Untreated mice made some mistakes. Some tended to favor either the right or left side, regardless of the flashing, for example. Mice that were dosed with psychedelics—either psilocybin or ketamine—were more accurate. Other drugs, like cocaine and diazepam, didn’t show the same effects.</p>\n<p>According to the team, the psychedelic drug treatments may have freed the mice from their prior biases. “These findings reveal how psychedelics reduce the reliance on habits and repetitive choices, which may explain part of their therapeutic effect,” study author Benjamin Scott explained in a statement .</p>\n<p>It’s a finding that harmonizes with a model called REBUS (RElaxed Beliefs Under pSychedelics). Under this model, psychedelics make our brains a bit more cognitively supple and open. In this case, they may have made the mice learn the sensory cues more quickly.</p>\n<p>“Both drugs strengthen the influence of sensory evidence on choices and reduce the effect of bias,” Scott explained. “Thus, decisions became more accurate, guided by the immediate sensory environment of the animals and less influenced by other factors, like the bias to repeat the same choice over again.”</p>\n<p>The team did uncover a potential trade-off, however. Although their choices were more accurate, the dosed mice took a bit longer to decide. “Extrapolating on this, you could imagine that in situations where processing speed or reaction time is critical, for example, while driving or playing sports, these drugs could negatively affect performance,” Scott said.</p>\n<p>That may explain why Dock Ellis went 0 for 3 at the plate that fateful day.</p>\n<p>Exploring how people talk in the throes of mental health crises with McGill psychiatrist Lena Palaniyappan</p>\n<p>A conversation with cognitive scientist Evelina Fedorenko about where thought and language overlap</p>",
-      "lenses": [
-        "Ciencia y buenas noticias científicas",
-        "Los colores"
-      ],
-      "hiloRojo": {
-        "minutaTitle": "Loco un poco nada más.",
-        "minutaUrl": "https://arianawajntraub.substack.com/p/loco-un-poco-nada-mas",
-        "videoTitle": "À Gisèle: El arte ante lo inconcebible | Whimsy POV",
-        "videoUrl": "https://www.youtube.com/watch?v=nVfw1EuRiDA",
-        "summaryLine": "Dialoga con tu Minuta W «Loco un poco nada más.» y con «À Gisèle: El arte ante lo inconcebible | Whimsy POV» en @whimsyPOV."
-      },
-      "broadcastPreset": {
-        "mode": "images",
-        "zone": "right",
-        "withSound": true
-      },
-      "protagonist": {
-        "name": "Jake Currie",
-        "handle": "@nautilusmag",
-        "foundHandles": [
-          "@nautilusmag",
-          "@NautilusMag",
-          "@whimsypov"
-        ],
-        "contactUrl": "https://nautil.us/can-psychedelics-improve-decision-making-1286863/",
-        "contactEmail": "",
-        "inviteEs": "¡Hola Jake Currie (@nautilusmag)! Soy Ariana Wajntraub, conductora de Whimsy POV y La Minuta W. Estamos armando una entrega sobre «Can Psychedelics Improve Decision-making?» y vamos a proyectar tu material acreditando fuente y arroba en pantalla. Si querés enviar una nota de voz de 40 segundos contando el detrás de escena para pasar al aire, te leo.",
-        "inviteEn": "Hi Jake Currie (@nautilusmag)! I am Ariana Wajntraub, host of Whimsy POV & La Minuta W. We are featuring \"Can Psychedelics Improve Decision-making?\" in our upcoming live broadcast, crediting your source and handle on screen. If you would like to send a 40-second voice note with the backstory to play on air, let me know!",
-        "postAirEs": "¡Hola Jake Currie (@nautilusmag)! Hoy en Whimsy POV salió el bloque dedicado a «Can Psychedelics Improve Decision-making?» con tu crédito y enlace en pantalla. Podés verlo en https://www.youtube.com/@whimsyPOV y en https://arianawajntraub.substack.com."
-      },
-      "suggestedMusic": {
-        "id": "A-2",
-        "rack": "A",
-        "trackIdx": 2,
-        "title": "fail safe audio (Moby)",
-        "mood": "Electro Hypnotic Groove",
-        "bpm": "108",
-        "duration": "05:54",
-        "file": "audio/fast_03_fail-safe-audio.m4a",
-        "tags": [
-          "ciencia",
-          "física",
-          "ia",
-          "tecnología"
-        ]
-      },
-      "suggestedBucket": "tema:Color",
-      "curatorialAngle": "Desde la lente Ciencia y buenas noticias científicas, este hallazgo de Nautilus aporta 6 láminas extraídas desde la fuente original. Su Hilo Rojo dialoga con «Loco un poco nada más.» para abrir una pregunta concreta al aire.",
-      "id": "rss-7f6fc95836317f"
     },
     {
       "feedId": "smithsonian-smart",
